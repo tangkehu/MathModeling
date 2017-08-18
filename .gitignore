@@ -1,2 +1,3 @@
 ﻿*.pyc
 .idea/
+venv_math/
