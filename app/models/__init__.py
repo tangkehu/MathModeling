@@ -4,6 +4,10 @@ from .. import login_manager
 from .common import Common
 from .role import Role
 from .user import User
+from .train import Train
+from .train_team import TrainTeam
+from .train_files import TrainFiles
+from .train_file_type import TrainFileType
 
 
 @login_manager.user_loader

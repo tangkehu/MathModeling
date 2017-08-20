@@ -108,7 +108,7 @@
                 data: $("#login_form").serialize(),
                 success: function (result) {
                     if (result == 'true'){
-                        location.href = "{{ url_for('train.past') }}"
+                        location.href = "{{ url_for('train.current') }}"
                     }else {
                         $("#flash_msg").html(result).show();
                     }

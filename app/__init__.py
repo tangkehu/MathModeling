@@ -23,9 +23,12 @@ def create_app(config_name):
     app.register_blueprint(main)
 
     from .auth import auth
-    app.register_blueprint(auth)
+    app.register_blueprint(auth, url_prefix='/auth')
 
     from .train import train
-    app.register_blueprint(train)
+    app.register_blueprint(train, url_prefix='/train')
+
+    from .adminis import administration
+    app.register_blueprint(administration, url_prefix='/administration')
 
     return app

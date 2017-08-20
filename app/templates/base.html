@@ -51,13 +51,26 @@
                         </li>
 
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 集训系统<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-users fa-fw"></i> 集训系统<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="{{ url_for('train.past') }}">历届集训</a>
                                 </li>
                                 <li>
-                                    <a href="#">当前集训</a>
+                                    <a href="{{ url_for('train.current') }}">当前集训</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-cogs fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url_for('administration.train') }}">集训系统管理</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('administration.user') }}">用户管理</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -70,14 +83,16 @@
         </nav>
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">{{ page_title }}</h1>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header"><i class="fa fa-hand-o-right fa-fw"></i> {{ page_title }}</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
                 </div>
-                <!-- /.col-lg-12 -->
+                <!-- /.row -->
+                {% block page_content %}{% endblock %}
             </div>
-            <!-- /.row -->
-            {% block page_content %}{% endblock %}
         </div>
         <!-- /#page-wrapper -->
 

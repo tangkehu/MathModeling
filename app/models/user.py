@@ -1,10 +1,12 @@
 # -*- encoding: utf-8 -*-
 
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash    # 获取生成hash值的方法
 from flask_login import UserMixin    # 用户登录管理要实现的一些方法
 from app import db
 from .common import Common
 from .role import Role
+from .train_team import TrainTeam
 
 
 class User(UserMixin, Common):
@@ -12,7 +14,9 @@ class User(UserMixin, Common):
     student_id = db.Column(db.String(12), nullable=False, unique=True, index=True)    # 学号
     real_name = db.Column(db.String(64), nullable=False, index=True)    # 实名
     password_hash = db.Column(db.String(128), nullable=False)    # 密码散列值
+    create_time = db.Column(db.DateTime, default=datetime.now())
     role_id = db.Column(db.Integer, db.ForeignKey('tb_roles.id'))
+    train_team_id = db.Column(db.Integer, db.ForeignKey('tb_train_team.id'))
 
     # 密码
     def password(self, password):
@@ -46,6 +50,11 @@ class User(UserMixin, Common):
             self.real_name = info.get('real_name')
         if info.get('password'):
             self.password(info.get('password'))
+        if info.get('role_id'):
+            self.role = Role.query.get_or_404(int(info.get('role_id')))
+        if info.get('train_team_id'):
+            self.train_team = TrainTeam.query.get_or_404(int(info.get('train_team_id')))
+            self.train_team.insert_members()
         try:
             self.save()
             return True
