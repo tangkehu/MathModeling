@@ -13,7 +13,6 @@ def train():
     """
     if request.method == 'POST':
         info = {'name': request.form.get('name'), 'describe': request.form.get('describe')}
-        print info
         new_train = Train()
         flag = new_train.edit(info)
         if flag:
@@ -23,6 +22,12 @@ def train():
     else:
         info = Train.query.all()
         return render_template('adminis/train.html', page_title=u'集训系统管理', info=info)
+
+
+@administration.route('/train_edit')
+def train_edit():
+    page_title = Train.query.filter_by(able=1).first().name
+    return render_template('adminis/train_edit.html', page_title=page_title)
 
 
 @administration.route('/user')

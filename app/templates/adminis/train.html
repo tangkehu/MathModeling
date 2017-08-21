@@ -51,7 +51,7 @@
                                 {{ i.describe }}
                             </div>
                             <div class="panel-footer">
-                                <a href="#" class="btn btn-success"><i class="fa fa-folder-open-o fa-fw"></i> 进 入</a>
+                                <a href="{{ url_for('administration.train_edit') }}" class="btn btn-success"><i class="fa fa-folder-open-o fa-fw"></i> 进 入</a>
                                 <a href="#" class="btn btn-warning"><i class="fa fa-power-off fa-fw"></i> 结 束</a>
                                 <a href="#" class="btn btn-danger"><i class="fa fa-trash-o fa-fw"></i> 删 除</a>
                             </div>
@@ -74,7 +74,8 @@
 
     function formSubmit() {
         if ($("#trainForm").find('input[name="name"]').val() == '' || $("#trainForm").find('textarea[name="describe"]').val() == '' || $("#trainForm").find('input[name="team_count"]').val() == ''){
-            $("#tips").html('表单不能为空！').parent().slideDown();
+            $("#tips").html('表单未填写完整，“设置小组总数”只能填写数字！').parent().slideDown();
+            // 睡眠
             setTimeout(sleep,3600);
             function sleep() {
                 $("#tips").parent().slideUp();
