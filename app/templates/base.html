@@ -91,6 +91,19 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% for msg in get_flashed_messages() %}
+                            <div class="alert alert-danger">
+                                <h4>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <i class="fa fa-bullhorn fa-fw"></i> {{ msg }}
+                                </h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- flash消息 -->
                 {% block page_content %}{% endblock %}
             </div>
         </div>

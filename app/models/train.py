@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 from datetime import datetime
-import time
 from app import db
 from .common import Common
 
