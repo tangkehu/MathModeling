@@ -2,65 +2,63 @@
 
 {% block page_content %}
     <div class="row">
-    <div class="col-lg-12">
-        <div class="alert alert-warning" style="display: none">
-            <i class="fa fa-bullhorn fa-fw"></i> <span id="tips"></span>
-        </div>
-    </div>
-    </div>
-    <!-- / Ajax flash消息 -->
-    <div class="row">
         <div class="col-lg-1">
             <button onclick="formShow()" type="button" class="btn btn-xl btn-circle btn-primary btn-outline" style="margin-bottom: 5%"><i class="fa fa-plus"></i> </button>
         </div>
 
         <div class="col-lg-8">
             <div class="panel-group">
-            <!-- 集训新增表单 -->
-            <div id="train_form" class="panel panel-primary" style="display: none">
-                <div class="panel-heading">
-                    <h3><i class="fa fa-plus fa-fw"></i> 新增集训</h3>
+                <!-- 集训新增表单 -->
+                <div id="train_form" class="panel panel-primary" style="display: none">
+                    <div class="panel-heading">
+                        <h3><i class="fa fa-plus fa-fw"></i> 新增集训</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="trainForm">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input class="form-control" type="text" name="name" placeholder="例如：2017年第一轮集训">
+                            </div>
+                            <div class="form-group">
+                                <label>描述</label>
+                                <textarea class="form-control" name="describe" rows="3" placeholder="对本次集训的简短介绍，包括集训的数模题目、集训的参与人数等..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>设置小组总数</label>
+                                <input class="form-control" type="number" name="team_count" placeholder="总共有多少个小组？">
+                            </div>
+                            <a onclick="formSubmit()" class="btn btn-primary btn-outline"> 提 交</a>
+                        </form>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <form id="trainForm">
-                        <div class="form-group">
-                            <label>标题</label>
-                            <input class="form-control" type="text" name="name" placeholder="例如：2017年第一轮集训">
-                        </div>
-                        <div class="form-group">
-                            <label>描述</label>
-                            <textarea class="form-control" name="describe" rows="3" placeholder="对本次集训的简短介绍，包括集训的数模题目、集训的参与人数等..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>设置小组总数</label>
-                            <input class="form-control" type="number" name="team_count" placeholder="总共有多少个小组？">
-                        </div>
-                        <a onclick="formSubmit()" class="btn btn-primary btn-outline"> 提 交</a>
-                    </form>
-                </div>
-            </div>
-            <!-- / 集训新增表单 -->
-            <!-- 集训列表 -->
-            {% if info %}
-                {% for i in info %}
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3>{{ i.name }}</h3>
+                <!-- / 集训新增表单 -->
+
+                <!-- 集训列表 -->
+                {% if info %}
+                    {% for i in info %}
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3>{{ i.name }}</h3>
+                                </div>
+                                <div class="panel-body">
+                                    {{ i.describe }}
+                                </div>
+                                <div class="panel-footer">
+                                    <a href="{{ url_for('administration.train_edit', train_id=i.id) }}" class="btn btn-success"><i class="fa fa-folder-open-o fa-fw"></i> 进 入</a>
+                                    {% if i.able %}
+                                    <a onclick="trainAbleDelete('able', {{ i.id }})" class="btn btn-warning"><i class="fa fa-power-off fa-fw"></i> 结 束</a>
+                                    {% else %}
+                                    <a class="btn btn-info"><i class="fa fa-power-off fa-fw"></i> 已结束</a>
+                                    {% endif %}
+                                    <a onclick="trainAbleDelete('delete', {{ i.id }})" class="btn btn-danger"><i class="fa fa-trash-o fa-fw"></i> 删 除</a>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                {{ i.describe }}
-                            </div>
-                            <div class="panel-footer">
-                                <a href="{{ url_for('administration.train_edit') }}" class="btn btn-success"><i class="fa fa-folder-open-o fa-fw"></i> 进 入</a>
-                                <a href="#" class="btn btn-warning"><i class="fa fa-power-off fa-fw"></i> 结 束</a>
-                                <a href="#" class="btn btn-danger"><i class="fa fa-trash-o fa-fw"></i> 删 除</a>
-                            </div>
-                        </div>
-                {% endfor %}
-            {% else %}
-                <h3>请点击“+”添加集训！</h3>
-            {% endif %}
-            <!-- /集训列表 -->
+                    {% endfor %}
+                {% else %}
+                    <h3>请点击“+”添加集训！</h3>
+                {% endif %}
+                <!-- /集训列表 -->
+
             </div>
         </div>
     </div>
@@ -74,12 +72,7 @@
 
     function formSubmit() {
         if ($("#trainForm").find('input[name="name"]').val() == '' || $("#trainForm").find('textarea[name="describe"]').val() == '' || $("#trainForm").find('input[name="team_count"]').val() == ''){
-            $("#tips").html('表单未填写完整，“设置小组总数”只能填写数字！').parent().slideDown();
-            // 睡眠
-            setTimeout(sleep,3600);
-            function sleep() {
-                $("#tips").parent().slideUp();
-            }
+            layer.msg('表单未填写完整，“设置小组总数”只能填写数字！');
         }else {
             $.ajax({
                 url: "{{ url_for('administration.train') }}",
@@ -88,17 +81,42 @@
                 success: function (result) {
                     if (result == 'true'){
                         $("#train_form").slideUp();
-                        location.href = "{{ url_for('administration.train') }}";
+                        setTimeout(function () {
+                            location.href = "{{ url_for('administration.train') }}";
+                        }, 1000);
                     }else {
-                        $("#tips").html(result).parent().slideDown();
-                        setTimeout(sleep,3600);
-                        function sleep() {
-                            $("#tips").parent().slideUp();
-                        }
+                        layer.msg(result);
                     }
                 }
             })
         }
+    }
+
+    // 集训结束/删除功能
+    function trainAbleDelete(field, train_id) {
+        if (field == 'delete'){
+            info_data = {'delete': 1, "train_id": train_id}
+        }else if (field == 'able'){
+            info_data = {'able': 1, "train_id": train_id}
+        }
+        layer.msg("确认本次操作", {
+            time: 0
+            ,btn: ['确认', '取消']
+            ,yes: function () {
+                $.ajax({
+                    url: "{{ url_for('administration.train') }}",
+                    type: "POST",
+                    data: info_data,
+                    success: function (result) {
+                        if (result == 'true'){
+                            location.href = "{{ url_for('administration.train') }}";
+                        }else {
+                            layer.msg(result);
+                        }
+                    }
+                });
+            }
+        })
     }
     </script>
 {% endblock %}

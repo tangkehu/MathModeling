@@ -11,6 +11,7 @@ class Train(Common):
     describe = db.Column(db.String(128), nullable=False)
     create_time = db.Column(db.DateTime, default=datetime.now())
     able = db.Column(db.Boolean, default=True)
+    delete = db.Column(db.Boolean, default=False)
 
     train_team = db.relationship('TrainTeam', backref='train', lazy='dynamic')
     train_files = db.relationship('TrainFiles', backref='train', lazy='dynamic')
@@ -26,10 +27,9 @@ class Train(Common):
         if info.get('describe'):
             self.describe = info.get('describe')
         if info.get('able'):
-            if self.able:
-                self.able = False
-            else:
-                self.able = True
+            self.able = False
+        if info.get('delete'):
+            self.delete = True
         try:
             self.save()
             return True
