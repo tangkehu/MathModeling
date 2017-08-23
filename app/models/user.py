@@ -18,6 +18,8 @@ class User(UserMixin, Common):
     role_id = db.Column(db.Integer, db.ForeignKey('tb_roles.id'))
     train_team_id = db.Column(db.Integer, db.ForeignKey('tb_train_team.id'))
 
+    train_files = db.relationship('TrainFiles', backref='user', lazy='dynamic')
+
     # 密码
     def password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -2,10 +2,11 @@
 
 {% block page_content %}
     <div class="row">
-    <div class="col-lg-12">
-        <a href="{{ url_for('administration.train') }}" class="btn btn-default btn-outline" style="margin-bottom: 3%"><i class="fa fa-reply fa-fw"></i> 返 回</a>
+        <div class="col-lg-12">
+            <a href="{{ url_for('administration.train') }}" class="btn btn-default btn-outline" style="margin-bottom: 3%"><i class="fa fa-reply fa-fw"></i> 返 回</a>
+        </div>
     </div>
-    </div>
+
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-primary">
@@ -13,89 +14,177 @@
                     集训题目
                 </div>
                 <div class="panel-body">
-                    这里是集训题目
+                    {% set timu = current_train.train_files.filter_by(train_file_type_id=1).all() %}
+                    {% if timu %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                {% for ti in timu %}
+                                    <tr>
+                                        <td>{{ ti.name }}</td>
+                                        <td>
+                                            <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a onclick="fileDelete({{ ti.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 当前无集训题目
+                    {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     模型结构
                 </div>
                 <div class="panel-body">
-                    模型结构
+                    {% set moxing = current_train.train_files.filter_by(train_file_type_id=2).all() %}
+                    {% if moxing %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                {% for mo in moxing %}
+                                    <tr>
+                                        <td>{{ mo.name }}</td>
+                                        <td>
+                                            <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a onclick="fileDelete({{ mo.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 当前无模型结构
+                    {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     参考资料
                 </div>
                 <div class="panel-body">
-                    参考资料
+                    {% set ziliao = current_train.train_files.filter_by(train_file_type_id=8).all() %}
+                    {% if ziliao %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                {% for zi in ziliao %}
+                                    <tr>
+                                        <td>{{ zi.name }}</td>
+                                        <td>
+                                            <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a onclick="fileDelete({{ zi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 当前无参考资料
+                    {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     评分标准
                 </div>
                 <div class="panel-body">
-                    评分标准
+                    {% set biaozhun = current_train.train_files.filter_by(train_file_type_id=4).all() %}
+                    {% if biaozhun %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                {% for bi in biaozhun %}
+                                    <tr>
+                                        <td>{{ bi.name }}</td>
+                                        <td>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 当前无评分标准
+                    {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     评分表
                 </div>
                 <div class="panel-body">
-                    评分表
+                    {% set biao = current_train.train_files.filter_by(train_file_type_id=6).all() %}
+                    {% if biao %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                {% for bi in biao %}
+                                    <tr>
+                                        <td>{{ bi.name }}</td>
+                                        <td>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 当前无评分表
+                    {% endif %}
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     文档上传
                 </div>
                 <div class="panel-body">
-                    <form role="form">
+                    <form role="form" action="" method="post" enctype="multipart/form-data">
                          <div class="form-group">
                             <label>选择类别</label>
-                            <label>
-                                <input type="radio" name="file_type" value="1">集训题目
-                            </label>
-                            <label>
-                                <input type="radio" name="file_type" value="2">模型结构
-                            </label>
-                            <label>
-                                <input type="radio" name="file_type" value="4">评分标准
-                            </label>
-                             <label>
-                                <input type="radio" name="file_type" value="6">评分表
-                            </label>
-                             <label>
-                                <input type="radio" name="file_type" value="8">参考材料
-                            </label>
+                            <input type="radio" name="train_file_type_id" value="1" required>集训题目
+                            <input type="radio" name="train_file_type_id" value="2">模型结构
+                            <input type="radio" name="train_file_type_id" value="4">评分标准
+                            <input type="radio" name="train_file_type_id" value="6">评分表
+                            <input type="radio" name="train_file_type_id" value="8">参考材料
                         </div>
                         <div class="form-group">
                             <label>选择文件</label>
-                            <input type="file" name="file">
+                            <input type="file" name="file" required>
                         </div>
-                        <a class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</a>
+                        <button type="submit" class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="panel panel-info">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     小组管理
                 </div>
@@ -105,8 +194,8 @@
             </div>
         </div>
 
-        <div class="col-lg-8">
-            <div class="panel panel-success">
+        <div class="col-md-8">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     数据管理
                 </div>
@@ -116,4 +205,31 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block base_script %}
+<script type="text/javascript">
+    function fileDelete(file_id) {
+        layer.msg("确认本次操作", {
+            time: 0,
+            btn: ['确认', '取消'],
+            yes: function () {
+                $.ajax({
+                    url: "{{ url_for('administration.train_files_delete', train_files_id='') }}"+file_id,
+                    type: 'GET',
+                    success: function (result) {
+                        if (result == 'true'){
+                            layer.msg("删除成功！");
+                            setTimeout(function () {
+                                location.href = "{{ url_for('administration.train_edit', train_id=current_train.id) }}";
+                            }, 1000)
+                        }else {
+                            layer.msg(result)
+                        }
+                    }
+                })
+            }
+        })
+    }
+</script>
 {% endblock %}

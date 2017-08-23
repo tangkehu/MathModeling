@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+import os
+
 
 class Config:
 
@@ -8,6 +10,7 @@ class Config:
 
     SECRET_KEY = 'hard to guess string'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TRAIN_UPLOAD_FOLDER = os.path.join(os.getcwd(),'app', 'static', 'trainfiles')
 
     @staticmethod
     def init_app(app):
