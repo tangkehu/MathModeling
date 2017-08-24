@@ -50,7 +50,7 @@ def train_edit(train_id):
     if request.method == 'POST':
         post_file = request.files.get('file')
         if post_file:
-            name = post_file.filename.split('.')[:-1]
+            name = os.path.splitext(post_file.filename)[0]
             save_file = TrainFiles()
             flag = save_file.edit({'name': name, 'train_id': train_id, 'user_id': 1,
                                    'train_file_type_id': request.form.get('train_file_type_id')})
