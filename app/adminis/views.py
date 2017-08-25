@@ -29,6 +29,7 @@ def train():
             if Train.query.filter_by(able=1).first():
                 return u'当前有集训未结束，不能新增集训！'
             new_train = Train()
+            info['create_time'] = 1
             flag = new_train.edit(info)
             if flag:
                 return 'true'
@@ -52,8 +53,13 @@ def train_edit(train_id):
         if post_file:
             name = os.path.splitext(post_file.filename)[0]
             save_file = TrainFiles()
-            flag = save_file.edit({'name': name, 'train_id': train_id, 'user_id': 1,
-                                   'train_file_type_id': request.form.get('train_file_type_id')})
+            flag = save_file.edit({
+                'name': name,
+                'create_time': 1,
+                'train_id': train_id,
+                'user_id': 1,
+                'train_file_type_id': request.form.get('train_file_type_id')
+            })
             if not flag:
                 flash(u'文件上传失败，请重试！')
                 return redirect(url_for('.train_edit', train_id=train_id))

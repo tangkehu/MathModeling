@@ -30,6 +30,8 @@ class Train(Common):
             self.able = False
         if info.get('delete'):
             self.delete = True
+        if info.get('create_time'):
+            self.create_time = datetime.now()
         try:
             self.save()
             return True

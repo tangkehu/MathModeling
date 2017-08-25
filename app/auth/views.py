@@ -35,6 +35,7 @@ def register():
             return u'Tips：该学号已被注册！'
         else:
             new_user = User()
+            form_data['create_time'] = 1
             flag = new_user.edit(form_data)
             if flag:
                 return 'true'

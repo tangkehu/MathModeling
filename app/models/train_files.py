@@ -34,6 +34,8 @@ class TrainFiles(Common):
             self.train_file_type = TrainFileType.query.get_or_404(int(info.get('train_file_type_id')))
         if info.get('train_team_id'):
             self.train_team = TrainTeam.query.get_or_404(int(info.get('train_team_id')))
+        if info.get('create_time'):
+            self.create_time = datetime.now()
         if info.get('able'):
             if self.able:
                 self.able = False
@@ -44,14 +46,3 @@ class TrainFiles(Common):
             return True
         except Exception:
             return False
-
-    @staticmethod
-    def insert_test():
-        file_ = TrainFiles(
-            name='test',
-            path='test',
-            train_file_type = TrainFileType.query.get_or_404(1),
-            train=Train.query.get_or_404(4)
-        )
-
-        file_.save()

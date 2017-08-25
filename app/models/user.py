@@ -57,6 +57,8 @@ class User(UserMixin, Common):
         if info.get('train_team_id'):
             self.train_team = TrainTeam.query.get_or_404(int(info.get('train_team_id')))
             self.train_team.insert_members()
+        if info.get('create_time'):
+            self.create_time = datetime.now()
         try:
             self.save()
             return True

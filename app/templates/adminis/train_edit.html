@@ -8,7 +8,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     集训题目
@@ -41,6 +41,31 @@
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    文档上传
+                </div>
+                <div class="panel-body">
+                    <form role="form" action="" method="post" enctype="multipart/form-data">
+                         <div class="form-group">
+                            <label>选择类别</label>
+                            <input type="radio" name="train_file_type_id" value="1" required>集训题目
+                            <input type="radio" name="train_file_type_id" value="2">模型结构
+                            <input type="radio" name="train_file_type_id" value="4">评分标准
+                            <input type="radio" name="train_file_type_id" value="6">评分表
+                            <input type="radio" name="train_file_type_id" value="8">参考材料
+                        </div>
+                        <div class="form-group">
+                            <label>选择文件</label>
+                            <input type="file" name="file" required>
+                        </div>
+                        <button type="submit" class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
                     模型结构
                 </div>
                 <div class="panel-body">
@@ -68,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     参考资料
@@ -98,7 +123,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     评分标准
@@ -128,7 +153,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     评分表
@@ -158,32 +183,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    文档上传
-                </div>
-                <div class="panel-body">
-                    <form role="form" action="" method="post" enctype="multipart/form-data">
-                         <div class="form-group">
-                            <label>选择类别</label>
-                            <input type="radio" name="train_file_type_id" value="1" required>集训题目
-                            <input type="radio" name="train_file_type_id" value="2">模型结构
-                            <input type="radio" name="train_file_type_id" value="4">评分标准
-                            <input type="radio" name="train_file_type_id" value="6">评分表
-                            <input type="radio" name="train_file_type_id" value="8">参考材料
-                        </div>
-                        <div class="form-group">
-                            <label>选择文件</label>
-                            <input type="file" name="file" required>
-                        </div>
-                        <button type="submit" class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     小组管理
@@ -204,7 +204,9 @@
                 </div>
             </div>
         </div>
+
     </div>
+
 {% endblock %}
 
 {% block base_script %}
@@ -222,7 +224,7 @@
                             layer.msg("删除成功！");
                             setTimeout(function () {
                                 location.href = "{{ url_for('administration.train_edit', train_id=current_train.id) }}";
-                            }, 1000)
+                            }, 800)
                         }else {
                             layer.msg(result)
                         }
