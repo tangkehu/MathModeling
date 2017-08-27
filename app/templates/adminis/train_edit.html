@@ -16,21 +16,19 @@
                 <div class="panel-body">
                     {% set timu = current_train.train_files.filter_by(train_file_type_id=1).all() %}
                     {% if timu %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                {% for ti in timu %}
-                                    <tr>
-                                        <td>{{ ti.name }}</td>
-                                        <td>
-                                            <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a onclick="fileDelete({{ ti.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <tbody>
+                            {% for ti in timu %}
+                                <tr>
+                                    <td style="width: 75%">{{ ti.name }}</td>
+                                    <td>
+                                        <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                        <a onclick="fileDelete({{ ti.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <i class="fa fa-tags fa-fw"></i> 当前无集训题目
                     {% endif %}
@@ -71,21 +69,19 @@
                 <div class="panel-body">
                     {% set moxing = current_train.train_files.filter_by(train_file_type_id=2).all() %}
                     {% if moxing %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                {% for mo in moxing %}
-                                    <tr>
-                                        <td>{{ mo.name }}</td>
-                                        <td>
-                                            <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a onclick="fileDelete({{ mo.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <tbody>
+                            {% for mo in moxing %}
+                                <tr>
+                                    <td style="width: 75%">{{ mo.name }}</td>
+                                    <td>
+                                        <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                        <a onclick="fileDelete({{ mo.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <i class="fa fa-tags fa-fw"></i> 当前无模型结构
                     {% endif %}
@@ -101,21 +97,19 @@
                 <div class="panel-body">
                     {% set ziliao = current_train.train_files.filter_by(train_file_type_id=8).all() %}
                     {% if ziliao %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                {% for zi in ziliao %}
-                                    <tr>
-                                        <td>{{ zi.name }}</td>
-                                        <td>
-                                            <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a onclick="fileDelete({{ zi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <tbody>
+                            {% for zi in ziliao %}
+                                <tr>
+                                    <td style="width: 75%">{{ zi.name }}</td>
+                                    <td>
+                                        <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                        <a onclick="fileDelete({{ zi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <i class="fa fa-tags fa-fw"></i> 当前无参考资料
                     {% endif %}
@@ -131,21 +125,19 @@
                 <div class="panel-body">
                     {% set biaozhun = current_train.train_files.filter_by(train_file_type_id=4).all() %}
                     {% if biaozhun %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                {% for bi in biaozhun %}
-                                    <tr>
-                                        <td>{{ bi.name }}</td>
-                                        <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <tbody>
+                            {% for bi in biaozhun %}
+                                <tr>
+                                    <td style="width: 75%">{{ bi.name }}</td>
+                                    <td>
+                                        <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                        <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <i class="fa fa-tags fa-fw"></i> 当前无评分标准
                     {% endif %}
@@ -161,21 +153,19 @@
                 <div class="panel-body">
                     {% set biao = current_train.train_files.filter_by(train_file_type_id=6).all() %}
                     {% if biao %}
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                {% for bi in biao %}
-                                    <tr>
-                                        <td>{{ bi.name }}</td>
-                                        <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table">
+                            <tbody>
+                            {% for bi in biao %}
+                                <tr>
+                                    <td style="width: 75%">{{ bi.name }}</td>
+                                    <td>
+                                        <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                        <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <i class="fa fa-tags fa-fw"></i> 当前无评分表
                     {% endif %}

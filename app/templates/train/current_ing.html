@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-group">
+                <!-- 内容 -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        集训题目
+                    </div>
+                    <div class="panel-body">
+                        {% set timu = current_train.train_files.filter_by(train_file_type_id=1).all() %}
+                        {% if timu %}
+                            <table class="table">
+                                <tbody>
+                                {% for ti in timu %}
+                                    <tr>
+                                        <td style="width: 75%">{{ ti.name }}</td>
+                                        <td>
+                                            <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i> 当前无集训题目
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        模型结构
+                    </div>
+                    <div class="panel-body">
+                        {% set moxing = current_train.train_files.filter_by(train_file_type_id=2).all() %}
+                        {% if moxing %}
+                            <table class="table">
+                                <tbody>
+                                {% for mo in moxing %}
+                                    <tr>
+                                        <td style="width: 75%">{{ mo.name }}</td>
+                                        <td>
+                                            <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i> 当前无模型结构
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        参考资料
+                    </div>
+                    <div class="panel-body">
+                        {% set ziliao = current_train.train_files.filter_by(train_file_type_id=8).all() %}
+                        {% if ziliao %}
+                            <table class="table">
+                                <tbody>
+                                {% for zi in ziliao %}
+                                    <tr>
+                                        <td style="width: 75%">{{ zi.name }}</td>
+                                        <td>
+                                            <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i> 当前无参考资料
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        评分标准
+                    </div>
+                    <div class="panel-body">
+                        {% set biaozhun = current_train.train_files.filter_by(train_file_type_id=4).all() %}
+                        {% if biaozhun %}
+                            <table class="table">
+                                <tbody>
+                                {% for bi in biaozhun %}
+                                    <tr>
+                                        <td style="width: 75%">{{ bi.name }}</td>
+                                        <td>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i> 当前无评分标准
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        评分表
+                    </div>
+                    <div class="panel-body">
+                        {% set biao = current_train.train_files.filter_by(train_file_type_id=6).all() %}
+                        {% if biao %}
+                            <table class="table">
+                                <tbody>
+                                {% for bi in biao %}
+                                    <tr>
+                                        <td style="width: 75%">{{ bi.name }}</td>
+                                        <td>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i> 当前无评分表
+                        {% endif %}
+                    </div>
+                </div>
+            <!-- / 内容 -->
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        文档上传
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" action="" method="post" enctype="multipart/form-data">
+                             <div class="form-group">
+                                <label>选择类别</label>
+                                <input type="radio" name="train_file_type_id" value="3" required>数模项目管理
+                                <input type="radio" name="train_file_type_id" value="5">小组论文
+                            </div>
+                            <div class="form-group">
+                                <label>选择文件</label>
+                                <input type="file" name="file" required>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</button>
+                        </form>
+                    </div>
+                    <div class="panel-footer">
+                        {% if current_user.train_files.all() %}
+                            <table class="table">
+                                <tbody>
+                                {% for f in current_user.train_files.all() %}
+                                    <tr>
+                                        <td width="80%">{{ f.name }}</td>
+                                        <td>
+                                            {% if f.able %}正常{% else %}待审{% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
