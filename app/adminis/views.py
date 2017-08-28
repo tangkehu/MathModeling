@@ -114,28 +114,30 @@ def team_manage(train_id):
         return 'true'
 
 
-@administration.route('/team_table/<train_id>', methods=['GET', 'POST'])
+@administration.route('/team_edit/<team_id>', methods=['GET', 'POST'])
 @login_required
-def team_table(train_id):
-    current_train = Train.query.get_or_404(int(train_id))
-    if current_train.train_team:
-        cnt = current_train.train_team.count()
-        records = list()
-        for t in current_train.train_team.limit(int(request.args['length'])).offset(int(request.args['start'])).all():
-            content = dict()
-            content['number'] = t.number
-            content['members'] = t.members
-            content['id'] = t.id
-            records.append(content)
+def team_edit(team_id):
+    if request.method == 'POST':
+        # POST请求 ，包含train_id，处理单个新增
+        try:
+            int(team_id)
+        except Exception:
+            return u'请输入数字！'
+        else:
+            new_train = Train.query.get_or_404(int(request.form.get('train_id')))
+            if new_train.train_team.filter_by(number='%02d' % int(team_id)).first():
+                return u'该小组已经存在，请勿重复添加！'
+            new_team = TrainTeam()
+            flag = new_team.edit({'number': '%02d' % int(team_id), 'train_id': new_train.id})
+            if flag:
+                return 'true'
+            else:
+                return u'新增失败，请重试！'
     else:
-        cnt = 0
-        records = list()
-    data = {
-        "recordsTotal": cnt,
-        "recordsFiltered": cnt,
-        "data": records
-    }
-    return json.dumps(data)
+        # GET请求 只有id参数，处理删除
+        delete_team = TrainTeam.query.get_or_404(int(team_id))
+        delete_team.delete()
+        return 'true'
 
 
 @administration.route('/user')

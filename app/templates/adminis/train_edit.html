@@ -147,15 +147,29 @@
                     </div>
                     <div class="panel-body">
                         {% if current_train.train_team.all() %}
-                            <table id="teamTable" class="table">
+                            <table id="teamTable" class="table table-hover">
                                 <thead>
-                                <tr>
-                                    <th width="20%">组号</th>
-                                    <th width="60%">成员</th>
-                                    <th width="20%">操作</th>
-                                </tr>
+                                    <tr>
+                                        <th width="15%">组号</th>
+                                        <th width="70%">成员</th>
+                                        <th width="15%">操作</th>
+                                    </tr>
                                 </thead>
+                                <tbody>
+                                    {% for t in current_train.train_team.all() %}
+                                    <tr>
+                                        <td>{{ t.number }}</td>
+                                        <td>{{ t.members }}</td>
+                                        <td><a onclick="teamDelete({{ t.id }})" class="btn btn-danger btn-xs btn-outline"><i class="fa fa-trash-o fa-fw"></i> 删除</a> </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
                             </table>
+                            <!-- 单个小组新增 -->
+                            <a onclick="createSingleTeam()" class="btn btn-primary btn-outline"><i class="fa fa-plus-circle fa-fw"></i> 新 增</a>
+                            <!-- / 单个小组新增 -->
+                            <!-- 导出 -->
+                            <a onclick="" class="btn btn-primary btn-outline"><i class="fa fa-share-square-o fa-fw"></i> 导 出</a>
                         {% else %}
                             <form id="createTeamForm">
                                 <div class="form-group">
@@ -216,6 +230,13 @@
 {% block base_script %}
 
 <script type="text/javascript">
+
+    $("#teamTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
+
     function fileDelete(file_id) {
         layer.msg("确认本次操作", {
             time: 0,
@@ -263,22 +284,52 @@
         }
     }
 
-    $("#teamTable").DataTable({
-        "serverSide": true,
-        "retrieve": true,
-        // "pagingType": "full_numbers",
-        "lengthMenu": [5, 10, 20, 40],
-        language: dtLanguage,
-        "ajax": {
-            "url": "{{ url_for('administration.team_table', train_id=current_train.id) }}",
-            "type": 'GET'
-        },
-        "columns": [
-            {"data": "number"},
-            {"data": "members"},
-            {"data": "id"}
-        ]
-    })
+    // 单个创建小组
+    function createSingleTeam() {
+        layer.prompt({title: '请输入要新增的组号:'}, function (val, index) {
+            layer.close(index);
+            layer.load(1);
+            $.ajax({
+                url: "{{ url_for('administration.team_edit', team_id='') }}"+val,
+                type: "POST",
+                data: {'train_id': {{ current_train.id }}},
+                success: function (result) {
+                    layer.closeAll('loading');
+                    if (result == 'true'){
+                        layer.msg("新增成功！");
+                        setTimeout(function () {
+                            location.href = "{{ url_for('administration.train_edit', train_id=current_train.id) }}";
+                        }, 500);
+                    }else {
+                        layer.msg(result);
+                    }
+                }
+            })
+        });
+    }
+
+    function teamDelete(team_id) {
+        layer.msg("确认本次操作", {
+            time: 0,
+            btn: ['确认', '取消'],
+            yes: function () {
+                $.ajax({
+                    url: "{{ url_for('administration.team_edit', team_id='') }}"+team_id,
+                    type: 'GET',
+                    success: function (result) {
+                        if (result == 'true'){
+                            layer.msg("删除成功！");
+                            setTimeout(function () {
+                                location.href = "{{ url_for('administration.train_edit', train_id=current_train.id) }}";
+                            }, 500);
+                        }else {
+                            layer.msg(result);
+                        }
+                    }
+                })
+            }
+        })
+    }
     
 </script>
 
