@@ -23,10 +23,6 @@
                                 <label>描述</label>
                                 <textarea class="form-control" name="describe" rows="3" placeholder="对本次集训的简短介绍，包括集训的数模题目、集训的参与人数等..."></textarea>
                             </div>
-                            <div class="form-group">
-                                <label>设置小组总数</label>
-                                <input class="form-control" type="number" name="team_count" placeholder="总共有多少个小组？">
-                            </div>
                             <a onclick="formSubmit()" class="btn btn-primary btn-outline"> 提 交</a>
                         </form>
                     </div>
@@ -71,8 +67,8 @@
     }
 
     function formSubmit() {
-        if ($("#trainForm").find('input[name="name"]').val() == '' || $("#trainForm").find('textarea[name="describe"]').val() == '' || $("#trainForm").find('input[name="team_count"]').val() == ''){
-            layer.msg('表单未填写完整，“设置小组总数”只能填写数字！');
+        if ($("#trainForm").find('input[name="name"]').val() == '' || $("#trainForm").find('textarea[name="describe"]').val() == ''){
+            layer.msg('表单未填写完整!');
         }else {
             $.ajax({
                 url: "{{ url_for('administration.train') }}",

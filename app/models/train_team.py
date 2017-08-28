@@ -26,8 +26,8 @@ class TrainTeam(Common):
             self.number = info.get('number')
         if info.get('score'):
             self.score = info.get('score')
-        if info.get('train'):
-            self.train = Train.query.filter_by(able=True).first()
+        if info.get('train_id'):
+            self.train = Train.query.get_or_404(int(info.get('train_id')))
         if info.get('leader'):
             self.leader = self.users.get_or_404(int(info.get('leader'))).real_name
         try:

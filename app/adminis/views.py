@@ -1,10 +1,11 @@
 # encoding: utf-8
 
 import os
+import json
 from flask import render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required
 from . import administration
-from app.models import Train, TrainFiles
+from app.models import Train, TrainFiles, TrainTeam
 
 
 @administration.route('/train', methods=['GET', 'POST'])
@@ -96,6 +97,45 @@ def train_files_delete(train_files_id):
     else:
         delete_file.delete()
         return 'true'
+
+
+@administration.route('/team_manage/<train_id>', methods=['GET', 'POST'])
+@login_required
+def team_manage(train_id):
+    if request.method == 'POST':
+        numbers = int(request.form.get('team_count'))
+        for i in range(numbers):
+            new_team = TrainTeam()
+            flag = new_team.edit({'number': '%02d' % (i+1), 'train_id': train_id})
+            if not flag:
+                return u'小组创建失败!'
+        return 'true'
+    else:
+        return 'true'
+
+
+@administration.route('/team_table/<train_id>', methods=['GET', 'POST'])
+@login_required
+def team_table(train_id):
+    current_train = Train.query.get_or_404(int(train_id))
+    if current_train.train_team:
+        cnt = current_train.train_team.count()
+        records = list()
+        for t in current_train.train_team.limit(int(request.args['length'])).offset(int(request.args['start'])).all():
+            content = dict()
+            content['number'] = t.number
+            content['members'] = t.members
+            content['id'] = t.id
+            records.append(content)
+    else:
+        cnt = 0
+        records = list()
+    data = {
+        "recordsTotal": cnt,
+        "recordsFiltered": cnt,
+        "data": records
+    }
+    return json.dumps(data)
 
 
 @administration.route('/user')

@@ -19,8 +19,8 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mssql+pymssql://sa:.@127.0.0.1/NewMath'
-    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:tkh259.@127.0.0.1/mathmodeling'
+    # SQLALCHEMY_DATABASE_URI = 'mssql+pymssql://sa:.@127.0.0.1/NewMath'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:tkh259.@127.0.0.1/mathmodeling'
 
 
 class ProductionConfig(Config):

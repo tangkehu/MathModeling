@@ -2,7 +2,7 @@
 
 {% block page_content %}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-8">
             <div class="panel panel-group">
                 <!-- 内容 -->
                 <div class="panel panel-primary">
@@ -138,8 +138,9 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="panel panel-group">
+                <!-- 右边栏 -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         文档上传
@@ -147,9 +148,11 @@
                     <div class="panel-body">
                         <form role="form" action="" method="post" enctype="multipart/form-data">
                              <div class="form-group">
-                                <label>选择类别</label>
-                                <input type="radio" name="train_file_type_id" value="3" required>数模项目管理
-                                <input type="radio" name="train_file_type_id" value="5">小组论文
+                                 <label>选择类别</label>
+                                 <input type="radio" name="train_file_type_id" value="3" required>数模项目管理
+                                 <input type="radio" name="train_file_type_id" value="5">小组论文
+                                 <input type="radio" name="train_file_type_id" value="6">评分表
+                                 <input type="radio" name="train_file_type_id" value="7">总结
                             </div>
                             <div class="form-group">
                                 <label>选择文件</label>
@@ -162,7 +165,7 @@
                         {% if current_user.train_files.all() %}
                             <table class="table">
                                 <tbody>
-                                {% for f in current_user.train_files.all() %}
+                                {% for f in current_user.train_files.filter_by(train_id=current_train.id).all() %}
                                     <tr>
                                         <td width="80%">{{ f.name }}</td>
                                         <td>
@@ -175,10 +178,10 @@
                         {% endif %}
                     </div>
                 </div>
-
-
+                <!-- / 右边栏 -->
             </div>
         </div>
+
     </div>
 
 {% endblock %}
