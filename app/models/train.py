@@ -16,6 +16,7 @@ class Train(Common):
 
     train_team = db.relationship('TrainTeam', backref='train', lazy='dynamic')
     train_files = db.relationship('TrainFiles', backref='train', lazy='dynamic')
+    train_grade = db.relationship('TrainGrade', backref='train', lazy='dynamic')
 
     def edit(self, info):
         """

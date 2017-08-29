@@ -2,7 +2,7 @@
 
 {% block page_content %}
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="panel panel-group">
                 <!-- 内容 -->
                 <div class="panel panel-primary">
@@ -111,86 +111,6 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        论文
-                    </div>
-                    <div class="panel-body">
-                        {% set lunwen = current_train.train_files.filter_by(train_file_type_id=5).all() %}
-                        {% if lunwen %}
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">组号</th>
-                                        <th width="50%">成员</th>
-                                        <th width="10%">得分</th>
-                                        <th width="30%">论文</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for l in lunwen %}
-                                    <tr>
-                                        <td>{{ l.train_team.number }}</td>
-                                        <td>{{ l.train_team.members }}</td>
-                                        <td>{{ l.train_team.score }}</td>
-                                        <td>
-                                            <a href="{% if l.filename %}{{ url_for('train.download', filename=l.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a href="{% if l.filename %}{{ url_for('train.download', filename=l.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <i class="fa fa-tags fa-fw"></i> 当前无论文
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        其它文档
-                    </div>
-                    <div class="panel-body">
-                    {% if current_train.train_team.first() %}
-                        {% if current_train.train_team.first().train_files.filter_by(train_file_type_id=6).all() or current_train.train_files.filter_by(train_file_type_id=3).all() or current_train.train_files.filter_by(train_file_type_id=7).all() %}
-                            {% set teams = current_train.train_team.all() %}
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">组号</th>
-                                        <th width="30%">项目管理</th>
-                                        <th width="30%">评分情况</th>
-                                        <th width="30%">总结</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for t in teams %}
-                                        <tr>
-                                            <td>{{ t.number }}</td>
-                                            <td>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=3).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=3).first().filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=3).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=3).first().filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
-                                            </td>
-                                            <td>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=6).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=6).first().filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=6).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=6).first().filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
-                                            </td>
-                                            <td>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=7).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=7).first().filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                                <a href="{% if t.train_files.filter_by(train_file_type_id=7).first().filename %}{{ url_for('train.download', filename=t.train_files.filter_by(train_file_type_id=7).first().filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <i class="fa fa-tags fa-fw"></i> 当前无其它文档
-                        {% endif %}
-                    {% endif %}
-                    </div>
-                </div>
-
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
                         评分表
                     </div>
                     <div class="panel-body">
@@ -199,6 +119,7 @@
                             <table class="table">
                                 <tbody>
                                 {% for bi in biao %}
+                                    {% if not bi.train_team_id %}
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
@@ -206,12 +127,82 @@
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
                         {% else %}
                             <i class="fa fa-tags fa-fw"></i> 当前无评分表
                         {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        数据展示
+                    </div>
+
+                    <div class="panel-body">
+                    <table id="teamDataTable" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th width="8%">组号</th>
+                            <th width="22%">成员</th>
+                            <th width="10%">分数</th>
+                            <th width="15%">项目管理</th>
+                            <th width="15%">论文</th>
+                            <th width="15%">评分表</th>
+                            <th width="15%">总结</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if current_train.train_team.all() %}
+                            {% for t in current_train.train_team.all() %}
+                                <tr>
+                                    <td>{{ t.number }}</td>
+                                    <td>{{ t.members }}</td>
+                                    <td>{{ t.score }}</td>
+                                    <td>
+                                        {% set three = t.train_files.filter_by(train_file_type_id=3).first() %}
+                                        {% if three %}
+                                        <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set five = t.train_files.filter_by(train_file_type_id=5).first() %}
+                                        {% if five %}
+                                        <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set six = t.train_files.filter_by(train_file_type_id=6).first() %}
+                                        {% if six %}
+                                        <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set seven = t.train_files.filter_by(train_file_type_id=7).first() %}
+                                        {% if seven %}
+                                        <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
                     </div>
                 </div>
 
@@ -228,4 +219,17 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_script %}
+    <script type="text/javascript">
+
+    // 小组数据处理功能
+    $("#teamDataTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
+
+    </script>
 {% endblock %}

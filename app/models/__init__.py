@@ -8,6 +8,7 @@ from .train import Train
 from .train_team import TrainTeam
 from .train_files import TrainFiles
 from .train_file_type import TrainFileType
+from .train_grade import TrainGrade
 
 
 @login_manager.user_loader

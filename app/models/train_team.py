@@ -3,6 +3,7 @@
 from app import db
 from .common import Common
 from .train import Train
+from .train_grade import TrainGrade
 
 
 class TrainTeam(Common):
@@ -14,6 +15,18 @@ class TrainTeam(Common):
 
     users = db.relationship('User', backref='train_team', lazy='dynamic')
     train_files = db.relationship('TrainFiles', backref='train_team', lazy='dynamic')
+
+    # 典型的多对多关系
+    graded = db.relationship('TrainGrade',
+                             foreign_keys=[TrainGrade.grader_id],
+                             backref=db.backref('grader', lazy='joined'),
+                             lazy='dynamic',
+                             cascade='all, delete-orphan')
+    grader = db.relationship('TrainGrade',
+                             foreign_keys=[TrainGrade.graded_id],
+                             backref=db.backref('graded', lazy='joined'),
+                             lazy='dynamic',
+                             cascade='all, delete-orphan')
 
     def edit(self, info):
         """

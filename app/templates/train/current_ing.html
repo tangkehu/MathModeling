@@ -142,31 +142,34 @@
                         分数公示栏
                     </div>
                     <div class="panel-body">
+                        {% if current_train.scores_public %}
                         <table id="scoresTable" class="table table-hover">
                             <thead>
                             <tr>
                                 <th width="15%">组号</th>
                                 <th width="15%">得分</th>
                                 <th width="45%">论文</th>
-                                <th width="25%">--</th>
+                                <th width="25%"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% if current_train.train_team and current_train.scores_public %}
                                 {% for t in current_train.train_team.all() %}
+                                    {% set t_file = t.train_files.filter_by(train_file_type_id=5).first() %}
                                     <tr>
                                         <td>{{ t.number }}</td>
-                                        <td>--</td>
-                                        <td>--</td>
+                                        <td>{{ t.score }}</td>
+                                        <td>{{ t_file.name }}</td>
                                         <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                            <a href="{{ url_for('train.download', filename=t_file.filename) }}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{{ url_for('train.download', filename=t_file.filename) }}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
-                            {% endif %}
                             </tbody>
                         </table>
+                        {% else %}
+                        <i class="fa fa-tags fa-fw"></i> 分数暂未公示！
+                        {% endif %}
                     </div>
                 </div>
 

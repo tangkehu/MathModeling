@@ -4,7 +4,7 @@ from app import db
 
 
 class Common(db.Model):
-    __abstract__ = True
+    __abstract__ = True    # 设置这个值，才能被当成MODEL继承
     id = db.Column(db.Integer, primary_key=True)
 
     def save(self):
