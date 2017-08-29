@@ -125,6 +125,7 @@
                             <table class="table">
                                 <tbody>
                                 {% for bi in biao %}
+                                    {% if not bi.train_team_id %}
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
@@ -132,6 +133,7 @@
                                             <a onclick="fileDelete({{ bi.id }})" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> 删 除</a>
                                         </td>
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

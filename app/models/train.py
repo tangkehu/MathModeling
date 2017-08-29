@@ -10,8 +10,9 @@ class Train(Common):
     name = db.Column(db.String(64), nullable=False, unique=True)
     describe = db.Column(db.String(128), nullable=False)
     create_time = db.Column(db.DateTime, default=datetime.now())
-    able = db.Column(db.Boolean, default=True)
+    able = db.Column(db.Boolean, default=True)    # 记录是否为当前集训轮次
     delete = db.Column(db.Boolean, default=False)
+    scores_public = db.Column(db.Boolean, default=False)    # 分数公示
 
     train_team = db.relationship('TrainTeam', backref='train', lazy='dynamic')
     train_files = db.relationship('TrainFiles', backref='train', lazy='dynamic')
@@ -32,6 +33,11 @@ class Train(Common):
             self.delete = True
         if info.get('create_time'):
             self.create_time = datetime.now()
+        if info.get('scores_public'):
+            if self.scores_public:
+                self.scores_public = False
+            else:
+                self.scores_public = True
         try:
             self.save()
             return True

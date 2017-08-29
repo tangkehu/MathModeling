@@ -119,6 +119,7 @@
                             <table class="table">
                                 <tbody>
                                 {% for bi in biao %}
+                                    {% if not bi.train_team_id %}
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
@@ -126,6 +127,7 @@
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -134,6 +136,40 @@
                         {% endif %}
                     </div>
                 </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        分数公示栏
+                    </div>
+                    <div class="panel-body">
+                        <table id="scoresTable" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="15%">组号</th>
+                                <th width="15%">得分</th>
+                                <th width="45%">论文</th>
+                                <th width="25%">--</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if current_train.train_team and current_train.scores_public %}
+                                {% for t in current_train.train_team.all() %}
+                                    <tr>
+                                        <td>{{ t.number }}</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             <!-- / 内容 -->
             </div>
         </div>
@@ -189,6 +225,13 @@
 {% block base_script %}
     
 <script type="text/javascript">
+
+    // 分数公示栏表格处理
+    $("#scoresTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
 
     // 判断用户是否已经加入小组内
     {% if not current_user.train_team or not current_user.train_team.train_id == current_train.id %}
