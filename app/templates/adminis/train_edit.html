@@ -184,10 +184,70 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        数据管理
+                        小组文件数据管理
                     </div>
+
                     <div class="panel-body">
-                        DataTable
+                    <table id="filesTable" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th width="12%">组号</th>
+                            <th width="22%">项目管理</th>
+                            <th width="22%">论文</th>
+                            <th width="22%">评分表</th>
+                            <th width="22%">总结</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if current_train.train_team %}
+                            {% for t in current_train.train_team.all() %}
+                                <tr>
+                                    <td>{{ t.number }}</td>
+                                    <td>
+                                        {% set three = t.train_files.filter_by(train_file_type_id=3).first() %}
+                                        {% if three %}
+                                        <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        <a onclick="fileDelete({{ three.id }})" class="btn btn-outline btn-danger btn-xs"><i class="fa fa-trash-o fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set five = t.train_files.filter_by(train_file_type_id=5).first() %}
+                                        {% if five %}
+                                        <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        <a onclick="fileDelete({{ five.id }})" class="btn btn-outline btn-danger btn-xs"><i class="fa fa-trash-o fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set six = t.train_files.filter_by(train_file_type_id=6).first() %}
+                                        {% if six %}
+                                        <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        <a onclick="fileDelete({{ six.id }})" class="btn btn-outline btn-danger btn-xs"><i class="fa fa-trash-o fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set seven = t.train_files.filter_by(train_file_type_id=7).first() %}
+                                        {% if seven %}
+                                        <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
+                                        <a onclick="fileDelete({{ seven.id }})" class="btn btn-outline btn-danger btn-xs"><i class="fa fa-trash-o fa-fw"></i> </a>
+                                        {% else %}
+                                        无
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
                     </div>
                 </div>
                 <!-- / 左面栏 -->
@@ -230,13 +290,21 @@
 {% block base_script %}
 
 <script type="text/javascript">
-
+    // 小组管理的表格处理
     $("#teamTable").DataTable({
         "stateSave": true,
         "lengthMenu": [5, 10, 20, 40],
         language: dtLanguage
     });
 
+    // 文件管理表格处理
+    $("#filesTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
+
+    // 文件删除操作
     function fileDelete(file_id) {
         layer.msg("确认本次操作", {
             time: 0,
@@ -259,7 +327,8 @@
             }
         })
     }
-    
+
+    // 批量创建小组
     function createTeams() {
         if ($("#createTeamForm").find("input[name='team_count']").val() == ''){
             layer.msg("表单未填写，且表单只能填写数字！");
@@ -308,6 +377,7 @@
         });
     }
 
+    // 小组删除功能
     function teamDelete(team_id) {
         layer.msg("确认本次操作", {
             time: 0,

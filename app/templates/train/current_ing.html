@@ -161,27 +161,63 @@
                             <button type="submit" class="btn btn-default btn-outline"><i class="fa fa-upload fa-fw"></i> 上 传</button>
                         </form>
                     </div>
-                    <div class="panel-footer">
-                        {% if current_user.train_files.all() %}
-                            <table class="table">
-                                <tbody>
-                                {% for f in current_user.train_files.filter_by(train_id=current_train.id).all() %}
-                                    <tr>
-                                        <td width="80%">{{ f.name }}</td>
-                                        <td>
-                                            {% if f.able %}正常{% else %}待审{% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endif %}
-                    </div>
+
+                    {% if current_user.train_team and current_user.train_team.train_files.all() %}
+                        <table class="table">
+                            <tbody>
+                            {% for f in current_user.train_team.train_files.all() %}
+                                <tr>
+                                    <td width="80%">{{ f.name }}</td>
+                                    <td>
+                                        {% if f.able %}正常{% else %}待审{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+
                 </div>
                 <!-- / 右边栏 -->
             </div>
         </div>
 
     </div>
+
+{% endblock %}
+
+{% block base_script %}
+    
+<script type="text/javascript">
+
+    // 判断用户是否已经加入小组内
+    {% if not current_user.train_team or not current_user.train_team.train_id == current_train.id %}
+        // 用户未加入小组或用户已加小组不是当前集训轮次的小组
+        layer.ready(function () {
+            layer.open({
+                title: "请选择小组",
+                content: '<form><select multiple class="form-control" name="team_id">{% for t in current_train.train_team.all() %}<option value="{{ t.id }}">{{ t.number }}</option>{% endfor %}</select></form>',
+                skin: 'layui-layer-molv',
+                closeBtn: 0,
+                yes: function (index, layero) {
+                    $.ajax({
+                        url: '{{ url_for('train.team_to_user', team_id='') }}'+$('select[name="team_id"]').val(),
+                        type: 'GET',
+                        success: function (result) {
+                            if (result == 'true'){
+                                layer.close(index);
+                            }else {
+                                layer.close(index);
+                                layer.msg(result);
+                                location.href = "{{ url_for('train.index') }}"
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    {% endif %}
+    
+</script>
 
 {% endblock %}

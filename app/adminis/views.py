@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 import os
-import json
 from flask import render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required
 from . import administration
@@ -102,6 +101,11 @@ def train_files_delete(train_files_id):
 @administration.route('/team_manage/<train_id>', methods=['GET', 'POST'])
 @login_required
 def team_manage(train_id):
+    """
+    批量创建小组功能, 通过POST参数team_count获取小组总数
+    :param train_id: 要创建的小组所在的集训轮次
+    :return:
+    """
     if request.method == 'POST':
         numbers = int(request.form.get('team_count'))
         for i in range(numbers):
@@ -117,6 +121,11 @@ def team_manage(train_id):
 @administration.route('/team_edit/<team_id>', methods=['GET', 'POST'])
 @login_required
 def team_edit(team_id):
+    """
+    处理小组管理的删除，及单个小组新增功能，新增时通过POST参数train_id获取小组所在的集训轮次
+    :param team_id: 当新增功能时，team_id是要新添的小组号
+    :return: 'true'用于Ajax的判断
+    """
     if request.method == 'POST':
         # POST请求 ，包含train_id，处理单个新增
         try:

@@ -2,7 +2,7 @@
 
 import os
 from flask import render_template, send_from_directory, current_app, request, flash, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import train
 from app.models import Train, TrainFiles
 
@@ -20,6 +20,9 @@ def current(train_id):
     if request.method == 'POST':
         post_file = request.files.get('file')
         if post_file:
+            if current_user.train_team.train_files.filter_by(train_file_type_id=int(request.form.get('train_file_type_id'))).first():
+                flash(u'小组已经上传该类文件，请勿重复上传！')
+                return redirect(url_for('.current', train_id=train_id))
             name = os.path.splitext(post_file.filename)[0]
             save_file = TrainFiles()
             flag = save_file.edit({
@@ -27,7 +30,8 @@ def current(train_id):
                 'create_time': 1,
                 'train_id': train_id,
                 'user_id': 1,
-                'train_file_type_id': request.form.get('train_file_type_id')
+                'train_file_type_id': request.form.get('train_file_type_id'),
+                'train_team_id': current_user.train_team_id
             })
             if not flag:
                 flash(u'文件上传失败，请重试！')
@@ -54,6 +58,16 @@ def current(train_id):
             return render_template('train/current_ing.html', page_title=current_train.name, current_train=current_train)
         else:
             return render_template('train/current.html', page_title=current_train.name, current_train=current_train)
+
+
+@train.route('/team_to_user/<team_id>')
+@login_required
+def team_to_user(team_id):
+    flag = current_user.edit({'train_team_id': team_id})
+    if flag:
+        return 'true'
+    else:
+        return u'加入小组失败！'
 
 
 @train.route('/download/<filename>')
