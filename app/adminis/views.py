@@ -180,18 +180,23 @@ def grade_edit():
 @login_required
 def scores_public_edit(train_id):
     train_public = Train.query.get_or_404(int(train_id))
-    for t in train_public.train_team.all():
-        i = float()
-        j = float()
-        for g in t.grader.all():
-            i += 1
-            j += g.score
-        print round(j/i, 2)
-    #     t.score = round(j/i, 2)
-    #     t.save()
-    # train_public.scores_public = True
-    # train_public.save()
-    return 'true'
+    try:
+        for t in train_public.train_team.all():
+            i = float()
+            j = float()
+            for g in t.grader.all():
+                i += 1
+                j += g.score
+            t.score = round(j/i, 2)
+            t.save()
+    except Exception:
+        return u'分数公示操作失败！请检查任务分发是否完毕，小组打分是否完毕！'
+    else:
+        flag = train_public.edit({'scores_public': 1})
+        if flag:
+            return 'true'
+        else:
+            return u'分数公示操作失败！'
 
 
 @administration.route('/user')

@@ -347,7 +347,7 @@
                             {% endif %}
                             </tbody>
                         </table>
-                        <a class="btn btn-primary"><i class="fa fa-send-o fa-fw"></i> 分数公示</a>
+                        <a onclick="scorePublic()" class="btn btn-primary"><i class="fa fa-send-o fa-fw"></i> 分数公示</a>
                     </div>
                 </div>
                 <!-- / 右面栏 -->
@@ -538,6 +538,26 @@
         });
     }
 
+    // 分数公示
+    function scorePublic() {
+        layer.msg("确认本次操作", {
+            time: 0,
+            btn: ['确认', '取消'],
+            yes: function () {
+                $.ajax({
+                    url: "{{ url_for('administration.scores_public_edit', train_id=current_train.id) }}",
+                    type: 'GET',
+                    success: function (result) {
+                        if (result == 'true'){
+                            layer.msg("操作成功！");
+                        }else {
+                            layer.msg(result);
+                        }
+                    }
+                })
+            }
+        })
+    }
 </script>
 
 {% endblock %}
