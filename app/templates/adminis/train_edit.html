@@ -8,7 +8,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <div class="panel panel-group">
                 <!-- 左面栏 -->
                 <div class="panel panel-primary">
@@ -201,7 +201,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% if current_train.train_team %}
+                        {% if current_train.train_team.all() %}
                             {% for t in current_train.train_team.all() %}
                                 <tr>
                                     <td>{{ t.number }}</td>
@@ -256,7 +256,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="panel panel-group">
                 <!-- 右面栏 -->
                 <div class="panel panel-primary">
@@ -287,7 +287,67 @@
                         评分任务分发
                     </div>
                     <div class="panel-body">
-                        datatables
+                        <table id="gradeTable" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="20%">评阅人</th>
+                                <th width="20%">论文1</th>
+                                <th width="20%">论文2</th>
+                                <th width="20%">论文3</th>
+                                <th width="20%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if current_train.train_team.all() %}
+                                {% for t in current_train.train_team.all() %}
+                                <tr>
+                                    <td>{{ t.number }}</td>
+                                    {% if t.graded.all() %}
+                                        {% for g in t.graded.all() %}
+                                            <td>{{ g.graded.number }}</td>
+                                        {% endfor %}
+                                    {% else %}
+                                        <td style="color: red;">无</td>
+                                        <td style="color: red;">无</td>
+                                        <td style="color: red;">无</td>
+                                    {% endif %}
+                                    <td><a onclick="gradeEdit({{ t.id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw>"></i> </a> </td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        评分结果管理
+                    </div>
+                    <div class="panel-body">
+                        <table id="gradeResultTable" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="25%">评阅人</th>
+                                <th width="25%">得分人</th>
+                                <th width="25%">分数</th>
+                                <th width="25%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if current_train.train_grade.all() %}
+                                {% for g in current_train.train_grade.all() %}
+                                <tr>
+                                    <td>{{ g.grader.number }}</td>
+                                    <td>{{ g.graded.number }}</td>
+                                    <td>{{ g.score }}</td>
+                                    <td><a onclick="scoreEdit({{ g.id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw>"></i> 分数修改</a> </td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                        <a class="btn btn-primary"><i class="fa fa-send-o fa-fw"></i> 分数公示</a>
                     </div>
                 </div>
                 <!-- / 右面栏 -->
@@ -311,6 +371,20 @@
 
     // 文件管理表格处理
     $("#filesTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
+
+    // 评分任务表格处理
+    $("#gradeTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [5, 10, 20, 40],
+        language: dtLanguage
+    });
+
+    // 评分结果管理表格处理
+    $("#gradeResultTable").DataTable({
         "stateSave": true,
         "lengthMenu": [5, 10, 20, 40],
         language: dtLanguage
@@ -412,7 +486,58 @@
             }
         })
     }
-    
+
+    // 评分任务分发弹框
+    function gradeEdit(grader_id) {
+        layer.open({
+            title: "给该小组配置任务",
+            closeBtn: 0,
+            btn: ['确定', '取消'],
+            content: '<form id="gradeEditForm"><label>论文一</label><select class="form-control" name="0">{% for t in current_train.train_team.all() %}<option value="{{ t.id }}">{{ t.number }}</option>{% endfor %}</select><label>论文二</label><select class="form-control" name="1">{% for t in current_train.train_team.all() %}<option value="{{ t.id }}">{{ t.number }}</option>{% endfor %}</select><label>论文三</label><select class="form-control" name="2">{% for t in current_train.train_team.all() %}<option value="{{ t.id }}">{{ t.number }}</option>{% endfor %}</select></form>',
+            yes: function (index, layero) {
+                $.ajax({
+                    url: "{{ url_for('administration.grade_edit') }}?grader_id="+grader_id+"&train_id={{ current_train.id }}",
+                    type: "POST",
+                    data: $("#gradeEditForm").serialize(),
+                    success: function (result) {
+                        if (result == 'true'){
+                            layer.close(index);
+                            layer.msg('任务分发成功！');
+                            setTimeout(function () {
+                                location.href = "{{ url_for('administration.train_edit', train_id=current_train.id) }}";
+                            }, 500);
+                        }else {
+                            layer.close(index);
+                            layer.msg(result);
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    //分数修改弹窗
+    function scoreEdit(score_id) {
+        layer.prompt({title: "请输入分数"}, function (val, index) {
+            $.ajax({
+                url: "{{ url_for('train.grade_score') }}",
+                type: 'POST',
+                data: {'score': val, 'score_id': score_id},
+                success: function (result) {
+                    if (result == 'true'){
+                        layer.close(index);
+                        layer.msg("打分成功！");
+                        setTimeout(function () {
+                            location.href = "{{ url_for('administration.train_edit', train_id = current_train.id) }}"
+                        }, 500)
+                    }else {
+                        layer.msg(result)
+                    }
+                }
+            })
+        });
+    }
+
 </script>
 
 {% endblock %}

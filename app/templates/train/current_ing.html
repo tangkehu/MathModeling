@@ -215,7 +215,80 @@
                             </tbody>
                         </table>
                     {% endif %}
+                </div>
 
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        评分任务
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th width="30%">论文</th>
+                            <th width="30%">分数</th>
+                            <th width="40%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if current_user.train_team.graded.all() %}
+                            <tr>
+                            <td>1</td>
+                            <td>{{ current_user.train_team.graded.all()[0].score }}</td>
+                            <td>
+                                {% if current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first() %}
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
+                                <a onclick="gradeScore({{ current_user.train_team.graded.all()[0].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
+                                {% else %}
+                                    该组未上传论文
+                                {% endif %}
+                            </td>
+                            </tr>
+
+                            <tr>
+                            <td>2</td>
+                            <td>{{ current_user.train_team.graded.all()[1].score }}</td>
+                            <td>
+                                {% if current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first() %}
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
+                                <a onclick="gradeScore({{ current_user.train_team.graded.all()[1].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
+                                {% else %}
+                                    该组未上传论文
+                                {% endif %}
+                            </td>
+                            </tr>
+
+                            <tr>
+                            <td>3</td>
+                            <td>{{ current_user.train_team.graded.all()[2].score }}</td>
+                            <td>
+                                {% if current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first() %}
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
+                                <a onclick="gradeScore({{ current_user.train_team.graded.all()[2].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
+                                {% else %}
+                                    该组未上传论文
+                                {% endif %}
+                            </td>
+                            </tr>
+                        {% else %}
+                            <i class="fa fa-tags fa-fw"></i>未接收到任务！
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        小组自评
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <label>团队合作</label>
+                            <select class="form-control" name="option1"><option>一般</option><option>优秀</option><option>特别优秀</option></select>
+                        </form>
+                    </div>
                 </div>
                 <!-- / 右边栏 -->
             </div>
@@ -224,6 +297,7 @@
     </div>
 
 {% endblock %}
+
 
 {% block base_script %}
     
@@ -252,6 +326,7 @@
                         success: function (result) {
                             if (result == 'true'){
                                 layer.close(index);
+                                layer.msg('成功加入小组！');
                             }else {
                                 layer.close(index);
                                 layer.msg(result);
@@ -263,6 +338,28 @@
             });
         });
     {% endif %}
+
+    // 打分功能
+    function gradeScore(score_id) {
+        layer.prompt({title: "请输入分数"}, function (val, index) {
+            $.ajax({
+                url: "{{ url_for('train.grade_score') }}",
+                type: 'POST',
+                data: {'score': val, 'score_id': score_id},
+                success: function (result) {
+                    if (result == 'true'){
+                        layer.close(index);
+                        layer.msg("打分成功！");
+                        setTimeout(function () {
+                            location.href = "{{ url_for('train.current', train_id = current_train.id) }}"
+                        }, 500)
+                    }else {
+                        layer.msg(result)
+                    }
+                }
+            })
+        });
+    }
     
 </script>
 

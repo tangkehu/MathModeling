@@ -4,7 +4,7 @@ import os
 from flask import render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_required
 from . import administration
-from app.models import Train, TrainFiles, TrainTeam
+from app.models import Train, TrainFiles, TrainTeam, TrainGrade
 
 
 @administration.route('/train', methods=['GET', 'POST'])
@@ -147,6 +147,51 @@ def team_edit(team_id):
         delete_team = TrainTeam.query.get_or_404(int(team_id))
         delete_team.delete()
         return 'true'
+
+
+@administration.route('/grade_edit', methods=['GET', 'POST'])
+@login_required
+def grade_edit():
+    """
+    评分任务分发，接收get参数的train_id，grader_id，以及POST参数的任务组号，通过判断评分数据表里面是否存在grader_id，
+    来判断是新增还是编辑。通过POST请求的key设定为0,1,2这一特殊处理达到任务组号顺序不紊乱的效果
+    :return:
+    """
+    info = request.form.to_dict()
+    old_grades = TrainGrade.query.filter_by(train_id=int(request.args['train_id']), grader_id=int(request.args['grader_id'])).all()  # 多条件查询案例
+    for g in range(3):
+        if old_grades:
+            flag = old_grades[g].edit({'graded_id': info[str(g)]})
+            if not flag:
+                return u'任务分发失败！'
+        else:
+            new_grade = TrainGrade()
+            flag = new_grade.edit({
+                'train_id': request.args['train_id'],
+                'grader_id': request.args['grader_id'],
+                'graded_id': info[str(g)]
+            })
+            if not flag:
+                return u'任务分发失败！'
+    return 'true'
+
+
+@administration.route('/scores_public_edit/<train_id>')
+@login_required
+def scores_public_edit(train_id):
+    train_public = Train.query.get_or_404(int(train_id))
+    for t in train_public.train_team.all():
+        i = float()
+        j = float()
+        for g in t.grader.all():
+            i += 1
+            j += g.score
+        print round(j/i, 2)
+    #     t.score = round(j/i, 2)
+    #     t.save()
+    # train_public.scores_public = True
+    # train_public.save()
+    return 'true'
 
 
 @administration.route('/user')

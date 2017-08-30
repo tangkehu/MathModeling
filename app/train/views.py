@@ -4,7 +4,7 @@ import os
 from flask import render_template, send_from_directory, current_app, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import train
-from app.models import Train, TrainFiles
+from app.models import Train, TrainFiles, TrainGrade
 
 
 @train.route('/index')
@@ -68,6 +68,24 @@ def team_to_user(team_id):
         return 'true'
     else:
         return u'加入小组失败！'
+
+
+@train.route('/grade_score', methods=['GET', 'POST'])
+@login_required
+def grade_score():
+    try:
+        float(request.form['score'])
+    except Exception:
+        return u'请输入整数或小数！'
+    else:
+        score_edit = TrainGrade.query.get_or_404(int(request.form['score_id']))
+        if score_edit.train.scores_public:
+            return u'分数已公示，不可更改！'
+        flag = score_edit.edit({'score': float(request.form['score'])})
+        if flag:
+            return 'true'
+        else:
+            return u'打分失败！请重试。'
 
 
 @train.route('/download/<filename>')
