@@ -107,3 +107,14 @@ def download(filename):
     :return:
     """
     return send_from_directory(current_app.config.get('TRAIN_UPLOAD_FOLDER'), filename)
+
+
+@train.route('/preview/<filename>')
+@login_required
+def preview(filename):
+    ext = ['.txt', '.doc', '.docx', '.xls', '.xlsx', '.pdf', '.ppt', '.pptx']
+    if os.path.splitext(filename)[1] in ext:
+        return redirect('http://ow365.cn/?i=13418&furl='+url_for('static', filename='trainfiles/'+filename, _external=True))
+    else:
+        flash(u'该文档类型不支持预览,已返回首页！')
+        return redirect(url_for('train.index'))

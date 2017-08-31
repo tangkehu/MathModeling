@@ -18,7 +18,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ ti.name }}</td>
                                         <td>
-                                            <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if ti.filename %}{{ url_for('train.preview', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -44,7 +44,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ mo.name }}</td>
                                         <td>
-                                            <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if mo.filename %}{{ url_for('train.preview', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -70,7 +70,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ zi.name }}</td>
                                         <td>
-                                            <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if zi.filename %}{{ url_for('train.preview', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -96,7 +96,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -123,7 +123,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -165,7 +165,7 @@
                                     <td>
                                         {% set three = t.train_files.filter_by(train_file_type_id=3).first() %}
                                         {% if three %}
-                                        <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.preview', filename=three.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
                                         <a href="{{ url_for('train.download', filename=three.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
                                         {% else %}
                                         无
@@ -174,7 +174,7 @@
                                     <td>
                                         {% set five = t.train_files.filter_by(train_file_type_id=5).first() %}
                                         {% if five %}
-                                        <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.preview', filename=five.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
                                         <a href="{{ url_for('train.download', filename=five.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
                                         {% else %}
                                         无
@@ -183,7 +183,7 @@
                                     <td>
                                         {% set six = t.train_files.filter_by(train_file_type_id=6).first() %}
                                         {% if six %}
-                                        <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.preview', filename=six.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
                                         <a href="{{ url_for('train.download', filename=six.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
                                         {% else %}
                                         无
@@ -192,7 +192,7 @@
                                     <td>
                                         {% set seven = t.train_files.filter_by(train_file_type_id=7).first() %}
                                         {% if seven %}
-                                        <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
+                                        <a href="{{ url_for('train.preview', filename=seven.filename) }}" class="btn btn-outline btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> </a>
                                         <a href="{{ url_for('train.download', filename=seven.filename) }}" class="btn btn-outline btn-info btn-xs"><i class="fa fa-download fa-fw"></i> </a>
                                         {% else %}
                                         无

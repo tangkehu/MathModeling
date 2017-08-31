@@ -14,11 +14,7 @@ def login():
         if user:
             flag = user.check_password(form_data.get('password'))
             if flag:
-                print form_data.get('remember')
-                if form_data.get('remember'):
-                    login_user(user, True)
-                else:
-                    login_user(user, False)
+                login_user(user, form_data.get('remember'))
                 return 'true'
             else:
                 return u'Tips：学号或密码错误！'
