@@ -3,7 +3,119 @@
 {% block page_content %}
     <div class="row">
         <div class="col-lg-12">
-            <a href="#" class="btn btn-primary"><i class="fa fa-ambulance fa-fw"></i> 添加</a>
+            <div class="panel panel-group">
+                <!-- content -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <a class="btn btn-default"><i class="fa fa-download fa-fw "></i> 导 入</a>
+                        <a class="btn btn-default"><i class="fa fa-upload fa-fw"></i> 导 出</a>
+                    </div>
+                    <div class="panel-body">
+                        <table id="userTable" class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th>学号</th>
+                                <th>姓名</th>
+                                <th>权限</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td>{{ u.student_id }}</td>
+                                <td>{{ u.real_name }}</td>
+                                <td>{{ u.role.role_name }}</td>
+                                <td>{{ u.create_time }}</td>
+                                <td>
+                                    <a onclick="userEdit({{ u.id }})" class="btn btn-xs btn-outline btn-success"><i class="fa fa-edit fa-fw"></i> 编辑</a>
+                                    <a onclick="deleteUser({{ u.id }})" class="btn btn-xs btn-outline btn-danger"><i class="fa fa-trash fa-fw"></i> 删除</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>学号</th>
+                                <th>姓名</th>
+                                <th>权限</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- / content -->
+            </div>
         </div>
     </div>
+{% endblock %}
+
+
+
+{% block base_script %}
+    <script type="text/javascript">
+
+    // 用户管理表
+    $("#userTable").DataTable({
+        "stateSave": true,
+        "lengthMenu": [20, 40, 80],
+        language: dtLanguage
+    });
+
+    // 管理员编辑用户
+    function userEdit(user_id) {
+        $.get("{{ url_for('administration.user_edit', user_id='') }}"+user_id, function (data) {
+            layer.open({
+                title: false,
+                closeBtn: 0,
+                content: data,
+                btn: ['修改', '取消'],
+                yes: function (index) {
+                    $.post("{{ url_for('administration.user_edit', user_id='') }}"+user_id,
+                        $("#userEditForm").serialize(),function (data) {
+                            if (data == 'true'){
+                                layer.close(index);
+                                layer.msg("修改成功！");
+                                setTimeout(function () {
+                                    location.href = "{{ url_for('administration.user') }}"
+                                }, 500)
+                            }else {
+                                layer.msg(data);
+                            }
+                        });
+                }
+            });
+        });
+    }
+
+    // 删除用户
+    function deleteUser(user_id) {
+        {% if current_user.check_role(current_user.get_permissions('ADMINISTER')) %}
+        layer.msg("请确认本次操作", {
+            time: 0,
+            btn: ['确认', '取消'],
+            yes: function (index) {
+                $.get("{{ url_for('administration.user_delete', user_id='') }}"+user_id, function (data) {
+                    if (data == 'true'){
+                        layer.close(index);
+                        layer.msg("删除成功");
+                        setTimeout(function () {
+                            location.href = "{{ url_for('administration.user') }}"
+                        }, 500)
+                    }else {
+                        layer.msg(data);
+                    }
+                })
+            }
+        });
+        {% else %}
+        layer.msg("你不具备该权限，请联系管理员！");
+        {% endif %}
+    }
+
+    </script>
 {% endblock %}

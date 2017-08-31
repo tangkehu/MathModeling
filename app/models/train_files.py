@@ -11,7 +11,6 @@ from .train_team import TrainTeam
 
 class TrainFiles(Common):
     __tablename__ = 'tb_train_files'
-    # number = db.Column(db.String(16), index=True, unique=True)
     name = db.Column(db.String(128))
     filename = db.Column(db.String(128))
     create_time = db.Column(db.DateTime, default=datetime.now())

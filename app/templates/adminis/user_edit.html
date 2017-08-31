@@ -1,0 +1,27 @@
+
+<form id="userEditForm">
+    <div class="form-group">
+        <label>学号</label>
+        <input class="form-control" type="text" name="student_id" value="{{ edit_user.student_id }}">
+    </div>
+
+    <div class="form-group">
+        <label>姓名</label>
+        <input class="form-control" type="text" name="real_name" value="{{ edit_user.real_name }}">
+    </div>
+
+    <div class="form-group">
+        <label>权限</label>
+        <select class="form-control" name="role_id">
+            {% for r in roles %}
+            <option value="{{ r.id }}" {% if edit_user.role_id == r.id %}selected{% endif %}>{{ r.role_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>修改密码</label>
+        <input class="form-control" type="password" name="password" placeholder="若不修改密码，则不填这一字段">
+    </div>
+
+</form>

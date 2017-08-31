@@ -14,6 +14,7 @@ def login():
         if user:
             flag = user.check_password(form_data.get('password'))
             if flag:
+                print form_data.get('remember')
                 if form_data.get('remember'):
                     login_user(user, True)
                 else:

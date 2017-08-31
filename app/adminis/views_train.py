@@ -37,7 +37,7 @@ def train():
                 return u'标题已经有了，换个标题试试！'
     else:
         info = Train.query.filter_by(delete=0).order_by(Train.id.desc()).all()
-        return render_template('adminis/train.html', page_title=u'集训系统管理', info=info)
+        return render_template('adminis/train.html', page_title=u'集训管理', info=info)
 
 
 @administration.route('/train_edit/<train_id>', methods=['GET', 'POST'])
@@ -197,8 +197,3 @@ def scores_public_edit(train_id):
             return 'true'
         else:
             return u'分数公示操作失败！'
-
-
-@administration.route('/user')
-def user():
-    return render_template('adminis/user.html', page_title=u'用户管理')

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-user-md fa-2x"></i>
+                </div>
+                <div class="panel-body">
+                    <form id="editSelfForm">
+                        <div class="form-group">
+                            <label>学号</label>
+                            <input class="form-control" type="text" name="student_id" value="{{ current_user.student_id }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>姓名</label>
+                            <input class="form-control" type="text" name="real_name" value="{{ current_user.real_name }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>修改密码</label>
+                            <input class="form-control" type="password" name="password" placeholder="若不修改密码，则不填这一字段">
+                        </div>
+
+                        <div class="form-group">
+                            <label>输入以确认新密码</label>
+                            <input class="form-control" type="password" name="password_check" placeholder="若不修改密码，则不填这一字段">
+                        </div>
+
+                        <a onclick="editUserSelf()" class="btn btn-outline btn-block btn-primary"><i class="fa fa-edit fa-fw"></i> 修 改</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block base_script %}
+
+    <script type="text/javascript">
+
+    // 用户自己修改帐户信息包括密码
+    function editUserSelf() {
+        if ($('input[name="password"]').val() != $('input[name="password_check"]').val()){
+            layer.msg("两次密码输入不一致")
+        }else {
+            layer.msg("请确认本次操作", {
+                time: 0,
+                btn: ['确认', '取消'],
+                yes: function (index) {
+                    $.post("{{ url_for('main.user') }}", $("#editSelfForm").serialize(), function (data) {
+                        if(data == 'true'){
+                            layer.close(index)
+                            layer.msg("修改成功");
+                            setTimeout(function () {
+                                location.href = "{{ url_for('main.user') }}"
+                            }, 500);
+                        }else {
+                            layer.msg(data);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    </script>
+
+{% endblock %}
