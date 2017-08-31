@@ -2,7 +2,7 @@
 
 from .. import login_manager
 from .common import Common
-from .role import Role
+from .role import Role, Permissions
 from .user import User
 from .train import Train
 from .train_team import TrainTeam

@@ -465,6 +465,7 @@
 
     // 小组删除功能
     function teamDelete(team_id) {
+        {% if current_user.check_role(current_user.get_permissions('ADMINISTER')) %}
         layer.msg("确认本次操作", {
             time: 0,
             btn: ['确认', '取消'],
@@ -485,10 +486,14 @@
                 })
             }
         })
+        {% else %}
+        layer.msg("你不具备该权限，请联系管理员！")
+        {% endif %}
     }
 
     // 评分任务分发弹框
     function gradeEdit(grader_id) {
+        {% if current_user.check_role(current_user.get_permissions('ADMINISTER')) %}
         layer.open({
             title: "给该小组配置任务",
             closeBtn: 0,
@@ -514,6 +519,9 @@
                 })
             }
         })
+        {% else %}
+        layer.msg("你不具备该权限，请联系管理员！")
+        {% endif %}
     }
 
     //分数修改弹窗

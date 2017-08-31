@@ -31,14 +31,23 @@ class User(UserMixin, Common):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            self.role = Role.query.filter_by(role_name='User').first()
+            self.role = Role.query.filter_by(role_name=u'普通用户').first()
 
     # 核查权限
-    def check_role(self, role_name):
-        if self.role.role_name == role_name:
-            return True
+    def check_role(self, permissions):
+        return self.role and (self.role.permissions & permissions) == permissions
+
+    # 方便获取权限数值  方便核查权限
+    @staticmethod
+    def get_permissions(name):
+        if name == 'ADMINISTER':
+            return 0b10000000
+        elif name == 'RECV_TRAIN':
+            return 0b00000001
+        elif name == 'TEACH':
+            return 0b00000010
         else:
-            return False
+            return 0b00000000
 
     def edit(self, info):
         """

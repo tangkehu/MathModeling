@@ -315,6 +315,8 @@
     // 判断用户是否已经加入小组内
     {% if not current_user.train_team or not current_user.train_team.train_id == current_train.id %}
         // 用户未加入小组或用户已加小组不是当前集训轮次的小组
+        {% if not current_user.check_role(current_user.get_permissions('TEACH')) %}
+        // 判断是否未协管员
         layer.ready(function () {
             layer.open({
                 title: "请选择小组",
@@ -339,6 +341,7 @@
                 }
             });
         });
+        {% endif %}
     {% endif %}
 
     // 打分功能

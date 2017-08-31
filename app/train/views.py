@@ -4,7 +4,7 @@ import os
 from flask import render_template, send_from_directory, current_app, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from . import train
-from app.models import Train, TrainFiles, TrainGrade
+from app.models import Train, TrainFiles, TrainGrade, Permissions
 
 
 @train.route('/index')
@@ -20,6 +20,9 @@ def current(train_id):
     if request.method == 'POST':
         post_file = request.files.get('file')
         if post_file:
+            if current_user.check_role(current_user.get_permissions('TEACH')):
+                flash(u'你不具备该权限！')
+                return redirect(url_for('.current', train_id=train_id))
             if current_user.train_team.train_files.filter_by(train_file_type_id=int(request.form.get('train_file_type_id'))).first():
                 flash(u'小组已经上传该类文件，请勿重复上传！')
                 return redirect(url_for('.current', train_id=train_id))
@@ -52,10 +55,17 @@ def current(train_id):
                 save_file.delete()
                 flash(u'文件上传失败，请重试！')
                 return redirect(url_for('.current', train_id=train_id))
+        else:
+            flash(u'未找到你要上传的文件，请重试！')
+            return redirect(url_for('.current', train_id=train_id))
     else:
         current_train = Train.query.get_or_404(int(train_id))
         if current_train.able:
-            return render_template('train/current_ing.html', page_title=current_train.name, current_train=current_train)
+            if current_user.check_role(Permissions.RECV_TRAIN):
+                return render_template('train/current_ing.html', page_title=current_train.name, current_train=current_train)
+            else:
+                flash(u'你不具备该权限，请联系管理员！')
+                return redirect(url_for('.index'))
         else:
             return render_template('train/current.html', page_title=current_train.name, current_train=current_train)
 

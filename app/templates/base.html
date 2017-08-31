@@ -54,6 +54,7 @@
                             <a href="{{ url_for('train.index') }}"><i class="fa fa-users fa-fw"></i> 集训系统</a>
                         </li>
 
+                        {% if current_user.check_role(current_user.get_permissions('TEACH')) %}
                         <li>
                             <a href="#"><i class="fa fa-cogs fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -66,6 +67,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
