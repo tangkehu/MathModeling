@@ -112,9 +112,9 @@ def download(filename):
 @train.route('/preview/<filename>')
 @login_required
 def preview(filename):
-    ext = ['.txt', '.doc', '.docx', '.xls', '.xlsx', '.pdf', '.ppt', '.pptx']
-    if os.path.splitext(filename)[1] in ext:
-        return redirect('http://ow365.cn/?i=13418&furl='+url_for('static', filename='trainfiles/'+filename, _external=True))
-    else:
-        flash(u'该文档类型不支持预览,已返回首页！')
-        return redirect(url_for('train.index'))
+    # ext = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx']
+    # if os.path.splitext(filename)[1] in ext:
+        return redirect('http://dcsapi.com?k=200237654&url='+url_for('static', filename='trainfiles/'+filename, _external=True))
+    # else:
+    #     flash(u'该文档类型不支持预览,已返回首页！')
+    #     return redirect(url_for('train.index'))

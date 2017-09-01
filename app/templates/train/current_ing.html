@@ -18,7 +18,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ ti.name }}</td>
                                         <td>
-                                            <a href="{% if ti.filename %}{{ url_for('train.preview', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if ti.filename %}{{ url_for('train.preview', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if ti.filename %}{{ url_for('train.download', filename=ti.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -44,7 +44,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ mo.name }}</td>
                                         <td>
-                                            <a href="{% if mo.filename %}{{ url_for('train.preview', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if mo.filename %}{{ url_for('train.preview', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if mo.filename %}{{ url_for('train.download', filename=mo.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -70,7 +70,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ zi.name }}</td>
                                         <td>
-                                            <a href="{% if zi.filename %}{{ url_for('train.preview', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if zi.filename %}{{ url_for('train.preview', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if zi.filename %}{{ url_for('train.download', filename=zi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -96,7 +96,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -123,7 +123,7 @@
                                     <tr>
                                         <td style="width: 75%">{{ bi.name }}</td>
                                         <td>
-                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{% if bi.filename %}{{ url_for('train.preview', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{% if bi.filename %}{{ url_for('train.download', filename=bi.filename) }}{% else %}#{% endif %}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -160,7 +160,7 @@
                                         <td>{{ t.score }}</td>
                                         <td>{{ t_file.name }}</td>
                                         <td>
-                                            <a href="{{ url_for('train.preview', filename=t_file.filename) }}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-fw"></i> 查 看</a>
+                                            <a href="{{ url_for('train.preview', filename=t_file.filename) }}" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye fa-fw"></i> 查 看</a>
                                             <a href="{{ url_for('train.download', filename=t_file.filename) }}" class="btn btn-warning btn-xs"><i class="fa fa-download fa-fw"></i> 下 载</a>
                                         </td>
                                     </tr>
@@ -236,7 +236,7 @@
                             <td>{{ current_user.train_team.graded.all()[0].score }}</td>
                             <td>
                                 {% if current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first() %}
-                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success" target="_blank"><i class="fa fa-eye fa-fw"></i> </a>
                                 <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[0].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
                                 <a onclick="gradeScore({{ current_user.train_team.graded.all()[0].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
                                 {% else %}
@@ -250,7 +250,7 @@
                             <td>{{ current_user.train_team.graded.all()[1].score }}</td>
                             <td>
                                 {% if current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first() %}
-                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success" target="_blank"><i class="fa fa-eye fa-fw"></i> </a>
                                 <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[1].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
                                 <a onclick="gradeScore({{ current_user.train_team.graded.all()[1].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
                                 {% else %}
@@ -264,7 +264,7 @@
                             <td>{{ current_user.train_team.graded.all()[2].score }}</td>
                             <td>
                                 {% if current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first() %}
-                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success"><i class="fa fa-eye fa-fw"></i> </a>
+                                <a href="{{ url_for('train.preview', filename=current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-success" target="_blank"><i class="fa fa-eye fa-fw"></i> </a>
                                 <a href="{{ url_for('train.download', filename=current_user.train_team.graded.all()[2].graded.train_files.filter_by(train_file_type_id=5).first().filename) }}" class="btn btn-xs btn-warning"><i class="fa fa-download fa-fw"></i> </a>
                                 <a onclick="gradeScore({{ current_user.train_team.graded.all()[2].id }})" class="btn btn-xs btn-danger"><i class="fa fa-edit fa-fw"></i> </a>
                                 {% else %}
