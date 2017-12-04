@@ -1,4 +1,5 @@
 ﻿*.pyc
 .idea/
 venv_math/
-migrations/trainfiles/
+migrations/
+trainfiles/
