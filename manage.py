@@ -11,6 +11,20 @@ manager = Manager(app)
 migrate = Migrate(app, db)    # 用于数据库迁移
 
 
+@manager.command
+def deploy():
+    """
+    Run deployment tasks.
+    """
+    from app import db
+    from app.models import Role, TrainFileType
+
+    db.drop_all()
+    db.create_all()
+    Role.insert_roles()
+    TrainFileType.insert_types()
+
+
 def make_shell_context():
     """
     添加shell中的命令
