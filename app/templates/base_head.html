@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="#">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    {% block css_block %}{% endblock %}
+
+    <title>Title</title>
+</head>
+<body {% block body_style_block %}{% endblock %}>
+    {% block body_block %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='jquery/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {% block script_block %}{% endblock %}
+</body>
+</html>
