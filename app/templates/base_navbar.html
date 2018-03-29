@@ -1,0 +1,33 @@
+{% extends 'base_head.html' %}
+
+{% block body_block %}
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #91000a;">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img class="my-2 rounded-circle" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" width="72" height="72">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample07">
+          <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-item nav-link" href="#">Link</a>
+              <a class="nav-item nav-link" href="#">Pages</a>
+              <a class="nav-item nav-link" href="#">News</a>
+              <a class="nav-item nav-link" href="#">Train</a>
+          </div>
+          <form class="form-inline my-2">
+              <a class="text-white font-weight-bold" href="#" style="text-decoration: none;">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded mr-2" width="30" height="30" alt="">
+                Profile
+              </a>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    {% block content_block %}{% endblock %}
+
+{% endblock %}

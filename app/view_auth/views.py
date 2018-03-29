@@ -10,3 +10,8 @@ def login():
 @auth.route('/register')
 def register():
     return render_template('auth/register.html')
+
+
+@auth.route('/profile')
+def profile():
+    return render_template('auth/profile.html')
