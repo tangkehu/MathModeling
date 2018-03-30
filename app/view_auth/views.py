@@ -14,4 +14,9 @@ def register():
 
 @auth.route('/profile')
 def profile():
-    return render_template('auth/profile.html')
+    return render_template('auth/profile.html', active_flg=['profile'])
+
+
+@auth.route('/account')
+def account():
+    return render_template('auth/account.html', active_flg=['account'])

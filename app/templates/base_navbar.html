@@ -1,7 +1,7 @@
 {% extends 'base_head.html' %}
 
 {% block body_block %}
-    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #91000a;">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
       <div class="container">
         <a class="navbar-brand" href="#">
           <img class="my-2 rounded-circle" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" width="72" height="72">
@@ -12,14 +12,15 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample07">
           <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link" href="#">Link</a>
-              <a class="nav-item nav-link" href="#">Pages</a>
-              <a class="nav-item nav-link" href="#">News</a>
-              <a class="nav-item nav-link" href="#">Train</a>
+              <a class="nav-item nav-link {% if 'know' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">Know <span class="sr-only">(current)</span></a>
+              <a class="nav-item nav-link {% if 'train' in active_flg %} active {% endif %}" href="#">Train</a>
+              <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="#">Teaching</a>
+              <a class="nav-item nav-link {% if 'community' in active_flg %} active {% endif %}" href="#">Community</a>
+              <a class="nav-item nav-link {% if 'news' in active_flg %} active {% endif %}" href="#">News</a>
+              <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="#">Management</a>
           </div>
           <form class="form-inline my-2">
-              <a class="text-white font-weight-bold" href="#" style="text-decoration: none;">
+              <a class="text-white font-weight-bold" href="{{ url_for('auth.profile') }}" style="text-decoration: none;">
                 <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded mr-2" width="30" height="30" alt="">
                 Profile
               </a>

@@ -1,0 +1,14 @@
+    <div class="jumbotron jumbotron-fluid" style="background-image: url({{ url_for('static', filename='img/index_bg.jpg') }});">
+      <div class="container text-center text-white">
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded-circle" width="120px" height="120px">
+        <h3 class="mt-2">Username</h3>
+      </div>
+    </div>
+    <div class="nav nav-pills justify-content-center my-4">
+        <a class="nav-item nav-link {% if 'profile' in active_flg %} active {% endif %}" href="{{ url_for('auth.profile') }}">
+            <span class="oi oi-person mr-1"></span> Profile
+        </a>
+        <a class="nav-item nav-link {% if 'account' in active_flg %} active {% endif %}" href="{{ url_for('auth.account') }}">
+            <span class="oi oi-cog mr-1"></span> Account
+        </a>
+    </div>

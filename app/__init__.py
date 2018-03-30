@@ -10,4 +10,7 @@ def create_app():
     from .view_auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
+    from .view_know import know as know_blueprint
+    app.register_blueprint(know_blueprint, url_prefix='/know')
+
     return app

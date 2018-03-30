@@ -1,0 +1,13 @@
+  <div class="container pt-2">
+    <div class="nav nav-pills">
+      <a class="nav-item nav-link {% if 'push' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">
+          <span class="oi oi-bar-chart mr-1"></span> Push
+      </a>
+      <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource') }}">
+          <span class="oi oi-folder mr-1"></span> Resource
+      </a>
+      <a class="nav-item nav-link {% if 'upload' in active_flg %} active {% endif %}" href="{{ url_for('know.upload') }}">
+          <span class="oi oi-cloud-upload mr-1"></span> Upload
+      </a>
+    </div>
+  </div>
