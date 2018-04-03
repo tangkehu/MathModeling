@@ -13,4 +13,7 @@ def create_app():
     from .view_know import know as know_blueprint
     app.register_blueprint(know_blueprint, url_prefix='/know')
 
+    from .view_teaching import teaching as teaching_blueprint
+    app.register_blueprint(teaching_blueprint, url_prefix='/teaching')
+
     return app

@@ -14,7 +14,7 @@
           <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link {% if 'know' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">Know <span class="sr-only">(current)</span></a>
               <a class="nav-item nav-link {% if 'train' in active_flg %} active {% endif %}" href="#">Train</a>
-              <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="#">Teaching</a>
+              <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="{{ url_for('teaching.main') }}">Teaching</a>
               <a class="nav-item nav-link {% if 'community' in active_flg %} active {% endif %}" href="#">Community</a>
               <a class="nav-item nav-link {% if 'news' in active_flg %} active {% endif %}" href="#">News</a>
               <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="#">Management</a>
