@@ -5,7 +5,7 @@ from app import create_app
 # from app import create_app, db
 # from app.models import Role, TrainFileType, TrainFiles
 
-app = create_app()
+app = create_app('default')
 # app = create_app('development')
 #
 manager = Manager(app)
