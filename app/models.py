@@ -2,6 +2,7 @@ from app import db
 
 
 class School(db.Model):
+    __tablename__ = 'school'
     id = db.Column(db.Integer, primary_key=True)
     school_name = db.Column(db.String(128), nullable=False, unique=True)
     user = db.relationship('User', backref='school')

@@ -7,13 +7,12 @@ class Config(object):
 
     @staticmethod
     def init_app(app):
-        print('This is config init.')
         pass
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1/mathmodeling'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost/mathmodeling'
 
 
 class ProductionConfig(Config):
