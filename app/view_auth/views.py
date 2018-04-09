@@ -1,10 +1,18 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, flash
 from . import auth
+from ..forms import LoginForm
 
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('auth/login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        print(form.email.data, form.password.data, form.remember_me.data)
+        return redirect(url_for('auth.login'))
+    message = list(form.errors.values())
+    if message:
+        flash(message[0][0])
+    return render_template('auth/login.html', form=form)
 
 
 @auth.route('/register')
