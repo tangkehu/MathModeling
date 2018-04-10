@@ -25,6 +25,15 @@ class School(db.Model):
     train_file = db.relationship('TrainFile', backref='school')
     train_grade = db.relationship('TrainGrade', backref='school')
 
+    @staticmethod
+    def insert_basic_schools():
+        basic_schools = ['成都大学']
+        for one in basic_schools:
+            if not School.query.filter_by(school_name=one).first():
+                school = School(school_name=one)
+                db.session.add(school)
+        db.session.commit()
+
 
 relation_role_permission = db.Table(
     'relation_role_permission',
@@ -52,6 +61,11 @@ class Role(db.Model):
     is_default = db.Column(db.Boolean)
 
     user = db.relationship('User', backref='role')
+
+    @staticmethod
+    def insert_basic_roles():
+        basic_roles = ['管理员']
+        pass
 
 
 class User(UserMixin, db.Model):
