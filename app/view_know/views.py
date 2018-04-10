@@ -1,8 +1,10 @@
 from flask import render_template
+from flask_login import login_required
 from . import know
 
 
 @know.route('/push')
+@login_required
 def push():
     return render_template('know/push.html', active_flg=['know', 'push'])
 

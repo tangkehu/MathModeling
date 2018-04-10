@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gb2312">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="icon" href="#">
@@ -12,21 +13,6 @@
     <title>Title</title>
 </head>
 <body {% block body_style_block %}{% endblock %}>
-    {% for flash_message in get_flashed_messages() %}
-        <div class="modal" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
-                <p>{{ flash_message }}</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">&times;</button>
-              </div>
-            </div>
-          </div>
-        </div>
-    {% endfor %}
-
     {% block body_block %}{% endblock %}
 
     <script src="{{ url_for('static', filename='jquery/jquery-3.3.1.min.js') }}"></script>

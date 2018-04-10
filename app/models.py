@@ -1,4 +1,12 @@
-from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from app import db, login_manager
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # login_manager加载用户的回掉函数
+    return User.query.get(int(user_id))
 
 
 class School(db.Model):
@@ -46,12 +54,12 @@ class Role(db.Model):
     user = db.relationship('User', backref='role')
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False, unique=True)
     email = db.Column(db.String(32), nullable=False, unique=True)
-    password_hash = db.Column(db.String(64), nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
     real_name = db.Column(db.String(32))
     student_number = db.Column(db.String(16), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
@@ -63,6 +71,17 @@ class User(db.Model):
     news = db.relationship('News', backref='user')
     train_student = db.relationship('TrainStudent', backref='user')
     train_file = db.relationship('TrainFile', backref='user')
+
+    @property
+    def password(self):
+        return AttributeError('password是不可读的属性')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 # 典型的邻接表结构

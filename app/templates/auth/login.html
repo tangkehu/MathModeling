@@ -9,42 +9,32 @@
 {% endblock %}
 
 {% block body_block %}
-{#    <form class="form-signin">#}
-{#      <img class="mb-4 rounded-circle" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" width="72" height="72">#}
-{#      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>#}
-{##}
-{#      <label for="inputEmail" class="sr-only">Email address</label>#}
-{#      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>#}
-{#      <label for="inputPassword" class="sr-only">Password</label>#}
-{#      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>#}
-{##}
-{#      <div class="checkbox mb-3">#}
-{#        <label>#}
-{#          <input type="checkbox" value="remember-me"> Remember me#}
-{#        </label>#}
-{#      </div>#}
-{##}
-{#      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>#}
-{#      <p>Have no a count? Please <a href="{{ url_for('auth.register') }}">sign up</a>. </p>#}
-{#    </form>#}
-
     <form class="form-signin" method="post">
       <img class="mb-4 rounded-circle" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <h1 class="h3 mb-3 font-weight-normal">登 录</h1>
 
-      {{ form.hidden_tag() }}
+      {% for flash_message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show text-left" role="alert">
+          {{ flash_message }}！
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+
+      {{ form.csrf_token }}
       {{ form.email.label(class='sr-only') }}
-      {{ form.email(class='form-control', placeholder='Email address') }}
+      {{ form.email(class='form-control', placeholder='请输入有效的邮箱') }}
       {{ form.password.label(class='sr-only') }}
-      {{ form.password(class="form-control", placeholder="Password") }}
+      {{ form.password(class="form-control", placeholder="请输入密码") }}
 
       <div class="checkbox mb-3">
         <label>
-          {{ form.remember_me }} Remember me
+          {{ form.remember_me }} 记住我
         </label>
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <p>Have no a count? Please <a href="{{ url_for('auth.register') }}">sign up</a>. </p>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
+      <p>还没有帐号？请先进行 <a href="{{ url_for('auth.register') }}">注册</a>。</p>
     </form>
 {% endblock %}

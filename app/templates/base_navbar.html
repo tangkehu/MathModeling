@@ -20,9 +20,12 @@
               <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="#">Management</a>
           </div>
           <form class="form-inline my-2">
-              <a class="text-white font-weight-bold" href="{{ url_for('auth.profile') }}" style="text-decoration: none;">
-                <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded mr-2" width="30" height="30" alt="">
-                Profile
+              <a class="text-white" href="{{ url_for('auth.profile') }}" style="text-decoration: none;">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded" width="30" height="30" alt="">
+                {{ current_user.username }}
+              </a>
+              <a class="text-white" href="{{ url_for('auth.logout') }}" style="text-decoration: none;">
+                  <span class="ion ion-log-out ml-4 pb-2"> 登出</span>
               </a>
           </form>
         </div>

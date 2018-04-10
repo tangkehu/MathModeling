@@ -9,18 +9,30 @@
 {% endblock %}
 
 {% block body_block %}
-    <form class="form-signin">
+    <form method="post" style="width: 330px;">
       <img class="mb-4 rounded-circle" src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+      <h1 class="h3 mb-3 font-weight-normal">注 册</h1>
 
-      <label for="inputUsername" class="sr-only">Username</label>
-      <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      {% for flash_message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show text-left" role="alert">
+          {{ flash_message }}！
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
 
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-      <p>Remember your count? Please <a href="{{ url_for('auth.login') }}">sign in</a>. </p>
+      {{ form.csrf_token }}
+      {{ form.username.label(class="sr-only") }}
+      {{ form.username(class="form-control", placeholder="用户名") }}
+      {{ form.email.label(class="sr-only") }}
+      {{ form.email(class="form-control", placeholder="邮箱") }}
+      {{ form.password.label(class="sr-only") }}
+      {{ form.password(class="form-control", placeholder="密码") }}
+      {{ form.verify_password.label(class="sr-only") }}
+      {{ form.verify_password(class="form-control", placeholder="确认密码") }}
+
+      <button class="mt-4 btn btn-lg btn-primary btn-block" type="submit">注 册</button>
+      <p>已经拥有帐号? 请直接 <a href="{{ url_for('auth.login') }}">登录</a>。</p>
     </form>
 {% endblock %}
