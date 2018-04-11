@@ -27,7 +27,7 @@ class School(db.Model):
 
     @staticmethod
     def insert_basic_schools():
-        basic_schools = ['成都大学']
+        basic_schools = ['成都大学', '四川大学', '成都理工大学']
         for one in basic_schools:
             if not School.query.filter_by(school_name=one).first():
                 school = School(school_name=one)
@@ -53,6 +53,15 @@ class Permission(db.Model):
                            backref=db.backref('permission', lazy='dynamic'),
                            lazy='dynamic')
 
+    @staticmethod
+    def insert_basic_permission():
+        basic_permission = [('test', 'For test debug.'), ('admin', 'For admin test.')]
+        for one in basic_permission:
+            if not Permission.query.filter_by(permission_name=one[0]).first():
+                permission = Permission(permission_name=one[0], permission_description=one[1])
+                db.session.add(permission)
+        db.session.commit()
+
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -64,8 +73,13 @@ class Role(db.Model):
 
     @staticmethod
     def insert_basic_roles():
-        basic_roles = ['管理员']
-        pass
+        basic_roles = [('普通用户', 'test'), ('管理员', 'admin')]
+        for one in basic_roles:
+            if not Role.query.filter_by(role_name=one[0]).first():
+                is_default = True if one[0] == '普通用户' else False
+                role = Role(role_name=one[0], is_default=is_default)
+                db.session.add(role)
+        db.session.commit()
 
 
 class User(UserMixin, db.Model):
@@ -73,7 +87,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False, unique=True)
     email = db.Column(db.String(32), nullable=False, unique=True)
-    password_hash = db.Column(db.String(256), nullable=False)
+    password_hash = db.Column(db.String(256))
     real_name = db.Column(db.String(32))
     student_number = db.Column(db.String(16), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
@@ -96,6 +110,9 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def can(self, permission):
+
 
 
 # 典型的邻接表结构

@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required
 from app import db
 from . import auth
 from ..forms import LoginForm, RegisterForm
-from ..models import User
+from ..models import User, Role, School
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -34,7 +34,11 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    password=form.password.data,
+                    role=Role.query.filter_by(is_default=True).first(),
+                    school=School.query.get(form.school.data))
         db.session.add(user)
         db.session.commit()
         flash('注册成功，请登录')

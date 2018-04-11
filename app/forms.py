@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo
 from wtforms import ValidationError
-from .models import User
+from .models import User, School
 
 
 class LoginForm(FlaskForm):
@@ -20,6 +20,11 @@ class RegisterForm(FlaskForm):
     email = StringField('邮箱', validators=[Email(message='请输入正确的邮箱地址')])
     password = PasswordField('密码', validators=[DataRequired(message='请输入密码')])
     verify_password = PasswordField('确认密码', validators=[EqualTo('password', message='两次密码输入不一致')])
+    school = SelectField('高校', coerce=int)
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.school.choices = [(one.id, one.school_name) for one in School.query.all()]
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():

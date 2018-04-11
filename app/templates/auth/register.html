@@ -31,6 +31,7 @@
       {{ form.password(class="form-control", placeholder="密码") }}
       {{ form.verify_password.label(class="sr-only") }}
       {{ form.verify_password(class="form-control", placeholder="确认密码") }}
+      {{ form.school(class="form-control") }}
 
       <button class="mt-4 btn btn-lg btn-primary btn-block" type="submit">注 册</button>
       <p>已经拥有帐号? 请直接 <a href="{{ url_for('auth.login') }}">登录</a>。</p>
