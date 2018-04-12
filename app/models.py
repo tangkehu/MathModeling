@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
+from flask_login import AnonymousUserMixin
 from app import db, login_manager
 
 
@@ -79,6 +80,14 @@ class Role(db.Model):
                            backref=db.backref('role', lazy='dynamic'),
                            lazy='dynamic')
 
+    def verify_permission(self, permission):
+        flg = False
+        for one in self.permission.all():
+            if one.permission_name == permission:
+                flg = True
+                break
+        return flg
+
     @staticmethod
     def insert_basic_roles():
         basic_roles = [('普通用户', 'none'), ('管理员', 'all')]
@@ -148,13 +157,25 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def can(self, permission):
-        pass
+        flg = False
+        for one in self.role.all():
+            if one.verify_permission(permission):
+                flg = True
+                break
+        return flg
 
 
 @login_manager.user_loader
 def load_user(user_id):
     # login_manager加载用户的回掉函数
     return User.query.get(int(user_id))
+
+
+class AnonymousUser(AnonymousUserMixin):
+    def can(self, permission):
+        return False
+
+login_manager.anonymous_user = AnonymousUser
 
 
 # 典型的邻接表结构
