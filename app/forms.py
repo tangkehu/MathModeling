@@ -24,7 +24,7 @@ class RegisterForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        self.school.choices = [(one.id, one.school_name) for one in School.query.all()]
+        self.school.choices = [(one.id, one.school_name) for one in School.query.all()]    # 调用时初始化配置下拉选项
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():

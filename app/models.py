@@ -1,5 +1,4 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
 from flask import current_app
 from app import db, login_manager
 
@@ -93,7 +92,7 @@ class Role(db.Model):
         db.session.commit()
 
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False, unique=True)
@@ -112,10 +111,25 @@ class User(UserMixin, db.Model):
     train_file = db.relationship('TrainFile', backref='user', lazy='dynamic')
 
     @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
+    @property    # 只读属性装饰器
     def password(self):
         return AttributeError('password是不可读的属性')
 
-    @password.setter
+    @password.setter    # 用只读属性的赋值装饰器为只读属性添加赋值方法
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
