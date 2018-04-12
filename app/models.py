@@ -3,12 +3,6 @@ from flask import current_app
 from app import db, login_manager
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    # login_manager加载用户的回掉函数
-    return User.query.get(int(user_id))
-
-
 class School(db.Model):
     __tablename__ = 'school'
     id = db.Column(db.Integer, primary_key=True)
@@ -67,13 +61,23 @@ class Permission(db.Model):
         db.session.commit()
 
 
+relation_user_role = db.Table(
+    'relation_user_role',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
+)
+
+
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(32), nullable=False, unique=True)
     is_default = db.Column(db.Boolean)
 
-    user = db.relationship('User', backref='role', lazy='dynamic')
+    user = db.relationship('User',
+                           secondary=relation_user_role,
+                           backref=db.backref('role', lazy='dynamic'),
+                           lazy='dynamic')
 
     @staticmethod
     def insert_basic_roles():
@@ -101,7 +105,6 @@ class User(db.Model):
     real_name = db.Column(db.String(32))
     student_number = db.Column(db.String(16), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
     know_resource = db.relationship('KnowResource', backref='user', lazy='dynamic')
     community_question = db.relationship('CommunityQuestion', backref='user', lazy='dynamic')
@@ -109,6 +112,14 @@ class User(db.Model):
     news = db.relationship('News', backref='user', lazy='dynamic')
     train_student = db.relationship('TrainStudent', backref='user', lazy='dynamic')
     train_file = db.relationship('TrainFile', backref='user', lazy='dynamic')
+
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(*args, **kwargs)
+        if not self.role.all():
+            if self.email == current_app.config['ADMIN_EMAIL']:
+                self.role = [Role.query.filter_by(role_name='管理员').first()]
+            else:
+                self.role = [Role.query.filter_by(is_default=True).first()]
 
     @property
     def is_authenticated(self):
@@ -138,6 +149,12 @@ class User(db.Model):
 
     def can(self, permission):
         pass
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # login_manager加载用户的回掉函数
+    return User.query.get(int(user_id))
 
 
 # 典型的邻接表结构

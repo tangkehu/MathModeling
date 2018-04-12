@@ -10,6 +10,7 @@ class Config(object):
         ('test3', '用于测试'),
         ('test4', '用于测试')
     ]
+    ADMIN_EMAIL = 'tangkehu@cecgw.cn'
 
     @staticmethod
     def init_app(app):
