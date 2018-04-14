@@ -164,6 +164,15 @@ class User(db.Model):
                 break
         return flg
 
+    @staticmethod
+    def insert_admin_user():
+        user = User(username='admin',
+                    email='2739182815@qq.com',
+                    password='tang@1013',
+                    school=School.query.filter_by(school_name='成都大学').first())
+        db.session.add(user)
+        db.session.commit()
+
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -10,12 +10,13 @@ manager = Manager(app)
 @manager.command
 def deploy():
     """应用程序的初始化配置，主要是数据库基础数据配置"""
-    from app.models import School, Permission, Role
+    from app.models import School, Permission, Role, User
     db.drop_all()
     db.create_all()
     School.insert_basic_schools()
     Permission.insert_basic_permission()
     Role.insert_basic_roles()
+    User.insert_admin_user()
     return '配置成功'
 
 
