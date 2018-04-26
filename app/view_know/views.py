@@ -10,10 +10,12 @@ def push():
 
 
 @know.route('/resource')
+@login_required
 def resource():
     return render_template('know/resource.html', active_flg=['know', 'resource'])
 
 
 @know.route('/upload')
+@login_required
 def upload():
-    return render_template('know/upload.html', active_flg=['know', 'upload'])
+    return render_template('know/upload.html', active_flg=['know', 'resource'])

@@ -1,13 +1,8 @@
-  <div class="container pt-2">
-    <div class="nav nav-pills">
+    <div class="nav nav-pills justify-content-center my-2">
       <a class="nav-item nav-link {% if 'push' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">
           <span class="ion ion-ios-pie mr-1"></span> Push
       </a>
       <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource') }}">
           <span class="ion ion-ios-folder mr-1"></span> Resource
       </a>
-      <a class="nav-item nav-link {% if 'upload' in active_flg %} active {% endif %}" href="{{ url_for('know.upload') }}">
-          <span class="ion ion-ios-cloud-upload mr-1"></span> Upload
-      </a>
     </div>
-  </div>

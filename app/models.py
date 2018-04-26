@@ -167,8 +167,8 @@ class User(db.Model):
     @staticmethod
     def insert_admin_user():
         user = User(username='admin',
-                    email='2739182815@qq.com',
-                    password='tang@1013',
+                    email=current_app.config['ADMIN_EMAIL'],
+                    password=current_app.config['ADMIN_EMAIL'],
                     school=School.query.filter_by(school_name='成都大学').first())
         db.session.add(user)
         db.session.commit()
