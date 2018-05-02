@@ -1,4 +1,3 @@
-import os
 
 
 class Config(object):
@@ -11,6 +10,7 @@ class Config(object):
         ('test4', '用于测试')
     ]
     ADMIN_EMAIL = '2739182815@qq.com'
+    ADMIN_PASSWORD = 'tang@1013'
 
     @staticmethod
     def init_app(app):

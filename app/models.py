@@ -168,7 +168,7 @@ class User(db.Model):
     def insert_admin_user():
         user = User(username='admin',
                     email=current_app.config['ADMIN_EMAIL'],
-                    password=current_app.config['ADMIN_EMAIL'],
+                    password=current_app.config['ADMIN_PASSWORD'],
                     school=School.query.filter_by(school_name='成都大学').first())
         db.session.add(user)
         db.session.commit()
@@ -183,6 +183,7 @@ def load_user(user_id):
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permission):
         return False
+
 
 login_manager.anonymous_user = AnonymousUser
 
