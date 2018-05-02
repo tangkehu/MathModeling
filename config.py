@@ -25,6 +25,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = ''
 
+
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,

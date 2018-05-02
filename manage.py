@@ -24,6 +24,7 @@ def make_shell_context():
     """添加shell中的命令"""
     return dict(app=app, db=db)
 
+
 manager.add_command('shell', Shell(make_context=make_shell_context))
 # manager.add_command('db', MigrateCommand)    # 用于数据库迁移
 
