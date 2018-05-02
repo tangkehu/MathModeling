@@ -1,8 +1,11 @@
     <div class="nav nav-pills justify-content-center my-2">
       <a class="nav-item nav-link {% if 'push' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">
-          <span class="ion ion-ios-pie mr-1"></span> Push
+          <span class="ion ion-ios-pie mr-1"></span> 资源推荐
       </a>
       <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource') }}">
-          <span class="ion ion-ios-folder mr-1"></span> Resource
+          <span class="ion ion-ios-folder mr-1"></span> 知识库
+      </a>
+      <a class="nav-item nav-link {% if 'file_check' in active_flg %} active {% endif %}" href="{{ url_for('know.file_check') }}">
+          <span class="ion ion-funnel mr-1"></span> 文件审核
       </a>
     </div>

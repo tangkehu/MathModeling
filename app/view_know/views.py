@@ -19,3 +19,10 @@ def resource():
 @login_required
 def upload():
     return render_template('know/upload.html', active_flg=['know', 'resource'])
+
+
+@know.route('/file_check')
+@login_required
+def file_check():
+    return render_template('know/file_check.html', active_flg=['know', 'file_check'])
+

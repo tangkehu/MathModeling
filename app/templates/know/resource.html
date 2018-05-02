@@ -3,4 +3,30 @@
 {% block content_block %}
     {% include 'know/_navs.html' %}
     {% include 'know/_search.html' %}
+    <div class="row justify-content-center my-4">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Library</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Data</li>
+
+                <li>
+                    <a href="#"><span class="ion ion-plus"></span> 类别</a>
+                    <a href="#"><span class="ion ion-plus-circled"></span> 资源</a>
+{#                  <div class="btn-group btn-group-sm ml-lg-5" role="group">#}
+{#                    <button type="button" class="btn btn-success"><span class="ion ion-plus"></span> 类别</button>#}
+{#                    <button type="button" class="btn btn-primary"><span class="ion ion-plus-circled"></span> 资源</button>#}
+{#                  </div>#}
+                </li>
+              </ol>
+            </nav>
+
+            {% include 'know/_list.html' %}
+
+        </div>
+      </div>
+    </div>
 {% endblock %}
