@@ -1,0 +1,53 @@
+{% extends "base_navbar.html" %}
+{% block content_block %}
+    {% include "train/_navs.html" %}
+
+    <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card">
+
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link {% if 1 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=1) }}">集训题目</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if 2 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=2) }}">参考资料</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if 3 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=3) }}">模型结构</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if 4 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=4) }}">评分标准</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if 5 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=5) }}">评分表</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body text-center">
+              <a href="#" class="btn btn-info my-2"><span class="ion ion-paper-airplane"></span> 发布文件</a>
+          </div>
+
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                  <span class="ion ion-document-text mr-2"></span>
+                  <a href="#">
+                      数学建模集训题目
+                  </a>
+                  <a href="#" class="btn btn-danger btn-sm float-right"><span class="ion ion-trash-a"></span> 删除</a>
+              </li>
+
+              <li class="list-group-item">
+                  <span class="ion ion-document-text mr-2"></span>
+                  <a href="#">
+                      数学建模集训题目
+                  </a>
+                  <a href="#" class="btn btn-danger btn-sm float-right"><span class="ion ion-trash-a"></span> 删除</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    </div>
+{% endblock %}

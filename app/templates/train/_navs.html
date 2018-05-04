@@ -1,0 +1,11 @@
+    <div class="nav nav-pills justify-content-center my-2">
+      <a class="nav-item nav-link {% if 'file' in active_flg %} active {% endif %}" href="{{ url_for('train.file', type_id=1) }}">
+          <span class="ion ion-folder mr-1"></span> 文件
+      </a>
+      <a class="nav-item nav-link {% if 'team' in active_flg %} active {% endif %}" href="{{ url_for('train.team') }}">
+          <span class="ion ion-person-stalker mr-1"></span> 小组
+      </a>
+      <a class="nav-item nav-link {% if 'student' in active_flg %} active {% endif %}" href="{{ url_for('train.student') }}">
+          <span class="ion ion-gear-a mr-1"></span> 学员
+      </a>
+    </div>
