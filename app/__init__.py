@@ -26,6 +26,9 @@ def create_app(config_name):
     from .view_know import know
     app.register_blueprint(know, url_prefix='/know')
 
+    from .view_train import train
+    app.register_blueprint(train, url_prefix='/train')
+
     from .view_teaching import teaching
     app.register_blueprint(teaching, url_prefix='/teaching')
 
