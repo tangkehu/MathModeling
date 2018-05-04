@@ -5,8 +5,8 @@
             数学建模集训
         </a>
         <div class="btn-group btn-group-sm float-right" role="group">
-            <button type="button" class="btn btn-primary"><span class="ion ion-refresh"></span> 重命名</button>
-            <button type="button" class="btn btn-danger"><span class="ion ion-trash-a"></span> 删除</button>
+            <a href="{{ url_for('know.edit_name') }}" class="btn btn-primary"><span class="ion ion-refresh"></span> 重命名</a>
+            <a href="#" class="btn btn-danger"><span class="ion ion-trash-a"></span> 删除</a>
         </div>
     </li>
     <li class="list-group-item" data-toggle="tooltip" title="发布人：<u>唐柯虎</u>；<br>发布时间：2018-05-02；<br>所属类别：建模集训">
@@ -16,9 +16,9 @@
         </a>
         <span class="badge badge-success badge-pill">66 赞</span>
         <div class="btn-group btn-group-sm float-right" role="group">
-            <button type="button" class="btn btn-success"><span class="ion ion-thumbsup"></span> 点赞</button>
-            <button type="button" class="btn btn-primary"><span class="ion ion-refresh"></span> 重命名</button>
-            <button type="button" class="btn btn-danger"><span class="ion ion-trash-a"></span> 删除</button>
+            <a href="#" class="btn btn-success"><span class="ion ion-thumbsup"></span> 点赞</a>
+            <a href="{{ url_for('know.edit_name') }}" class="btn btn-primary"><span class="ion ion-refresh"></span> 重命名</a>
+            <a href="#" class="btn btn-danger"><span class="ion ion-trash-a"></span> 删除</a>
         </div>
     </li>
     <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="Tooltip on top">

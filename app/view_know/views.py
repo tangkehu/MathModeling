@@ -20,10 +20,21 @@ def resource():
 def upload():
     if request.method == 'POST':
         # 处理业务逻辑
-        print(request.files.get('file').filename)
+        print(request.files.get('file'))
         return redirect(url_for('know.resource'))
     if request.method == 'GET':
         return render_template('know/upload.html', active_flg=['know'])
+
+
+@know.route('/edit_name', methods=['GET', 'POST'])
+@login_required
+def edit_name():
+    if request.method == 'POST':
+        # 处理业务逻辑
+        print(request.form.get('new_name'))
+        return redirect(url_for('know.resource'))
+    if request.method == 'GET':
+        return render_template('know/edit_name.html', active_flg=['know'])
 
 
 @know.route('/file_check')
@@ -42,4 +53,3 @@ def search():
         return redirect(url_for('know.search')+args)
     print(request.args)
     return render_template('know/search_result.html', active_flg=['know'])
-
