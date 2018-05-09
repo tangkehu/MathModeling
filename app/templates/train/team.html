@@ -22,7 +22,7 @@
                   <div class="col-lg-4">
                       <p>论文：
                           <a href="#" class="mx-2 text-info"><span class="ion ion-eye"></span> 查看</a>
-                          <a href="#" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
+                          <a href="{{ url_for('train.upload', type_id=6) }}" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
                           <a href="#" class="mx-2 text-danger"><span class="ion ion-trash-b"></span> 删除</a>
                       </p>
                   </div>
@@ -32,7 +32,7 @@
                   <div class="col-lg-4">
                       <p>总结：
                           <a href="#" class="mx-2 text-info"><span class="ion ion-eye"></span> 查看</a>
-                          <a href="#" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
+                          <a href="{{ url_for('train.upload', type_id=8) }}" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
                           <a href="#" class="mx-2 text-danger"><span class="ion ion-trash-b"></span> 删除</a>
                       </p>
                   </div>
@@ -62,7 +62,7 @@
                       <p>
                           评分表：
                           <a href="#" class="mx-2 text-info"><span class="ion ion-eye"></span> 查看</a>
-                          <a href="#" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
+                          <a href="{{ url_for('train.upload', type_id=7) }}" class="mx-2 text-info"><span class="ion ion-upload"></span> 上传</a>
                           <a href="#" class="mx-2 text-danger"><span class="ion ion-trash-b"></span> 删除</a>
                       </p>
                   </div>

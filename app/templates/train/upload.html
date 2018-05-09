@@ -1,0 +1,25 @@
+{% extends 'base_navbar.html' %}
+
+{% block content_block %}
+    {% include 'train/_navs.html' %}
+
+    <div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-header text-center text-info"><h4>{{ type_name }}文件上传</h4></div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-8 col-sm-10">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="form-group my-5">
+                            <label for="exampleFormControlFile1">请选择文件...</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                        </div>
+                        <button class="btn btn-primary my-4" type="submit"><span class="ion ion-upload"></span> 上传</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
