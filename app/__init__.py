@@ -32,4 +32,7 @@ def create_app(config_name):
     from .view_teaching import teaching
     app.register_blueprint(teaching, url_prefix='/teaching')
 
+    from .view_community import community
+    app.register_blueprint(community, url_prefix='/community')
+
     return app
