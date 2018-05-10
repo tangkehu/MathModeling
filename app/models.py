@@ -1,12 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask import current_app
+from flask_login import AnonymousUserMixin
 from app import db, login_manager
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    # login_manager加载用户的回掉函数
-    return User.query.get(int(user_id))
 
 
 class School(db.Model):
@@ -14,16 +9,25 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     school_name = db.Column(db.String(128), nullable=False, unique=True)
 
-    user = db.relationship('User', backref='school')
-    know_type = db.relationship('KnowType', backref='school')
-    know_resource = db.relationship('KnowResource', backref='school')
-    community_question = db.relationship('CommunityQuestion', backref='school')
-    community_answer = db.relationship('CommunityAnswer', backref='school')
-    news = db.relationship('News', backref='school')
-    train_student = db.relationship('TrainStudent', backref='school')
-    train_team = db.relationship('TrainTeam', backref='school')
-    train_file = db.relationship('TrainFile', backref='school')
-    train_grade = db.relationship('TrainGrade', backref='school')
+    user = db.relationship('User', backref='school', lazy='dynamic')
+    know_type = db.relationship('KnowType', backref='school', lazy='dynamic')
+    know_resource = db.relationship('KnowResource', backref='school', lazy='dynamic')
+    community_question = db.relationship('CommunityQuestion', backref='school', lazy='dynamic')
+    community_answer = db.relationship('CommunityAnswer', backref='school', lazy='dynamic')
+    news = db.relationship('News', backref='school', lazy='dynamic')
+    train_student = db.relationship('TrainStudent', backref='school', lazy='dynamic')
+    train_team = db.relationship('TrainTeam', backref='school', lazy='dynamic')
+    train_file = db.relationship('TrainFile', backref='school', lazy='dynamic')
+    train_grade = db.relationship('TrainGrade', backref='school', lazy='dynamic')
+
+    @staticmethod
+    def insert_basic_schools():
+        basic_schools = ['成都大学', '四川大学', '成都理工大学']
+        for one in basic_schools:
+            if not School.query.filter_by(school_name=one).first():
+                school = School(school_name=one)
+                db.session.add(school)
+        db.session.commit()
 
 
 relation_role_permission = db.Table(
@@ -44,6 +48,26 @@ class Permission(db.Model):
                            backref=db.backref('permission', lazy='dynamic'),
                            lazy='dynamic')
 
+    @staticmethod
+    def insert_basic_permission():
+        for one in current_app.config['PERMISSIONS']:
+            find_exist = Permission.query.filter_by(permission_name=one[0]).first()
+            if find_exist:
+                if find_exist.permission_description != one[1]:
+                    find_exist.permission_description = one[1]
+                    db.session.add(find_exist)
+            else:
+                permission = Permission(permission_name=one[0], permission_description=one[1])
+                db.session.add(permission)
+        db.session.commit()
+
+
+relation_user_role = db.Table(
+    'relation_user_role',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
+)
+
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -51,37 +75,117 @@ class Role(db.Model):
     role_name = db.Column(db.String(32), nullable=False, unique=True)
     is_default = db.Column(db.Boolean)
 
-    user = db.relationship('User', backref='role')
+    user = db.relationship('User',
+                           secondary=relation_user_role,
+                           backref=db.backref('role', lazy='dynamic'),
+                           lazy='dynamic')
+
+    def verify_permission(self, permission):
+        flg = False
+        for one in self.permission.all():
+            if one.permission_name == permission:
+                flg = True
+                break
+        return flg
+
+    @staticmethod
+    def insert_basic_roles():
+        basic_roles = [('普通用户', 'none'), ('管理员', 'all')]
+        for one in basic_roles:
+            if not Role.query.filter_by(role_name=one[0]).first():
+                is_default = True if one[0] == '普通用户' else False
+                if one[1] == 'none':
+                    permission = []
+                elif one[1] == 'all':
+                    permission = Permission.query.all()
+                else:
+                    permission = [Permission.query.filter_by(permission_name=item).first() for item in one[1]]
+                role = Role(role_name=one[0], is_default=is_default, permission=permission)
+                db.session.add(role)
+        db.session.commit()
 
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False, unique=True)
     email = db.Column(db.String(32), nullable=False, unique=True)
-    password_hash = db.Column(db.String(256), nullable=False)
+    password_hash = db.Column(db.String(256))
     real_name = db.Column(db.String(32))
     student_number = db.Column(db.String(16), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
-    know_resource = db.relationship('KnowResource', backref='user')
-    community_question = db.relationship('CommunityQuestion', backref='user')
-    community_answer = db.relationship('CommunityAnswer', backref='user')
-    news = db.relationship('News', backref='user')
-    train_student = db.relationship('TrainStudent', backref='user')
-    train_file = db.relationship('TrainFile', backref='user')
+    know_resource = db.relationship('KnowResource', backref='user', lazy='dynamic')
+    community_question = db.relationship('CommunityQuestion', backref='user', lazy='dynamic')
+    community_answer = db.relationship('CommunityAnswer', backref='user', lazy='dynamic')
+    news = db.relationship('News', backref='user', lazy='dynamic')
+    train_student = db.relationship('TrainStudent', backref='user', lazy='dynamic')
+    train_file = db.relationship('TrainFile', backref='user', lazy='dynamic')
+
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(*args, **kwargs)
+        if not self.role.all():
+            if self.email == current_app.config['ADMIN_EMAIL']:
+                self.role = [Role.query.filter_by(role_name='管理员').first()]
+            else:
+                self.role = [Role.query.filter_by(is_default=True).first()]
 
     @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
+    @property    # 只读属性装饰器
     def password(self):
         return AttributeError('password是不可读的属性')
 
-    @password.setter
+    @password.setter    # 用只读属性的赋值装饰器为只读属性添加赋值方法
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def can(self, permission):
+        flg = False
+        for one in self.role.all():
+            if one.verify_permission(permission):
+                flg = True
+                break
+        return flg
+
+    @staticmethod
+    def insert_admin_user():
+        user = User(username='admin',
+                    email=current_app.config['ADMIN_EMAIL'],
+                    password=current_app.config['ADMIN_PASSWORD'],
+                    school=School.query.filter_by(school_name='成都大学').first())
+        db.session.add(user)
+        db.session.commit()
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # login_manager加载用户的回掉函数
+    return User.query.get(int(user_id))
+
+
+class AnonymousUser(AnonymousUserMixin):
+    def can(self, permission):
+        return False
+
+
+login_manager.anonymous_user = AnonymousUser
 
 
 # 典型的邻接表结构
@@ -94,7 +198,7 @@ class KnowType(db.Model):
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
     children = db.relationship('KnowType', backref=db.backref('parent', remote_side=[id]))
-    know_resource = db.relationship('KnowResource', backref='know_type')
+    know_resource = db.relationship('KnowResource', backref='know_type', lazy='dynamic')
 
 
 class KnowResource(db.Model):
@@ -123,7 +227,7 @@ class CommunityQuestion(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
-    community_answer = db.relationship('CommunityAnswer', backref='community_question')
+    community_answer = db.relationship('CommunityAnswer', backref='community_question', lazy='dynamic')
 
 
 class CommunityAnswer(db.Model):
@@ -174,8 +278,8 @@ class TrainTeam(db.Model):
     team_score = db.Column(db.Float)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
-    train_student = db.relationship('TrainStudent', backref='train_team')
-    train_file = db.relationship('TrainFile', backref='train_team')
+    train_student = db.relationship('TrainStudent', backref='train_team', lazy='dynamic')
+    train_file = db.relationship('TrainFile', backref='train_team', lazy='dynamic')
     # 典型的自引用多对多关系
     children = db.relationship('TrainGrade',
                                foreign_keys=[TrainGrade.parent_team_id],

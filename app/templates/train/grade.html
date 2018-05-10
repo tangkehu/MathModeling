@@ -1,0 +1,22 @@
+{% extends "base_navbar.html" %}
+
+{% block content_block %}
+    {% include "train/_navs.html" %}
+
+    <div class="row justify-content-center my-4">
+    <div class="col-xl-8 col-md-10">
+        <div class="card">
+            <div class="card-header text-info text-center"><h4>任务一</h4></div>
+            <div class="row justify-content-center my-4">
+                <div class="col-xl-3 col-md-4 col-8">
+                    <form method="post">
+                        <input type="text" class="form-control" name="score" placeholder="请打分...">
+                        <button class="btn btn-primary my-3" type="submit"><span class="ion ion-checkmark-round"></span> 确定</button>
+                        <a href="{{ url_for('train.team') }}" class="btn btn-warning my-3"><span class="ion ion-arrow-return-left"></span> 取消</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

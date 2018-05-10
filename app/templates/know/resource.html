@@ -2,8 +2,25 @@
 
 {% block content_block %}
     {% include 'know/_navs.html' %}
-    {% include '_search.html' %}
-    <div class="container">
-        <h1 class="text-center">Hello Result!</h1>
+    {% include 'know/_search.html' %}
+    <div class="row justify-content-center my-4">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a href="#">根目录</a></li>
+                <li class="breadcrumb-item"><a href="#">数学建模</a></li>
+                <li class="breadcrumb-item"><a href="#">集训</a></li>
+                <li class="breadcrumb-item active" aria-current="page">建模题目</li>
+
+                <a href="{{ url_for('know.upload') }}" class="ml-4"><span class="ion ion-upload"></span> 上传</a>
+                <a href="{{ url_for('know.edit_name') }}" class="ml-2"><span class="ion ion-plus"></span> 添加</a>
+              </ol>
+            </nav>
+
+            {% include 'know/_list.html' %}
+
+        </div>
+      </div>
     </div>
 {% endblock %}
