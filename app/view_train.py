@@ -34,6 +34,17 @@ def team():
     return render_template('train/team.html', active_flg=['train', 'team'])
 
 
+@train.route('/team_member_edit/<team_id>', methods=['GET', 'POST'])
+@login_required
+def team_member_edit(team_id):
+    if request.method == 'POST':
+        print(request.form, team_id)
+        return redirect(url_for('train.team'))
+    if request.method == 'GET':
+        team_number = team_id
+        return render_template('train/team_member_edit.html', active_flg=['train', 'team'], team_number=team_number)
+
+
 @train.route('/student')
 @login_required
 def student():

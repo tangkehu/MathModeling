@@ -1,0 +1,56 @@
+{% extends 'base_navbar.html' %}
+
+{% block css_block %}
+  <!-- bootstrap-select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block content_block %}
+    {% include 'train/_navs.html' %}
+
+    <div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-header text-center text-info"><h4>{{ team_number }}组成员</h4></div>
+            <div class="row justify-content-center my-4">
+                <div class="col-lg-8 col-md-8 col-sm-10">
+                    <form method="post">
+                        <select class="selectpicker my-5" name="member1">
+                          <option value="1">唐柯虎</option>
+                          <option value="2">陈陆洋</option>
+                          <option value="3">张维雄</option>
+                          <option value="4">王铣铭</option>
+                        </select>
+                        <select class="form-control" name="member2">
+                          <option selected>请选择...</option>
+                          <option value="1">唐柯虎</option>
+                          <option value="2">陈陆洋</option>
+                          <option value="3">张维雄</option>
+                          <option value="4">王铣铭</option>
+                        </select>
+                        <select class="form-control" name="member3">
+                          <option selected>请选择...</option>
+                          <option value="1">唐柯虎</option>
+                          <option value="2">陈陆洋</option>
+                          <option value="3">张维雄</option>
+                          <option value="4">王铣铭</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit"><span class="ion ion-upload"></span> 上传</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <select class="selectpicker">
+      <option>Mustard</option>
+      <option>Ketchup</option>
+      <option>Relish</option>
+    </select>
+{% endblock %}
+
+{% block script_block %}
+    <!-- bootstrap-select -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+{% endblock %}
