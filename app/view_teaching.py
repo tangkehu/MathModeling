@@ -10,7 +10,15 @@ teaching = Blueprint('teaching', __name__)
 @login_required
 def main():
     if request.method == 'POST':
-        print(request.form)
-        return redirect(url_for())
+        return redirect(url_for('.search', search_words=request.form.get("search_words")))
     if request.method == 'GET':
-        return render_template()
+        return render_template('teaching/main.html', active_flg=['teaching'])
+
+
+@teaching.route('/search/<search_words>', methods=['GET', 'POST'])
+@login_required
+def search(search_words):
+    if request.method == 'POST':
+        return redirect(url_for('.search', search_words=request.form.get("search_words")))
+    if request.method == 'GET':
+        return render_template('teaching/search.html', active_flg=['teaching'], search_words=search_words)
