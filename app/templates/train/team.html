@@ -44,14 +44,14 @@
                       <a href="#" class="mr-2">任务一</a>
                       <a href="#" class="mr-2">任务二</a>
                       <a href="#" class="mr-2">任务三</a>
-                      <a href="#" class="text-info"><span class="ion ion-paper-airplane"></span> 发布任务</a>
+                      <a href="{{ url_for('train.grade_manage', team_id=1) }}" class="text-info"><span class="ion ion-paper-airplane"></span> 发布任务</a>
                       </p>
                   </div>
                   <div class="col-lg-4">
                       <p>
                       评分结果：
                       一：75
-                      <a href="#" class="text-warning mr-2"><span class="ion ion-edit"></span></a>
+                      <a href="{{ url_for('train.grade', team_id=1) }}" class="text-warning mr-2"><span class="ion ion-edit"></span></a>
                       二：85
                       <a href="#" class="text-warning mr-2"><span class="ion ion-edit"></span></a>
                       三：90

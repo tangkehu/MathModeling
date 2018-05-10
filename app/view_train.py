@@ -64,3 +64,24 @@ def upload(type_id):
         return render_template('train/upload.html',
                                active_flg=['train'],
                                type_name=current_app.config['TRAIN_FILE_TYPE'][int(type_id)])
+
+
+@train.route('/grade_manage/<team_id>', methods=['GET', 'POST'])
+@login_required
+def grade_manage(team_id):
+    if request.method == 'POST':
+        print(request.form, team_id)
+        return redirect(url_for('train.team'))
+    if request.method == 'GET':
+        team_number = team_id
+        return render_template('train/grade_manage.html', active_flg=['train', 'team'], team_number=team_number)
+
+
+@train.route('/grade/<team_id>', methods=['GET', 'POST'])
+@login_required
+def grade(team_id):
+    if request.method == 'POST':
+        print(request.form, team_id)
+        return redirect(url_for('train.team'))
+    if request.method == 'GET':
+        return render_template('train/grade.html', active_flg=['train', 'team'])
