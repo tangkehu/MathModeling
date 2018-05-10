@@ -1,9 +1,6 @@
-from flask import Blueprint
 from flask import request, redirect, url_for, render_template
 from flask_login import login_required
-
-
-teaching = Blueprint('teaching', __name__)
+from . import teaching
 
 
 @teaching.route('/main', methods=['GET', 'POST'])

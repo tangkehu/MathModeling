@@ -1,9 +1,6 @@
-from flask import Blueprint
 from flask import render_template, request, redirect, url_for, current_app
 from flask_login import login_required
-
-
-train = Blueprint('train', __name__)
+from . import train
 
 
 @train.route('/no_train')

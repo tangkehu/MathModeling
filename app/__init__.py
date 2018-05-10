@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import config
 
+
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -17,22 +18,28 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
 
-    from .view_main import main
+    from .main import main
     app.register_blueprint(main)
 
-    from .view_auth import auth
+    from .auth import auth
     app.register_blueprint(auth, url_prefix='/auth')
 
-    from .view_know import know
+    from .know import know
     app.register_blueprint(know, url_prefix='/know')
 
-    from .view_train import train
+    from .train import train
     app.register_blueprint(train, url_prefix='/train')
 
-    from .view_teaching import teaching
+    from .teaching import teaching
     app.register_blueprint(teaching, url_prefix='/teaching')
 
-    from .view_community import community
+    from .community import community
     app.register_blueprint(community, url_prefix='/community')
+
+    from .news import news
+    app.register_blueprint(news, url_prefix='/news')
+
+    from .management import management
+    app.register_blueprint(management, url_prefix='/management')
 
     return app
