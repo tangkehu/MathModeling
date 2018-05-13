@@ -21,7 +21,28 @@ def main(words):
         return render_template('community/main.html', active_flg=['community'], words=words)
 
 
-@community.route('/question')
+@community.route('/question_add', methods=['GET', 'POST'])
 @login_required
-def question():
-    return 'ok'
+def question_add():
+    if request.method == 'POST':
+        print(request.form)
+        return redirect(url_for('community.main', words='null'))
+    return render_template('community/question_add.html', active_flg=['community'])
+
+
+@community.route('/question_edit/<question_id>', methods=['GET', 'POST'])
+@login_required
+def question_edit(question_id):
+    if request.method == 'POST':
+        print(request.form)
+        return redirect(url_for('community.main', words='null'))
+    question = question_id
+    return render_template('community/question_add.html', active_flg=['community'], question=question)
+
+
+@community.route('/question_info/<question_id>')
+@login_required
+def question_info(question_id):
+    question = question_id
+    return render_template('community/question_info.html', active_flg=['community'], question=question)
+

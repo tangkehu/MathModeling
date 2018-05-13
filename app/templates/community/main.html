@@ -15,36 +15,35 @@
         </div>
     </div>
     <div class="row justify-content-center my-4">
-        <a href="#" class="btn btn-info"><i class="fas fa-question"></i> 我要提问</a>
+        <a href="{{ url_for('community.question_add') }}" class="btn btn-info"><i class="fas fa-question"></i> 我要提问</a>
     </div>
     <div class="row justify-content-center my-4">
         <div class="col-xl-8 col-md-10">
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title"><a href="#" class="text-dark">这里是一个问题</a></h5>
-                    <p class="card-text text-muted">唐柯虎 &nbsp;&nbsp;2018-05-13</p>
-                    <p class="card-text">这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述</p>
-                    <a href="#" class="card-link"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+            <div class="list-group">
+              <a href="{{ url_for('.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">这里是一个问题标题</h5>
+                  <small>3个回答</small>
                 </div>
-            </div>
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title"><a href="#" class="text-dark">这里是一个问题</a></h5>
-                    <p class="card-text text-muted">唐柯虎 &nbsp;&nbsp;2018-05-13</p>
-                    <p class="card-text">这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述</p>
-                    <a href="#" class="card-link"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
+                <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
+              </a>
+              <a href="{{ url_for('.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">这里是一个问题标题</h5>
+                  <small>3个回答</small>
                 </div>
-            </div>
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title"><a href="#" class="text-dark">这里是一个问题</a></h5>
-                    <p class="card-text text-muted">唐柯虎 &nbsp;&nbsp;2018-05-13</p>
-                    <p class="card-text">这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述，这里是问题描述</p>
-                    <a href="#" class="card-link"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
+                <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
+              </a>
+              <a href="{{ url_for('.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">这里是一个问题标题</h5>
+                  <small>3个回答</small>
                 </div>
+                <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
+                <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
+              </a>
             </div>
         </div>
     </div>
