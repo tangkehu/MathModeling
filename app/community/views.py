@@ -10,6 +10,8 @@ def main(words):
         new_words = request.form.get('words')
         if new_words:
             words = new_words
+        else:
+            words = 'null'
         return redirect(url_for('community.main', words=words))
     if request.method == 'GET':
         if words == 'null':
