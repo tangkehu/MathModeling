@@ -35,7 +35,7 @@ def question_add():
 def question_edit(question_id):
     if request.method == 'POST':
         print(request.form)
-        return redirect(url_for('community.main', words='null'))
+        return redirect(url_for('community.question_info', question_id=question_id))
     question = question_id
     return render_template('community/question_add.html', active_flg=['community'], question=question)
 
@@ -45,4 +45,24 @@ def question_edit(question_id):
 def question_info(question_id):
     question = question_id
     return render_template('community/question_info.html', active_flg=['community'], question=question)
+
+
+@community.route('/answer_add/<question_id>', methods=['GET', 'POST'])
+@login_required
+def answer_add(question_id):
+    if request.method == 'POST':
+        print(request.form)
+        return redirect(url_for('community.question_info', question_id=question_id))
+    question = question_id
+    return render_template('community/answer_add.html', active_flg=['community'], question=question)
+
+
+@community.route('/answer_edit/<answer_id>', methods=['GET', 'POST'])
+@login_required
+def answer_edit(answer_id):
+    if request.method == 'POST':
+        print(request.form)
+        return redirect(url_for('community.question_info', question_id=1))
+    question = answer_id
+    return render_template('community/answer_add.html', active_flg=['community'], question=question, answer=answer_id)
 
