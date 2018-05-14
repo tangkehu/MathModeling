@@ -3,7 +3,52 @@
 {% block content_block %}
     {% include 'auth/_head.html' %}
 
-    <div class="container text-center">
-        <h1>Hello World!</h1>
+    <div class="container">
+        <div class="row justify-content-center my-5">
+            <div id="main" style="width: 600px;height:400px;"></div>
+        </div>
     </div>
+{% endblock %}
+
+{% block script_block %}
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+    
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            radar: {
+                // shape: 'circle',
+                name: {
+                    textStyle: {
+                        color: '#fff',
+                        backgroundColor: '#999',
+                        borderRadius: 3,
+                        padding: [3, 5]
+                   }
+                },
+                indicator: [
+                   { name: '写作能力', max: 100},
+                   { name: '建模能力', max: 100},
+                   { name: '编码能力', max: 100},
+                   { name: '团队协作', max: 100}
+                ]
+            },
+            series: [{
+                type: 'radar',
+                // areaStyle: {normal: {}},
+                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                data : [
+                    {
+                        value : [40, 80, 10, 60]
+                    }
+                ]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
 {% endblock %}
