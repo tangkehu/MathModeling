@@ -12,20 +12,20 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample07">
           <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link {% if 'know' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">Know <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link {% if 'train' in active_flg %} active {% endif %}" href="{{ url_for('train.file', type_id=1) }}">Train</a>
-              <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="{{ url_for('teaching.main') }}">Teaching</a>
-              <a class="nav-item nav-link {% if 'community' in active_flg %} active {% endif %}" href="{{ url_for('community.main', words='null') }}">Community</a>
-              <a class="nav-item nav-link {% if 'news' in active_flg %} active {% endif %}" href="{{ url_for('news.main') }}">News</a>
-              <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="#">Management</a>
+              <a class="nav-item nav-link {% if 'know' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">知识库 <span class="sr-only">(current)</span></a>
+              <a class="nav-item nav-link {% if 'train' in active_flg %} active {% endif %}" href="{{ url_for('train.file', type_id=1) }}">集训系统</a>
+              <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="{{ url_for('teaching.main') }}">自主学习</a>
+              <a class="nav-item nav-link {% if 'community' in active_flg %} active {% endif %}" href="{{ url_for('community.main', words='null') }}">问答社区</a>
+              <a class="nav-item nav-link {% if 'news' in active_flg %} active {% endif %}" href="{{ url_for('news.main') }}">公告</a>
+              <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="{{ url_for('management.main') }}">后台</a>
           </div>
-          <form class="form-inline my-2">
-              <a class="text-white" href="{{ url_for('auth.profile') }}" style="text-decoration: none;">
+          <form class="form-inline">
+              <a class="text-white" href="{{ url_for('auth.profile', user_id=current_user.id) }}" style="text-decoration: none;">
                 <img src="{{ url_for('static', filename='img/logo.jpg') }}" class="rounded" width="30" height="30" alt="">
                 {{ current_user.username }}
               </a>
               <a class="text-white" href="{{ url_for('auth.logout') }}" style="text-decoration: none;">
-                  <span class="ion ion-log-out ml-4 pb-2"> 登出</span>
+                  <i class="fas fa-sign-out-alt ml-4"></i>
               </a>
           </form>
         </div>
