@@ -1,6 +1,40 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
     <div class="container">
-        <h1>Hello Management!</h1>
+        <div class="row justify-content-center my-5">
+            <div id="page_view_chart" style="width: 1000px; height:400px;"></div>
+        </div>
     </div>
+{% endblock %}
+
+{% block script_block %}
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var pvChart = echarts.init(document.getElementById('page_view_chart'));
+
+        // 指定图表的配置项和数据
+        var pvOption = {
+            title: {
+                text: '访问量趋势图'
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                areaStyle: {}
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        pvChart.setOption(pvOption);
+    </script>
 {% endblock %}
