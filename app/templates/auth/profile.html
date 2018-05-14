@@ -5,17 +5,17 @@
 
     <div class="container">
         <div class="row justify-content-center my-5">
-            <div id="main" style="width: 600px;height:400px;"></div>
+            <div id="user_look_chart" style="width: 600px;height:400px;"></div>
         </div>
     </div>
 {% endblock %}
 
 {% block script_block %}
     <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
-    
+
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('user_look_chart'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -30,10 +30,11 @@
                    }
                 },
                 indicator: [
-                   { name: '写作能力', max: 100},
-                   { name: '建模能力', max: 100},
-                   { name: '编码能力', max: 100},
-                   { name: '团队协作', max: 100}
+                    { name: '写作能力', max: 100},
+                    { name: '建模能力', max: 100},
+                    { name: '编码能力', max: 100},
+                    { name: '团队协作', max: 100},
+                    { name: '表达能力', max: 100}
                 ]
             },
             series: [{
@@ -42,7 +43,7 @@
                 itemStyle: {normal: {areaStyle: {type: 'default'}}},
                 data : [
                     {
-                        value : [40, 80, 10, 60]
+                        value : [40, 80, 10, 60, 50]
                     }
                 ]
             }]
