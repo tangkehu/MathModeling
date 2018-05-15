@@ -1,8 +1,11 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center my-5">
-            <div id="page_view_chart" style="width: 1000px; height:400px;"></div>
+            <div id="page_view_chart" style="width: 100%; height:400%;"></div>
+        </div>
+        <div class="row justify-content-center my-5">
+            <div id="resource_count_chart" style="width: 100%; height:400%;"></div>
         </div>
     </div>
 {% endblock %}
@@ -11,30 +14,57 @@
     <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
 
     <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
         var pvChart = echarts.init(document.getElementById('page_view_chart'));
-
-        // 指定图表的配置项和数据
         var pvOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
             title: {
-                text: '访问量趋势图'
+                text: '访问量趋势图',
+                left: 'center'
             },
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: ['2018-05-01', '2018-05-02', '2018-05-03', '2018-05-04', '2018-05-05', '2018-05-06', '2018-05-07', '2018-05-08', '2018-05-09', '2018-05-10', '2018-05-11', '2018-05-12', '2018-05-13', '2018-05-14', '2018-05-15']
             },
             yAxis: {
                 type: 'value'
             },
             series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320],
+                data: [50, 60, 50, 70, 80, 60, 50, 50, 70, 90, 100, 110, 100, 120, 125],
                 type: 'line',
-                areaStyle: {}
+                areaStyle: {},
+                color: '#73b9bc'
             }]
         };
-
-        // 使用刚指定的配置项和数据显示图表。
         pvChart.setOption(pvOption);
+
+
+        var resourceChart = echarts.init(document.getElementById('resource_count_chart'));
+        var resourceOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            title: {
+                text: '资源增量趋势图',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2018-05-01', '2018-05-02', '2018-05-03', '2018-05-04', '2018-05-05', '2018-05-06', '2018-05-07', '2018-05-08', '2018-05-09', '2018-05-10', '2018-05-11', '2018-05-12', '2018-05-13', '2018-05-14', '2018-05-15']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [30, 40, 10, 5, 30, 40, 5, 50, 10, 60, 45, 55, 65, 47, 33],
+                type: 'line',
+                areaStyle: {},
+                color: '#91c7ae'
+            }]
+        };
+        resourceChart.setOption(resourceOption);
     </script>
 {% endblock %}
