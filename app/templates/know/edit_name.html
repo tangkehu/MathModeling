@@ -1,29 +1,25 @@
 {% extends "base_navbar.html" %}
 
 {% block content_block %}
+  <div class="container">
     {% include "know/_navs.html" %}
-
-    <div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10 col-sm-12">
-        <div class="card">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb bg-white">
-                <li class="breadcrumb-item"><a href="#">根目录</a></li>
-                <li class="breadcrumb-item"><a href="#">数学建模</a></li>
-                <li class="breadcrumb-item"><a href="#">集训</a></li>
-                <li class="breadcrumb-item active" aria-current="page">建模题目</li>
-              </ol>
-            </nav>
-            <div class="row justify-content-center">
-                <div class="col-lg-8 col-md-8 col-sm-10">
-                    <form method="post">
-                        <input type="text" class="form-control" name="new_name" placeholder="请输入新命名...">
-                        <button class="btn btn-primary my-4" type="submit"><span class="ion ion-checkmark-round"></span> 确定</button>
-                        <a href="{{ url_for('know.resource') }}" class="btn btn-warning my-4"><span class="ion ion-arrow-return-left"></span> 取消</a>
-                    </form>
-                </div>
+    <div class="card my-5">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-white">
+            <li class="breadcrumb-item"><a href="#">根目录</a></li>
+            <li class="breadcrumb-item"><a href="#">集训文件</a></li>
+            <li class="breadcrumb-item active" aria-current="page">建模题目</li>
+          </ol>
+        </nav>
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-md-8 col-10">
+                <form method="post">
+                    <input type="text" class="form-control" name="new_name" placeholder="请输入名称...">
+                    <button class="btn btn-primary my-4" type="submit"><i class="fas fa-check"></i> 确定</button>
+                    <a href="{{ url_for('know.resource') }}" class="btn btn-warning my-4"><i class="fas fa-undo"></i> 取消</a>
+                </form>
             </div>
         </div>
     </div>
-    </div>
+  </div>
 {% endblock %}

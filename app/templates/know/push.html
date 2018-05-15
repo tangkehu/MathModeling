@@ -1,46 +1,35 @@
 {% extends 'base_navbar.html' %}
 
 {% block content_block %}
+  <div class="container">
     {% include 'know/_navs.html' %}
     {% include 'know/_search.html' %}
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    最新文件TOP10
-                </div>
-                {% include 'know/_list.html' %}
-            </div>
+    <div class="card">
+        <div class="card-header">
+            最新文件TOP10
         </div>
+        {% include 'know/_list.html' %}
     </div>
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    最热文件TOP10
-                </div>
-                {% include 'know/_list.html' %}
-            </div>
+
+    <div class="card mt-5">
+        <div class="card-header">
+            最热文件TOP10
         </div>
+        {% include 'know/_list.html' %}
     </div>
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    智能推荐
-                </div>
-                {% include 'know/_list.html' %}
-            </div>
+
+    <div class="card mt-5">
+        <div class="card-header">
+            智能推荐
         </div>
+        {% include 'know/_list.html' %}
     </div>
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    网络资源TOP10
-                </div>
-                {% include 'know/_list.html' %}
-            </div>
+
+    <div class="card mt-5">
+        <div class="card-header">
+            网络资源TOP10
         </div>
+        {% include 'know/_list.html' %}
     </div>
+  </div>
 {% endblock %}
