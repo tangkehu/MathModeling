@@ -1,53 +1,57 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
+  <div class="container">
     {% include "train/_navs.html" %}
+    <div class="card my-5">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link {% if 1 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=1) }}">集训题目</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 2 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=2) }}">参考资料</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 3 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=3) }}">模型结构</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 4 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=4) }}">评分标准</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 5 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=5) }}">评分表</a>
+          </li>
+        </ul>
+      </div>
 
-    <div class="row justify-content-center my-4">
-    <div class="col-lg-8 col-md-10">
-        <div class="card">
+      <div class="card-body text-center">
+          <a href="{{ url_for('train.upload', type_id=active_flg[2]) }}" class="btn btn-primary my-2"><i class="fas fa-plus"></i> 发布文件</a>
+      </div>
 
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item">
-                <a class="nav-link {% if 1 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=1) }}">集训题目</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if 2 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=2) }}">参考资料</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if 3 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=3) }}">模型结构</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if 4 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=4) }}">评分标准</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if 5 in active_flg %}active{% endif %}" href="{{ url_for('train.file', type_id=5) }}">评分表</a>
-              </li>
-            </ul>
-          </div>
+      <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+              <i class="fas fa-file-alt text-primary mr-2"></i>
+              <a href="#" class="text-dark">
+                  中国人口增长预测
+              </a>
+              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+          </li>
 
-          <div class="card-body text-center">
-              <a href="{{ url_for('train.upload', type_id=active_flg[2]) }}" class="btn btn-primary my-2"><span class="ion ion-paper-airplane"></span> 发布文件</a>
-          </div>
+          <li class="list-group-item">
+              <i class="fas fa-file-alt text-primary mr-2"></i>
+              <a href="#" class="text-dark">
+                  易拉罐形状和尺寸的最优设计
+              </a>
+              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+          </li>
 
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                  <span class="ion ion-document-text mr-2"></span>
-                  <a href="#">
-                      数学建模集训题目
-                  </a>
-                  <a href="#" class="btn btn-danger btn-sm float-right"><span class="ion ion-trash-a"></span> 删除</a>
-              </li>
-
-              <li class="list-group-item">
-                  <span class="ion ion-document-text mr-2"></span>
-                  <a href="#">
-                      数学建模集训题目
-                  </a>
-                  <a href="#" class="btn btn-danger btn-sm float-right"><span class="ion ion-trash-a"></span> 删除</a>
-              </li>
-          </ul>
-        </div>
+          <li class="list-group-item">
+              <i class="fas fa-file-alt text-primary mr-2"></i>
+              <a href="#" class="text-dark">
+                  雨量预报方法的评价
+              </a>
+              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+          </li>
+      </ul>
     </div>
-    </div>
+  </div>
 {% endblock %}
