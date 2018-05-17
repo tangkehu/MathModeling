@@ -3,7 +3,52 @@
 {% block content_block %}
     {% include 'auth/_head.html' %}
 
-    <div class="container text-center">
-      <h1>Hello Account!</h1>
+    <div class="container">
+    <div class="row justify-content-center mb-5">
+        <form method="post" class="col-6">
+            <div class="form-group">
+                <label for="usernameID">用户名：</label>
+                <input type="text" id="usernameID" class="form-control" name="username" value="{{ current_user.username }}">
+            </div>
+            <div class="form-group">
+                <label for="emailID">邮箱：</label>
+                <input type="email" id="emailID" class="form-control" name="email" value="{{ current_user.email }}">
+            </div>
+            <div class="form-group">
+                <label for="real_nameID">实名：</label>
+                <input type="text" id="real_nameID" class="form-control" name="real_name" value="{{ current_user.real_name }}">
+            </div>
+            <div class="form-group">
+                <label for="student_numberID">学号：</label>
+                <input type="text" id="student_numberID" class="form-control" name="student_number" value="{{ current_user.student_number }}">
+            </div>
+            <div class="form-group">
+                <label for="passwordID">新密码：</label>
+                <input type="password" id="passwordID" class="form-control" name="password">
+            </div>
+            <div class="form-group">
+                <label for="check_passwordID">确认新密码：</label>
+                <input type="password" id="check_passwordID" class="form-control" name="check_password">
+            </div>
+
+            <div class="form-group">
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="roleID1" class="custom-control-input" checked>
+                    <label class="custom-control-label" for="roleID1">角色1</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="roleID2" class="custom-control-input">
+                    <label class="custom-control-label" for="roleID2">角色2</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="roleID3" class="custom-control-input" disabled>
+                    <label class="custom-control-label" for="roleID3">角色3</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-warning"><i class="fas fa-sync"></i> 提交修改</button>
+            <button type="reset" class="btn btn-primary"><i class="fas fa-undo"></i> 取消修改</button>
+        </form>
+    </div>
     </div>
 {% endblock %}

@@ -3,19 +3,20 @@ from flask_login import login_required
 from . import teaching
 
 
-@teaching.route('/main', methods=['GET', 'POST'])
+@teaching.route('/main/', methods=['GET', 'POST'])
 @login_required
 def main():
     if request.method == 'POST':
-        return redirect(url_for('.search', search_words=request.form.get("search_words")))
+        return redirect(url_for('.search', words=request.form.get("words")))
     if request.method == 'GET':
         return render_template('teaching/main.html', active_flg=['teaching'])
 
 
-@teaching.route('/search/<search_words>', methods=['GET', 'POST'])
+@teaching.route('/search/<words>', methods=['GET', 'POST'])
 @login_required
-def search(search_words):
+def search(words):
     if request.method == 'POST':
-        return redirect(url_for('.search', search_words=request.form.get("search_words")))
+        words = request.form.get("words")
+        return redirect(url_for('.search', words=words)) if words else redirect(url_for('.main'))
     if request.method == 'GET':
-        return render_template('teaching/search.html', active_flg=['teaching'], search_words=search_words)
+        return render_template('teaching/search.html', active_flg=['teaching'], words=words)

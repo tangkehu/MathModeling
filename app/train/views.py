@@ -3,13 +3,16 @@ from flask_login import login_required
 from . import train
 
 
-@train.route('/no_train')
+@train.route('/no_train/', methods=['GET', 'POST'])
 @login_required
 def no_train():
+    if request.method == 'POST':
+        print(request.form.get('apply'))
+        return redirect(url_for('.file', type_id=1))
     return render_template('train/no_train.html', active_flg=['train'])
 
 
-@train.route('/apply', methods=['GET', 'POST'])
+@train.route('/apply/', methods=['GET', 'POST'])
 @login_required
 def apply():
     if request.method == 'POST':
@@ -25,7 +28,7 @@ def file(type_id):
     return render_template('train/file.html', active_flg=['train', 'file', int(type_id)])
 
 
-@train.route('/team')
+@train.route('/team/')
 @login_required
 def team():
     return render_template('train/team.html', active_flg=['train', 'team'])
@@ -42,7 +45,7 @@ def team_member_edit(team_id):
         return render_template('train/team_member_edit.html', active_flg=['train', 'team'], team_number=team_number)
 
 
-@train.route('/student')
+@train.route('/student/')
 @login_required
 def student():
     return render_template('train/student.html', active_flg=['train', 'student'])
@@ -82,3 +85,12 @@ def grade(team_id):
         return redirect(url_for('train.team'))
     if request.method == 'GET':
         return render_template('train/grade.html', active_flg=['train', 'team'])
+
+
+@train.route('/over/', methods=['GET', 'POST'])
+@login_required
+def over():
+    if request.method == 'POST':
+        print(request.form.get('del_student', None))
+        return redirect(url_for('.no_train'))
+    return render_template('train/over.html', active_flg=['train', 'over'])

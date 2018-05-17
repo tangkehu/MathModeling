@@ -48,11 +48,49 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
-@auth.route('/profile')
-def profile():
-    return render_template('auth/profile.html', active_flg=['profile'])
+@auth.route('/profile/<user_id>')
+def profile(user_id):
+    the_user = user_id
+    return render_template('auth/profile.html', active_flg=['profile'], the_user=the_user)
 
 
-@auth.route('/account')
-def account():
-    return render_template('auth/account.html', active_flg=['account'])
+@auth.route('/account/<user_id>', methods=['GET', 'POST'])
+def account(user_id):
+    if request.method == 'POST':
+        return redirect(url_for('.account', user_id=user_id))
+    the_user = user_id
+    return render_template('auth/account.html', active_flg=['account'], the_user=the_user)
+
+
+@auth.route('/manage/', methods=['GET', 'POST'])
+def manage():
+    if request.method == 'POST':
+        return redirect(url_for('.user_search', words=request.form.get('words', 'null')))
+    return render_template('auth/manage.html', active_flg=['manage'])
+
+
+@auth.route('/user_search/<words>', methods=['GET', 'POST'])
+def user_search(words):
+    if request.method == 'POST':
+        return redirect(url_for('.user_search', words=request.form.get('words', 'null')))
+    return render_template('auth/manage.html', active_flg=['manage'], words=words)
+
+
+@auth.route('/role/')
+def role():
+    return render_template('auth/role.html', active_flg=['role'])
+
+
+@auth.route('/role_add/', methods=['GET', 'POST'])
+def role_add():
+    if request.method == 'POST':
+        return redirect(url_for('.role'))
+    return render_template('auth/role_add.html', active_flg=['role'])
+
+
+@auth.route('/role_edit/<role_id>', methods=['GET', 'POST'])
+def role_edit(role_id):
+    if request.method == 'POST':
+        return redirect(url_for('.role'))
+    the_role = role_id
+    return render_template('auth/role_add.html', active_flg=['role'], the_role=the_role)

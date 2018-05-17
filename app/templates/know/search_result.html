@@ -1,13 +1,11 @@
 {% extends "base_navbar.html" %}
 
 {% block content_block %}
-    {% include "know/_navs.html" %}
+  {% include "know/_navs.html" %}
+  <div class="container">
     {% include "know/_search.html" %}
-    <div class="row justify-content-center my-4">
-    <div class="col-lg-8 col-md-10 col-sm-12">
-        <div class="card">
-            {% include "know/_list.html" %}
-        </div>
+    <div class="card">
+        {% include "know/_list.html" %}
     </div>
-    </div>
+  </div>
 {% endblock %}

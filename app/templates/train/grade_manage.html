@@ -6,44 +6,41 @@
 {% endblock %}
 
 {% block content_block %}
-    {% include 'train/_navs.html' %}
-
-    <div class="row justify-content-center my-4">
-    <div class="col-xl-8 col-md-10">
-        <div class="card">
-            <div class="card-header text-center text-info"><h4>{{ team_number }}组评分任务</h4></div>
-            <div class="row justify-content-center my-4">
-                <div class="col-xl-4 col-md-6 col-8">
-                    <form method="post">
-                        <select class="form-control show-tick selectpicker my-2" name="grade1" data-live-search="true">
-                          <option selected value="0">选择任务...</option>
-                          <option value="1">1组</option>
-                          <option value="2">2组</option>
-                          <option value="3">3组</option>
-                          <option value="4">4组</option>
-                        </select>
-                        <select class="form-control show-tick selectpicker my-2" name="grade2" data-live-search="true">
-                          <option selected value="0">选择任务...</option>
-                          <option value="1">1组</option>
-                          <option value="2">2组</option>
-                          <option value="3">3组</option>
-                          <option value="4">4组</option>
-                        </select>
-                        <select class="form-control show-tick selectpicker my-2" name="grade3" data-live-search="true">
-                          <option selected value="0">选择任务...</option>
-                          <option value="1">1组</option>
-                          <option value="2">2组</option>
-                          <option value="3">3组</option>
-                          <option value="4">4组</option>
-                        </select>
-                        <button class="btn btn-info my-2" type="submit"><span class="ion ion-checkmark"></span> 确定</button>
-                        <a href="{{ url_for('train.team') }}" class="btn btn-warning my-2"><span class="ion ion-arrow-return-left"></span> 取消</a>
-                    </form>
-                </div>
+  {% include 'train/_navs.html' %}
+  <div class="container">
+    <div class="card my-5">
+        <div class="card-header text-center text-info"><h4>{{ team_number }}组评分任务</h4></div>
+        <div class="row justify-content-center my-4">
+            <div class="col-xl-4 col-md-6 col-8">
+                <form method="post">
+                    <select class="form-control show-tick selectpicker my-2" name="grade1" data-live-search="true">
+                      <option selected value="0">选择任务...</option>
+                      <option value="1">1组</option>
+                      <option value="2">2组</option>
+                      <option value="3">3组</option>
+                      <option value="4">4组</option>
+                    </select>
+                    <select class="form-control show-tick selectpicker my-2" name="grade2" data-live-search="true">
+                      <option selected value="0">选择任务...</option>
+                      <option value="1">1组</option>
+                      <option value="2">2组</option>
+                      <option value="3">3组</option>
+                      <option value="4">4组</option>
+                    </select>
+                    <select class="form-control show-tick selectpicker my-2" name="grade3" data-live-search="true">
+                      <option selected value="0">选择任务...</option>
+                      <option value="1">1组</option>
+                      <option value="2">2组</option>
+                      <option value="3">3组</option>
+                      <option value="4">4组</option>
+                    </select>
+                    <button class="btn btn-info my-2" type="submit"><i class="fas fa-check"></i> 确定</button>
+                    <a href="{{ url_for('train.team') }}" class="btn btn-warning my-2"><i class="fas fa-undo-alt"></i> 取消</a>
+                </form>
             </div>
         </div>
     </div>
-    </div>
+  </div>
 {% endblock %}
 
 {% block script_block %}
