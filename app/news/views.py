@@ -7,7 +7,8 @@ from . import news
 @login_required
 def main():
     if request.method == 'POST':
-        return redirect(url_for('.search', words=request.form.get('words')))
+        words = request.form.get('words')
+        return redirect(url_for('.search', words=words)) if words else redirect(url_for('.main'))
     return render_template('news/main.html', active_flg=['news'])
 
 
@@ -15,7 +16,8 @@ def main():
 @login_required
 def search(words):
     if request.method == 'POST':
-        return redirect(url_for('.search', words=request.form.get('words')))
+        words = request.form.get('words')
+        return redirect(url_for('.search', words=words)) if words else redirect(url_for('.main'))
     return render_template('news/main.html', active_flg=['news'], words=words)
 
 
