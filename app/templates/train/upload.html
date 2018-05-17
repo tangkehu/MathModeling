@@ -1,8 +1,8 @@
 {% extends 'base_navbar.html' %}
 
 {% block content_block %}
+  {% include 'train/_navs.html' %}
   <div class="container">
-    {% include 'train/_navs.html' %}
     <div class="card my-5">
         <div class="card-header text-center text-info"><h4>{{ type_name }}文件上传</h4></div>
         <div class="row justify-content-center my-4">
