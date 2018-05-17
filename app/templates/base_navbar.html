@@ -17,7 +17,7 @@
               <a class="nav-item nav-link {% if 'teaching' in active_flg %} active {% endif %}" href="{{ url_for('teaching.main') }}">自主学习</a>
               <a class="nav-item nav-link {% if 'community' in active_flg %} active {% endif %}" href="{{ url_for('community.main', words='null') }}">问答社区</a>
               <a class="nav-item nav-link {% if 'news' in active_flg %} active {% endif %}" href="{{ url_for('news.main') }}">公告</a>
-              <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="{{ url_for('management.main') }}">后台</a>
+              <a class="nav-item nav-link {% if 'management' in active_flg %} active {% endif %}" href="{{ url_for('management.main') }}">可视化</a>
           </div>
           <form class="form-inline">
               <a class="text-white" href="{{ url_for('auth.profile', user_id=current_user.id) }}" style="text-decoration: none;">
