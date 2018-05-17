@@ -2,6 +2,18 @@
 {% block content_block %}
     <div class="container text-center my-5">
         <h4>数学建模集训尚未开启...</h4>
-        <a href="#" class="btn btn-primary my-4"><i class="fas fa-unlock-alt"></i> 开启集训</a>
+        <form method="post" class="my-5">
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="apply1" name="apply" class="custom-control-input" value="1" checked>
+                  <label class="custom-control-label text-success" for="apply1">开启报名</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="apply2" name="apply" class="custom-control-input" value="0">
+                  <label class="custom-control-label text-danger" for="apply2">跳过报名</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-unlock-alt"></i> 开启集训</button>
+        </form>
     </div>
 {% endblock %}

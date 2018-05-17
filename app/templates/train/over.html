@@ -1,0 +1,19 @@
+{% extends "base_navbar.html" %}
+{% block content_block %}
+    {% include "train/_navs.html" %}
+    <div class="container text-center">
+        <form method="post" class="my-5">
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="delStudentRadio1" name="del_student" class="custom-control-input" value="0" checked>
+                  <label class="custom-control-label text-success" for="delStudentRadio1">保留学员及小组信息</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="delStudentRadio2" name="del_student" class="custom-control-input" value="1">
+                  <label class="custom-control-label text-danger" for="delStudentRadio2">删除学员及小组信息</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger my-5"><i class="fas fa-power-off"></i> 结束本次集训</button>
+        </form>
+    </div>
+{% endblock %}
