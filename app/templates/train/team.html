@@ -3,10 +3,87 @@
   {% include "train/_navs.html" %}
   <div class="container">
     <div class="row justify-content-center mt-4">
-    <a href="#" class="btn btn-primary my-2"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
+        <a href="{{ url_for('.public_file') }}" class="btn btn-primary my-2"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
+        <a href="{{ url_for('.end_apply') }}" class="btn btn-primary my-2 mx-2"> 停止报名</a>
+        <a href="{{ url_for('.set_team_count') }}" class="btn btn-primary my-2"> 设置小组</a>
     </div>
 
     <ul class="list-unstyled">
+{#        {% for one in teams %}#}
+{#              <li class="media my-4">#}
+{#                <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> {{ one.team_number }}组</span>#}
+{#                <div class="media-body">#}
+{#                  <p>#}
+{#                      {% for x in one.train_student.all() %}#}
+{#                          <a href="#" class="text-dark">{{ x.user.username }}</a>#}
+{#                      {% endfor %}#}
+{#                      <a href="{{ url_for('train.team_member_edit', team_id=one.id) }}" class="ml-4 text-info"><i class="fas fa-edit"></i></a>#}
+{#                  </p>#}
+{#                  <div class="row">#}
+{#                      <div class="col-xl-2 col-md-4 col-8">#}
+{#                          <p>论文：#}
+{#                              {% if one.train_file.filter_by(train_filetype=6).first() %}#}
+{#                              <a href="{{ url_for('train.show_file', file_id=one.train_file.filter_by(train_filetype=6).first().id) }}" class="text-primary"><i class="fas fa-eye"></i></a>#}
+{#                              <a href="{{ url_for('train.del_file', file_id=one.train_file.filter_by(train_filetype=6).first().id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>#}
+{#                              {% else %}#}
+{#                              <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>#}
+{#                              {% endif %}#}
+{#                          </p>#}
+{#                      </div>#}
+{#                      <div class="col-xl-4 col-md-8 col-12">#}
+{#                          <p>评分任务：#}
+{#                              {% if one.children %}#}
+{#                                  {% set task = one.children %}#}
+{#                                  <a href="{{ url_for('train.show_file', file_id=task[0].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务一</a>#}
+{#                                  <a href="{{ url_for('train.show_file', file_id=task[1].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务二</a>#}
+{#                                  <a href="{{ url_for('train.show_file', file_id=task[2].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务三</a>#}
+{#                              {% else %}#}
+{#                                  <a href="{{ url_for('train.grade_manage', team_id=one.id) }}" class="text-info"><i class="fas fa-paper-plane"></i> 发布</a>#}
+{#                              {% endif %}#}
+{#                          </p>#}
+{#                      </div>#}
+{#                      <div class="col-xl-4 col-md-8 col-12">#}
+{#                          <p>评分结果：#}
+{#                              {% if one.children %}#}
+{#                                  {% set task = one.children %}#}
+{#                                  一：{{ task[0].score }}#}
+{#                                  <a href="{{ url_for('train.grade', grade_id=task[0].id) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>#}
+{#                                  二：{{ task[1].score }}#}
+{#                                  <a href="{{ url_for('train.grade', grade_id=task[1].id) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>#}
+{#                                  三：{{ task[2].score }}#}
+{#                                  <a href="{{ url_for('train.grade', grade_id=task[2].id) }}" class="text-warning"><i class="fas fa-pencil-alt"></i></a>#}
+{#                              {% endif %}#}
+{#                          </p>#}
+{#                      </div>#}
+{#                      <div class="col-xl-2 col-md-4 col-8">#}
+{#                          <p>评分表：#}
+{#                              {% if one.train_file.filter_by(train_filetype=7).first() %}#}
+{#                              <a href="{{ url_for('train.show_file', file_id=one.train_file.filter_by(train_filetype=7).first().id) }}" class="text-primary"><i class="fas fa-eye"></i></a>#}
+{#                              <a href="{{ url_for('train.del_file', file_id=one.train_file.filter_by(train_filetype=7).first().id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>#}
+{#                              {% else %}#}
+{#                              <a href="{{ url_for('train.upload', type_id=7) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>#}
+{#                              {% endif %}#}
+{#                          </p>#}
+{#                      </div>#}
+{#                      <div class="col-xl-2 col-md-4 col-6">#}
+{#                          <p>小组成绩：{{ one.team_score }}</p>#}
+{#                      </div>#}
+{#                      <div class="col-xl-2 col-md-4 col-8">#}
+{#                          <p>总结：#}
+{#                              {% if one.train_file.filter_by(train_filetype=8).first() %}#}
+{#                              <a href="{{ url_for('train.show_file', file_id=one.train_file.filter_by(train_filetype=8).first().id) }}" class="text-primary"><i class="fas fa-eye"></i></a>#}
+{#                              <a href="{{ url_for('train.del_file', file_id=one.train_file.filter_by(train_filetype=8).first().id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>#}
+{#                              {% else %}#}
+{#                              <a href="{{ url_for('train.upload', type_id=8) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>#}
+{#                              {% endif %}#}
+{#                          </p>#}
+{#                      </div>#}
+{#                  </div>#}
+{#                  <hr>#}
+{#                </div>#}
+{#              </li>#}
+{#        {% endfor %}#}
+
       <li class="media my-4">
         <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> 1组</span>
         <div class="media-body">
@@ -35,121 +112,7 @@
               <div class="col-xl-4 col-md-8 col-12">
                   <p>评分结果：
                       一：75
-                      <a href="{{ url_for('train.grade', team_id=1) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                      二：85
-                      <a href="#" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                      三：90
-                      <a href="#" class="text-warning"><i class="fas fa-pencil-alt"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>评分表：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=7) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-6">
-                  <p>小组成绩：80</p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>总结：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=6) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-          </div>
-          <hr>
-        </div>
-      </li>
-
-      <li class="media my-4">
-        <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> 2组</span>
-        <div class="media-body">
-          <p>
-              <a href="#" class="text-dark">唐柯虎</a>
-              <a href="#" class="text-dark">王跣铭</a>
-              <a href="#" class="text-dark">张维雄</a>
-              <a href="{{ url_for('train.team_member_edit', team_id=1) }}" class="ml-4 text-info"><i class="fas fa-edit"></i></a>
-          </p>
-          <div class="row">
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>论文：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-4 col-md-8 col-12">
-                  <p>评分任务：
-                      <a href="#" class="mr-2">任务一</a>
-                      <a href="#" class="mr-2">任务二</a>
-                      <a href="#" class="mr-2">任务三</a>
-                      <a href="{{ url_for('train.grade_manage', team_id=1) }}" class="text-info"><i class="fas fa-paper-plane"></i> 发布</a>
-                  </p>
-              </div>
-              <div class="col-xl-4 col-md-8 col-12">
-                  <p>评分结果：
-                      一：75
-                      <a href="{{ url_for('train.grade', team_id=1) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                      二：85
-                      <a href="#" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                      三：90
-                      <a href="#" class="text-warning"><i class="fas fa-pencil-alt"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>评分表：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=7) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-6">
-                  <p>小组成绩：80</p>
-              </div>
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>总结：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=6) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-          </div>
-          <hr>
-        </div>
-      </li>
-
-      <li class="media my-4">
-        <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> 3组</span>
-        <div class="media-body">
-          <p>
-              <a href="#" class="text-dark">唐柯虎</a>
-              <a href="#" class="text-dark">王跣铭</a>
-              <a href="#" class="text-dark">张维雄</a>
-              <a href="{{ url_for('train.team_member_edit', team_id=1) }}" class="ml-4 text-info"><i class="fas fa-edit"></i></a>
-          </p>
-          <div class="row">
-              <div class="col-xl-2 col-md-4 col-8">
-                  <p>论文：
-                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>
-                      <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>
-                      <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i></a>
-                  </p>
-              </div>
-              <div class="col-xl-4 col-md-8 col-12">
-                  <p>评分任务：
-                      <a href="#" class="mr-2">任务一</a>
-                      <a href="#" class="mr-2">任务二</a>
-                      <a href="#" class="mr-2">任务三</a>
-                      <a href="{{ url_for('train.grade_manage', team_id=1) }}" class="text-info"><i class="fas fa-paper-plane"></i> 发布</a>
-                  </p>
-              </div>
-              <div class="col-xl-4 col-md-8 col-12">
-                  <p>评分结果：
-                      一：75
-                      <a href="{{ url_for('train.grade', team_id=1) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
+                      <a href="{{ url_for('train.grade', grade_id=1) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
                       二：85
                       <a href="#" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
                       三：90

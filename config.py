@@ -4,11 +4,10 @@ import os
 class Config(object):
     SECRET_KEY = 'AjkljfiodsLl4398ADFJ90G$#@^5ASFL048509'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # 不追踪对象的修改，减少内存使用
-    FILE_PATH = os.path.join(os.getcwd(), 'app/static/know')
 
     # 自定义配置
     PERMISSIONS = [
-        ('test1', '用于测试'),
+        ('train_manage', '集训系统管理,具备该权限可直接进入集训不用报名'),
         ('test2', '用于测试'),
         ('test3', '用于测试'),
         ('test4', '用于测试')
@@ -23,6 +22,8 @@ class Config(object):
                        6: '论文',
                        7: '评分结果',
                        8: '总结'}
+    FILE_PATH = os.path.join(os.getcwd(), 'app/static/know')
+    TRAIN_FILE_PATH = os.path.join(os.getcwd(), 'app/static/train_files')
 
     @staticmethod
     def init_app(app):

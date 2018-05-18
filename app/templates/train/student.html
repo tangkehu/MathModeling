@@ -2,9 +2,27 @@
 {% block content_block %}
   {% include "train/_navs.html" %}
   <div class="container">
-    <h4 class="text-info text-center my-4">报名学员：45 &nbsp;&nbsp;已审核学员：20</h4>
+    <h4 class="text-info text-center my-4">报名学员：{{ all_count }} &nbsp;&nbsp;已审核学员：{{ apply_count }}</h4>
 
     <div class="list-group my-2">
+{#      {% for one in student_list %}#}
+{#          <div class="list-group-item flex-column align-items-start">#}
+{#            <div class="d-flex w-100 justify-content-between">#}
+{#              <h5 class="mb-0">{{ one.user.real_name }}</h5>#}
+{#              <div class="btn-group btn-group-sm">#}
+{#                  {% if one.verify_status == True %}#}
+{#                      <div class="btn btn-info"> 已通过</div>#}
+{#                  {% else %}#}
+{#                      <a href="{{ url_for('train.del_student', student_id=one.id) }}" class="btn btn-outline-danger"><i class="fas fa-trash"></i> 删除</a>#}
+{#                      <a href="{{ url_for('train.apply_student', student_id=one.id) }}" class="btn btn-outline-info"><i class="fas fa-check"></i> 通过</a>#}
+{#                  {% endif %}#}
+{#              </div>#}
+{#            </div>#}
+{#            <small>{{ one.user.student_number }}</small>#}
+{#            <p class="mb-1">{{ one.resume }}</p>#}
+{#          </div>#}
+{#      {% endfor %}#}
+
       <div class="list-group-item flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-0">唐柯虎</h5>
@@ -17,42 +35,42 @@
         <small>201410412217</small>
         <p class="mb-1">擅长使用python进行程序开发，包括数据分析及可视化编程。写文章比较有优势，擅长交流。</p>
       </div>
-
-      <div class="list-group-item flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-0">王铣铭</h5>
-          <div class="btn-group btn-group-sm">
+{##}
+{#      <div class="list-group-item flex-column align-items-start">#}
+{#        <div class="d-flex w-100 justify-content-between">#}
+{#          <h5 class="mb-0">王铣铭</h5>#}
+{#          <div class="btn-group btn-group-sm">#}
 {#                      <div class="btn btn-info"> 已通过</div>#}
-              <a href="#" class="btn btn-outline-danger"><i class="fas fa-trash"></i> 删除</a>
-              <a href="#" class="btn btn-outline-info"><i class="fas fa-check"></i> 通过</a>
-          </div>
-        </div>
-        <small>201410412217</small>
-        <p class="mb-1">擅长使用JAVA进行程序开发，包括数据分析及可视化编程。写文章比较有优势，擅长交流。</p>
-      </div>
-
-      <div class="list-group-item flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-0">唐柯虎</h5>
-          <div class="btn-group btn-group-sm">
-              <div class="btn btn-info"> 已通过</div>
 {#              <a href="#" class="btn btn-outline-danger"><i class="fas fa-trash"></i> 删除</a>#}
 {#              <a href="#" class="btn btn-outline-info"><i class="fas fa-check"></i> 通过</a>#}
-          </div>
-        </div>
-        <small>201410412217</small>
-        <p class="mb-1">擅长使用python进行程序开发，包括数据分析及可视化编程。写文章比较有优势，擅长交流。</p>
-      </div>
+{#          </div>#}
+{#        </div>#}
+{#        <small>201410412217</small>#}
+{#        <p class="mb-1">擅长使用JAVA进行程序开发，包括数据分析及可视化编程。写文章比较有优势，擅长交流。</p>#}
+{#      </div>#}
+{##}
+{#      <div class="list-group-item flex-column align-items-start">#}
+{#        <div class="d-flex w-100 justify-content-between">#}
+{#          <h5 class="mb-0">唐柯虎</h5>#}
+{#          <div class="btn-group btn-group-sm">#}
+{#              <div class="btn btn-info"> 已通过</div>#}
+{#              <a href="#" class="btn btn-outline-danger"><i class="fas fa-trash"></i> 删除</a>#}
+{#              <a href="#" class="btn btn-outline-info"><i class="fas fa-check"></i> 通过</a>#}
+{#          </div>#}
+{#        </div>#}
+{#        <small>201410412217</small>#}
+{#        <p class="mb-1">擅长使用python进行程序开发，包括数据分析及可视化编程。写文章比较有优势，擅长交流。</p>#}
+{#      </div>#}
     </div>
 
-    <nav class="my-2">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-        <li class="page-item active"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-      </ul>
-    </nav>
+{#    <nav class="my-2">#}
+{#      <ul class="pagination">#}
+{#        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>#}
+{#        <li class="page-item"><a class="page-link" href="#">1</a></li>#}
+{#        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>#}
+{#        <li class="page-item active"><a class="page-link" href="#">3</a></li>#}
+{#        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>#}
+{#      </ul>#}
+{#    </nav>#}
   </div>
 {% endblock %}
