@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required
 from . import know
+from ..models import KnowType
 
 
 @know.route('/push')
@@ -9,20 +10,25 @@ def push():
     return render_template('know/push.html', active_flg=['know', 'push'])
 
 
-@know.route('/resource')
+@know.route('/resource/<type_id>')
 @login_required
-def resource():
-    return render_template('know/resource.html', active_flg=['know', 'resource'])
+def resource(type_id):
+    parents = KnowType.get_parents(type_id)
+    children = KnowType.get_children(type_id)
+    select_type = KnowType.get_type_select()
+    return render_template('know/resource.html', active_flg=['know', 'resource'], parents=parents,
+                           resource_list=children, select_type=select_type, current_type_id=type_id)
 
 
-@know.route('/upload', methods=['GET', 'POST'])
+@know.route('/upload/<type>', methods=['GET', 'POST'])
 @login_required
-def upload():
+def upload(type):
     if request.method == 'POST':
         # 处理业务逻辑
         print(request.files.get('file'))
         return redirect(url_for('know.resource'))
     if request.method == 'GET':
+
         return render_template('know/upload.html', active_flg=['know'])
 
 

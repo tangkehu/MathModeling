@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
-from flask_login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin, current_user
 from app import db, login_manager
 
 
@@ -22,7 +22,7 @@ class School(db.Model):
 
     @staticmethod
     def insert_basic_schools():
-        basic_schools = ['成都大学', '四川大学', '成都理工大学']
+        basic_schools = ['成都大学']
         for one in basic_schools:
             if not School.query.filter_by(school_name=one).first():
                 school = School(school_name=one)
@@ -199,6 +199,45 @@ class KnowType(db.Model):
 
     children = db.relationship('KnowType', backref=db.backref('parent', remote_side=[id]))
     know_resource = db.relationship('KnowResource', backref='know_type', lazy='dynamic')
+
+    @staticmethod
+    def get_parents(type_id):
+        """接收的type_id为null或数字"""
+        result = []
+        if type_id == 'null':
+            pass
+        else:
+            child = KnowType.query.get_or_404(int(type_id))
+            while True:
+                result.insert(0, (child.id, child.type_name))
+                if child.parent_id:
+                    child = child.parent
+                else:
+                    break
+        return result
+
+    @staticmethod
+    def get_children(type_id):
+        """接收的type_id为null或数字，返回的children除了文件夹还有文件"""
+        if type_id == 'null':
+            child_type = KnowType.query.filter(
+                KnowType.parent_id is None, KnowType.school_id == current_user.school_id).order_by(
+                KnowType.type_name.desc()).all()
+            child_resource = KnowResource.query.filter(
+                KnowResource.know_type_id is None, KnowResource.school_id == current_user.school_id).order_by(
+                KnowResource.create_time.desc()).all()
+        else:
+            now_type = KnowType.query.get_or_404(int(type_id))
+            child_type = now_type.children.order_by(KnowType.type_name.desc()).all()
+            child_resource = now_type.know_resource.order_by(KnowResource.create_time.desc()).all()
+        return {'type': child_type, 'resource': child_resource}
+
+    @staticmethod
+    def get_type_select():
+        select_type = [(x.id, x.type_name) for x in KnowType.query.filter(
+            KnowType.parent_id is None, KnowType.school_id == current_user.school_id).order_by(
+            KnowType.type_name.desc()).all()]
+        return select_type
 
 
 class KnowResource(db.Model):
