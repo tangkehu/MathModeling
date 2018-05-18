@@ -1,3 +1,4 @@
+import os, time
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from flask_login import AnonymousUserMixin, current_user
@@ -197,7 +198,7 @@ class KnowType(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('know_type.id'))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
-    children = db.relationship('KnowType', backref=db.backref('parent', remote_side=[id]))
+    children = db.relationship('KnowType', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')
     know_resource = db.relationship('KnowResource', backref='know_type', lazy='dynamic')
 
     @staticmethod
@@ -209,7 +210,7 @@ class KnowType(db.Model):
         else:
             child = KnowType.query.get_or_404(int(type_id))
             while True:
-                result.insert(0, (child.id, child.type_name))
+                result.insert(0, (str(child.id), child.type_name))
                 if child.parent_id:
                     child = child.parent
                 else:
@@ -221,23 +222,53 @@ class KnowType(db.Model):
         """接收的type_id为null或数字，返回的children除了文件夹还有文件"""
         if type_id == 'null':
             child_type = KnowType.query.filter(
-                KnowType.parent_id is None, KnowType.school_id == current_user.school_id).order_by(
+                KnowType.parent_id == None, KnowType.school_id == current_user.school_id).order_by(
                 KnowType.type_name.desc()).all()
             child_resource = KnowResource.query.filter(
-                KnowResource.know_type_id is None, KnowResource.school_id == current_user.school_id).order_by(
+                KnowResource.know_type_id == None,
+                KnowResource.school_id == current_user.school_id,
+                KnowResource.verify_status == True).order_by(
                 KnowResource.create_time.desc()).all()
         else:
             now_type = KnowType.query.get_or_404(int(type_id))
             child_type = now_type.children.order_by(KnowType.type_name.desc()).all()
-            child_resource = now_type.know_resource.order_by(KnowResource.create_time.desc()).all()
+            child_resource = now_type.know_resource.filter_by(verify_status=True).order_by(
+                KnowResource.create_time.desc()).all()
         return {'type': child_type, 'resource': child_resource}
 
     @staticmethod
     def get_type_select():
-        select_type = [(x.id, x.type_name) for x in KnowType.query.filter(
-            KnowType.parent_id is None, KnowType.school_id == current_user.school_id).order_by(
+        select_type = [(str(x.id), x.type_name) for x in KnowType.query.filter(
+            KnowType.school_id == current_user.school_id).order_by(
             KnowType.type_name.desc()).all()]
         return select_type
+
+    @staticmethod
+    def add_type(type_id, name, code):
+        new_type = KnowType(type_name=name,
+                            type_code=code,
+                            parent=None if type_id == 'null' else KnowType.query.get_or_404(int(type_id)),
+                            school=current_user.school)
+        db.session.add(new_type)
+        db.session.commit()
+
+    @staticmethod
+    def edit_type(type_id, name, code):
+        the_type = KnowType.query.get_or_404(int(type_id))
+        the_type.type_name = name
+        the_type.type_code = code
+        db.session.add(the_type)
+        db.session.commit()
+
+    @staticmethod
+    def del_type(type_id):
+        the_type = KnowType.query.get_or_404(int(type_id))
+        for one in the_type.children:
+            KnowType.del_type(one.id)
+        for one in the_type.know_resource:
+            KnowResource.del_resource(one.id)
+        db.session.delete(the_type)
+        db.session.commit()
 
 
 class KnowResource(db.Model):
@@ -254,6 +285,72 @@ class KnowResource(db.Model):
     know_type_id = db.Column(db.Integer, db.ForeignKey('know_type.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+
+    @staticmethod
+    def search(type_id, words):
+        """type_id为null或id"""
+        if type_id == 'null':
+            result = KnowResource.query.filter(
+                KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True,
+                KnowResource.resource_name.like('%'+words+'%')).all()
+        else:
+            result = KnowResource.query.filter(
+                KnowResource.know_type_id == int(type_id), KnowResource.verify_status == True,
+                KnowResource.resource_name.like('%'+words+'%')).all()
+        return result
+
+    @staticmethod
+    def upload(type_id, file):
+        filename = file.filename
+        new_resource = KnowResource(resource_name=filename,
+                                    create_time=int(time.time()),
+                                    helpful_count=0,
+                                    unhelpful_count=0,
+                                    read_count=0,
+                                    verify_status=False,
+                                    know_type=None if type_id == 'null' else KnowType.query.get_or_404(int(type_id)),
+                                    user=current_user,
+                                    school=current_user.school)
+        db.session.add(new_resource)
+        db.session.commit()
+        resource_path = type_id + '-' + str(new_resource.id) + '-' + filename
+        try:
+            file.save(os.path.join(current_app.config['FILE_PATH'], resource_path))
+        except:
+            db.session.delete(new_resource)
+            db.session.commit()
+            return False
+        new_resource.resource_path = resource_path
+        db.session.add(new_resource)
+        db.session.commit()
+        return True
+
+    @staticmethod
+    def edit_resource(resource_id, resource_name):
+        the_resource = KnowResource.query.get_or_404(int(resource_id))
+        the_resource.resource_name = resource_name
+        db.session.add(the_resource)
+        db.session.commit()
+
+    @staticmethod
+    def del_resource(resource_id):
+        the_resource = KnowResource.query.get_or_404(int(resource_id))
+        db.session.delete(the_resource)
+        db.session.commit()
+
+    @staticmethod
+    def helpful(resource_id):
+        the_resource = KnowResource.query.get_or_404(int(resource_id))
+        the_resource.helpful_count += 1
+        db.session.add(the_resource)
+        db.session.commit()
+
+    @staticmethod
+    def file_pass(resource_id):
+        the_resource = KnowResource.query.get_or_404(int(resource_id))
+        the_resource.verify_status = True
+        db.session.add(the_resource)
+        db.session.commit()
 
 
 class CommunityQuestion(db.Model):

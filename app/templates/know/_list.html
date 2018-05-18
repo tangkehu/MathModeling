@@ -1,35 +1,30 @@
 <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">中国人口增长预测</a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">66 赞</span>
-        <span class="float-right">
-            <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-            <a href="{{ url_for('know.edit_name') }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-            <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-        </span>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">易拉罐形状和尺寸的最优设计</a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">45 赞</span>
-        <span class="float-right">
-            <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-            <a href="{{ url_for('know.edit_name') }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-            <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-        </span>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">雨量预报方法的评价</a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">20 赞</span>
-        <span class="float-right">
-            <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-            <a href="{{ url_for('know.edit_name') }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-            <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-        </span>
-    </li>
+    {% if resource_list.get('type') %}
+        {% for one in resource_list['type'] %}
+            <li class="list-group-item">
+                <i class="fas fa-folder text-primary mr-2"></i>
+                <a href="{{ url_for('know.resource', type_id=one.id) }}" class="text-dark">{{ one.type_name }}</a>
+                <span class="float-right">
+                    <a href="{{ url_for('know.edit_type', type_id=one.id) }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
+                    <a href="{{ url_for('know.del_type', type_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
+                </span>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+    {% if resource_list.get('resource') %}
+        {% for one in resource_list['resource'] %}
+            <li class="list-group-item">
+                <i class="fas fa-file-alt text-primary mr-2"></i>
+                <a href="{{ url_for('know.show_resource', resource_id=one.id) }}" class="text-dark">{{ one.resource_name }}</a>
+                <small class="text-muted ml-2">{{ one.user.username }} &nbsp; {{ one.create_time }} &nbsp; {{ one.know_type.type_name }}</small>
+                <span class="badge badge-success badge-pill">{{ one.helpful_count }} 赞</span>
+                <span class="float-right">
+                    <a href="{{ url_for('know.helpful', resource_id=one.id) }}" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
+                    <a href="{{ url_for('know.edit_resource', resource_id=one.id) }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
+                    <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
+                </span>
+            </li>
+        {% endfor %}
+    {% endif %}
 </ul>

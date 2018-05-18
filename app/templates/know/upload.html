@@ -6,9 +6,14 @@
     <div class="card my-5">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-white">
-            <li class="breadcrumb-item"><a href="#">根目录</a></li>
-            <li class="breadcrumb-item"><a href="#">集训文件</a></li>
-            <li class="breadcrumb-item active" aria-current="page">建模题目</li>
+            <li class="breadcrumb-item"><a href="#">/ 根目录</a></li>
+            {% for one in parents %}
+                {% if one[0] == current_type_id %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ one[1] }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('.resource', type_id=one[0]) }}">{{ one[1] }}</a></li>
+                {% endif %}
+            {% endfor %}
           </ol>
         </nav>
         <div class="row justify-content-center">
@@ -19,7 +24,7 @@
                         <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
                     </div>
                     <button class="btn btn-primary my-4" type="submit"><i class="fas fa-cloud-upload-alt"></i> 上传</button>
-                    <a href="{{ url_for('know.resource') }}" class="btn btn-warning my-4"><i class="fas fa-undo-alt"></i> 取消</a>
+                    <a href="{{ url_for('know.resource', type_id=current_type_id) }}" class="btn btn-warning my-4"><i class="fas fa-undo-alt"></i> 取消</a>
                 </form>
             </div>
         </div>

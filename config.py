@@ -1,8 +1,10 @@
+import os
 
 
 class Config(object):
     SECRET_KEY = 'AjkljfiodsLl4398ADFJ90G$#@^5ASFL048509'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # 不追踪对象的修改，减少内存使用
+    FILE_PATH = os.path.join(os.getcwd(), 'app/static/know')
 
     # 自定义配置
     PERMISSIONS = [
