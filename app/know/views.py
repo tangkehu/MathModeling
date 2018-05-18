@@ -122,7 +122,7 @@ def helpful(resource_id):
 @login_required
 def edit_resource(resource_id):
     the_resource = KnowResource.query.get_or_404(int(resource_id))
-    type_id = the_resource.know_type_id
+    type_id = the_resource.know_type_id if the_resource.know_type_id else 'null'
     if request.method == 'POST':
         name = request.form.get('name')
         if not name:
