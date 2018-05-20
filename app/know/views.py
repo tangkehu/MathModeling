@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, session
 from flask_login import login_required, current_user
 from . import know
 from ..models import KnowType, KnowResource
@@ -15,8 +15,9 @@ def push():
             return redirect(url_for('.search', type_id=request.form.get('search_type'), words=words))
     resource_list = {'type': None, 'resource': None}
     select_type = KnowType.get_type_select()
+    result = KnowResource.auto_push()
     return render_template('know/push.html', active_flg=['know', 'push'], resource_list=resource_list,
-                           select_type=select_type)
+                           select_type=select_type, result=result)
 
 
 @know.route('/resource/<type_id>', methods=['GET', 'POST'])
@@ -172,5 +173,6 @@ def search(type_id, words):
             return redirect(url_for('.search', type_id=search_type, words=search_words))
     resource_list = {'type': None, 'resource': KnowResource.search(type_id, words)}
     select_type = KnowType.get_type_select()
+    session['hot_words'] = words
     return render_template('know/search_result.html', active_flg=['know', 'resource'], resource_list=resource_list,
                            select_type=select_type, words=words, search_type=type_id)

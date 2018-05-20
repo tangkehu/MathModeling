@@ -1,6 +1,6 @@
 import os, time
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import current_app
+from flask import current_app, session
 from flask_login import AnonymousUserMixin, current_user
 from app import db, login_manager
 
@@ -376,6 +376,14 @@ class KnowResource(db.Model):
         the_resource.verify_status = True
         db.session.add(the_resource)
         db.session.commit()
+
+    @staticmethod
+    def auto_push():
+        words = session.get('hot_words', 'null')
+        result = KnowResource.query.filter(
+            KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True,
+            KnowResource.resource_name.like('%' + words + '%')).all()
+        return result
 
 
 class CommunityQuestion(db.Model):

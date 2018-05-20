@@ -24,6 +24,7 @@ class Config(object):
                        8: '总结'}
     FILE_PATH = os.path.join(os.getcwd(), 'app/static/know')
     TRAIN_FILE_PATH = os.path.join(os.getcwd(), 'app/static/train_files')
+    PAGE_VIEW = 0
 
     @staticmethod
     def init_app(app):
