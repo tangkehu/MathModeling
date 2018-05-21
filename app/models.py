@@ -145,7 +145,7 @@ class User(db.Model):
     community_question = db.relationship('CommunityQuestion', backref='user', lazy='dynamic')
     community_answer = db.relationship('CommunityAnswer', backref='user', lazy='dynamic')
     news = db.relationship('News', backref='user', lazy='dynamic')
-    train_student = db.relationship('TrainStudent', backref='user', lazy='dynamic')
+    train_student = db.relationship('TrainStudent', backref='user')
     train_file = db.relationship('TrainFile', backref='user', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
@@ -189,6 +189,10 @@ class User(db.Model):
                 flg = True
                 break
         return flg
+
+    @property
+    def is_train_student(self):
+        return True if self.train_student and self.train_student.verify_status is True else False
 
     @staticmethod
     def insert_admin_user():
@@ -431,13 +435,6 @@ class TrainStudent(db.Model):
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
     @staticmethod
-    def is_train_student():
-        if current_user.train_student:
-            return True
-        else:
-            return False
-
-    @staticmethod
     def add_student(resume):
         new_student = TrainStudent(resume=resume,
                                    verify_status=False,
@@ -453,24 +450,23 @@ class TrainStudent(db.Model):
         return result
 
     @staticmethod
-    def set_team(student_id, team_id):
-        student = TrainStudent.query.get(int(student_id))
-        student.train_team = TrainTeam.query.get_or_404(int(team_id))
-        db.session.add(student)
-        db.session.commit()
-
-    @staticmethod
     def del_student(student_id):
         the_student = TrainStudent.query.get(int(student_id))
         db.session.delete(the_student)
-        db.sessioncommit()
+        db.session.commit()
 
     @staticmethod
     def apply_student(student_id):
         the_student = TrainStudent.query.get(int(student_id))
         the_student.verify_status = True
         db.session.add(the_student)
-        db.sessioncommit()
+        db.session.commit()
+
+    @staticmethod
+    def reset():
+        for one in TrainStudent.query.filter_by(school_id=current_user.school_id).all():
+            db.session.delete(one)
+        db.session.commit()
 
 
 # 典型的自引用多对多关系关联表
@@ -488,11 +484,17 @@ class TrainGrade(db.Model):
                                    child_team=TrainTeam.query.get(int(one[1])),
                                    school=current_user.school)
             db.session.add(new_grade)
-            db.session.commit()
+        db.session.commit()
 
     def set_score(self, score):
         self.score = score
         db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def reset():
+        for one in TrainGrade.query.filter_by(school_id=current_user.school_id).all():
+            db.session.delete(one)
         db.session.commit()
 
 
@@ -518,12 +520,41 @@ class TrainTeam(db.Model):
                               cascade='all, delete-orphan')
 
     @staticmethod
-    def get_teams():
-        if current_user.can('train_manage') or current_user.school.train_status == 3:
+    def get_teams_info():
+        result = []
+        if current_user.can('train_manage'):
             teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+            for one in teams:
+                result.append({
+                    'team': one,
+                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                    'paper': one.train_file.filter_by(train_filetype=6).first(),
+                    'task': [x for x in one.children.all()],
+                    'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
+                    'final_report': one.train_file.filter_by(train_filetype=8).first()
+                })
+        elif current_user.school.train_status == 3:
+            teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+            for one in teams:
+                result.append({
+                    'team': one,
+                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                    'paper': one.train_file.filter_by(train_filetype=6).first(),
+                    'task': [],
+                    'grade_paper': None,
+                    'final_report': one.train_file.filter_by(train_filetype=8).first()
+                })
         else:
-            teams = [current_user.train_student.first().train_team, ] if current_user.train_student.first().train_team else []
-        return teams
+            one = current_user.train_student.train_team
+            result.append({
+                'team': one,
+                'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                'paper': one.train_file.filter_by(train_filetype=6).first(),
+                'task': [x for x in one.children.all()],
+                'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
+                'final_report': one.train_file.filter_by(train_filetype=8).first()
+            })
+        return result
 
     @staticmethod
     def get_select():
@@ -537,6 +568,26 @@ class TrainTeam(db.Model):
                                  school=current_user.school)
             db.session.add(new_team)
             db.session.commit()
+
+    def add_members(self, student_list):
+        for one in student_list:
+            the_student = TrainStudent.query.get_or_404(int(one))
+            the_student.train_team = self
+            db.session.add(the_student)
+        db.session.commit()
+
+    @staticmethod
+    def reset():
+        for one in TrainTeam.query.filter_by(school_id=current_user.school_id).all():
+            db.session.delete(one)
+        db.session.commit()
+
+    @staticmethod
+    def reset_score():
+        for one in TrainTeam.query.filter_by(school_id=current_user.school_id).all():
+            one.team_score = None
+            db.session.add(one)
+        db.session.commit()
 
 
 class TrainFile(db.Model):
@@ -557,15 +608,17 @@ class TrainFile(db.Model):
     @staticmethod
     def del_file(file_id):
         the_file = TrainFile.query.get_or_404(int(file_id))
+        current_file_type = the_file.train_filetype
         db.session.delete(the_file)
         db.session.commit()
+        return current_file_type
 
     @staticmethod
     def upload(type_id, file):
         filename = file.filename
         new_file = TrainFile(train_filename=filename,
-                             train_filetype=int(type_id),
-                             train_team=current_user.train_student.first().train_team if current_user.train_student.first() else None,
+                             train_filetype=type_id,
+                             train_team=current_user.train_student.train_team if current_user.train_student else None,
                              user=current_user,
                              school=current_user.school)
         db.session.add(new_file)
@@ -581,6 +634,16 @@ class TrainFile(db.Model):
         db.session.add(new_file)
         db.session.commit()
         return True
+
+    @staticmethod
+    def reset():
+        for one in TrainFile.query.filter_by(school_id=current_user.school_ic).all():
+            try:
+                os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
+            except:
+                current_app.logger.info('文件删除失败')
+            db.session.delete(one)
+        db.session.commit()
 
 
 class FlowCount(db.Model):
