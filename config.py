@@ -7,10 +7,7 @@ class Config(object):
 
     # 自定义配置
     PERMISSIONS = [
-        ('train_manage', '集训系统管理,具备该权限可直接进入集训不用报名'),
-        ('test2', '用于测试'),
-        ('test3', '用于测试'),
-        ('test4', '用于测试')
+        ('train_manage', '集训系统管理,具备该权限可直接进入集训不用报名')
     ]
     ADMIN_EMAIL = '2739182815@qq.com'
     ADMIN_PASSWORD = 'tang@1013'
