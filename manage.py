@@ -20,6 +20,12 @@ def deploy():
     return '配置成功'
 
 
+@manager.command
+def test_set():
+    """应用程序测试环境数据配置"""
+    from app.models import User
+
+
 def make_shell_context():
     """添加shell中的命令"""
     return dict(app=app, db=db)

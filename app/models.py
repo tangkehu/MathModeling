@@ -48,8 +48,7 @@ class School(db.Model):
 
     @staticmethod
     def insert_basic_schools():
-        basic_schools = ['成都大学']
-        for one in basic_schools:
+        for one in current_app.config['SCHOOLS']:
             if not School.query.filter_by(school_name=one).first():
                 school = School(school_name=one)
                 db.session.add(school)
@@ -116,8 +115,7 @@ class Role(db.Model):
 
     @staticmethod
     def insert_basic_roles():
-        basic_roles = [('普通用户', 'none'), ('管理员', 'all')]
-        for one in basic_roles:
+        for one in current_app.config['ROLES']:
             if not Role.query.filter_by(role_name=one[0]).first():
                 is_default = True if one[0] == '普通用户' else False
                 if one[1] == 'none':
@@ -199,7 +197,7 @@ class User(db.Model):
         user = User(username='admin',
                     email=current_app.config['ADMIN_EMAIL'],
                     password=current_app.config['ADMIN_PASSWORD'],
-                    school=School.query.filter_by(school_name='成都大学').first())
+                    school=School.query.filter_by(school_name=current_app.config['ADMIN_SCHOOL']).first())
         db.session.add(user)
         db.session.commit()
 

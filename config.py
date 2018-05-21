@@ -6,11 +6,14 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # 不追踪对象的修改，减少内存使用
 
     # 自定义配置
+    SCHOOLS = ['成都大学']
     PERMISSIONS = [
         ('train_manage', '集训系统管理,具备该权限可直接进入集训不用报名')
     ]
+    ROLES = [('普通用户', 'none'), ('管理员', 'all')]
     ADMIN_EMAIL = '2739182815@qq.com'
     ADMIN_PASSWORD = 'tang@1013'
+    ADMIN_SCHOOL = '成都大学'
     TRAIN_FILE_TYPE = {1: '集训题目',
                        2: '参考资料',
                        3: '模型结构',
