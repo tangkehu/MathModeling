@@ -14,19 +14,19 @@
             <div class="col-xl-4 col-md-6 col-8">
                 <form method="post">
                     <select class="form-control show-tick selectpicker my-2" name="member1" data-live-search="true">
-                      <option selected>请选择...</option>
+                      <option selected value="0">请选择...</option>
                       {% for one in select_student %}
                           <option value="{{ one[0] }}">{{ one[1] }}</option>
                       {% endfor %}
                     </select>
                     <select class="form-control show-tick selectpicker my-2" name="member2" data-live-search="true">
-                      <option selected>请选择...</option>
+                      <option selected value="0">请选择...</option>
                       {% for one in select_student %}
                           <option value="{{ one[0] }}">{{ one[1] }}</option>
                       {% endfor %}
                     </select>
                     <select class="form-control show-tick selectpicker my-2" name="member3" data-live-search="true">
-                      <option selected>请选择...</option>
+                      <option selected value="0">请选择...</option>
                       {% for one in select_student %}
                           <option value="{{ one[0] }}">{{ one[1] }}</option>
                       {% endfor %}

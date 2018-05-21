@@ -143,7 +143,7 @@ class User(db.Model):
     community_question = db.relationship('CommunityQuestion', backref='user', lazy='dynamic')
     community_answer = db.relationship('CommunityAnswer', backref='user', lazy='dynamic')
     news = db.relationship('News', backref='user', lazy='dynamic')
-    train_student = db.relationship('TrainStudent', backref='user')
+    train_student = db.relationship('TrainStudent', backref='user', uselist=False)
     train_file = db.relationship('TrainFile', backref='user', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
@@ -362,6 +362,10 @@ class KnowResource(db.Model):
     @staticmethod
     def del_resource(resource_id):
         the_resource = KnowResource.query.get_or_404(int(resource_id))
+        try:
+            os.remove(os.path.join(current_app.config['FILE_PATH'], the_resource.resource_path))
+        except:
+            current_app.logger.info('文件删除失败')
         db.session.delete(the_resource)
         db.session.commit()
 
@@ -525,7 +529,7 @@ class TrainTeam(db.Model):
             for one in teams:
                 result.append({
                     'team': one,
-                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
                     'paper': one.train_file.filter_by(train_filetype=6).first(),
                     'task': [x for x in one.children.all()],
                     'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
@@ -536,7 +540,7 @@ class TrainTeam(db.Model):
             for one in teams:
                 result.append({
                     'team': one,
-                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
                     'paper': one.train_file.filter_by(train_filetype=6).first(),
                     'task': [],
                     'grade_paper': None,
@@ -546,7 +550,7 @@ class TrainTeam(db.Model):
             one = current_user.train_student.train_team
             result.append({
                 'team': one,
-                'members': [x.user for x in one.train_student.all()] if one.train_student.first() else None,
+                'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
                 'paper': one.train_file.filter_by(train_filetype=6).first(),
                 'task': [x for x in one.children.all()],
                 'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
@@ -607,6 +611,10 @@ class TrainFile(db.Model):
     def del_file(file_id):
         the_file = TrainFile.query.get_or_404(int(file_id))
         current_file_type = the_file.train_filetype
+        try:
+            os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], the_file.train_filepath))
+        except:
+            current_app.logger.info('文件删除失败')
         db.session.delete(the_file)
         db.session.commit()
         return current_file_type
@@ -621,7 +629,7 @@ class TrainFile(db.Model):
                              school=current_user.school)
         db.session.add(new_file)
         db.session.commit()
-        file_path = type_id + '-' + str(new_file.id) + '-' + filename
+        file_path = str(type_id) + '-' + str(new_file.id) + '-' + filename
         try:
             file.save(os.path.join(current_app.config['TRAIN_FILE_PATH'], file_path))
         except:
@@ -635,7 +643,7 @@ class TrainFile(db.Model):
 
     @staticmethod
     def reset():
-        for one in TrainFile.query.filter_by(school_id=current_user.school_ic).all():
+        for one in TrainFile.query.filter_by(school_id=current_user.school_id).all():
             try:
                 os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
             except:

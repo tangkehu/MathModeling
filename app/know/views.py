@@ -142,7 +142,7 @@ def del_resource(resource_id):
     type_id = KnowResource.query.get_or_404(resource_id).know_type_id
     KnowResource.del_resource(resource_id)
     flash('删除成功')
-    return redirect(url_for('.resource', type_id=type_id))
+    return redirect(url_for('.resource', type_id=type_id if type_id else 'null'))
 
 
 @know.route('/file_check/')

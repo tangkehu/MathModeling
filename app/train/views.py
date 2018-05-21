@@ -109,7 +109,7 @@ def team_member_edit(team_id):
         member1 = request.form.get('member1')
         member2 = request.form.get('member2')
         member3 = request.form.get('member3')
-        if not member1 or not member2 or not member3:
+        if member1 == '0' or member2 == '0' or member3 == '0':
             flash('请选择')
         else:
             the_team.add_members([member1, member2, member3])
@@ -151,7 +151,7 @@ def grade_manage(team_id):
         grade1 = request.form.get('grade1')
         grade2 = request.form.get('grade2')
         grade3 = request.form.get('grade3')
-        if grade1 and grade2 and grade3:
+        if grade1 != '0' and grade2 != '0' and grade3 != '0':
             TrainGrade.set_grade([(team_id, grade1), (team_id, grade2), (team_id, grade3)])
             return redirect(url_for('train.team'))
         else:
