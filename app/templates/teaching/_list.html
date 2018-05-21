@@ -1,4 +1,15 @@
 <ul class="list-group list-group-flush">
+  {% if baidu_result %}
+    {% for one in baidu_result %}
+        <li class="list-group-item">
+            <i class="fas fa-file-alt text-primary mr-2"></i>
+            <a href="{{ one['url'] }}" class="text-dark" target="_blank">
+                {{ one['title'] }}
+            </a>
+            <small class="text-muted ml-2">{{ one['source'] }} &nbsp; {{ one['data'] }} &nbsp; 网络资源</small>
+        </li>
+    {% endfor %}
+  {% else %}
     <li class="list-group-item">
         <i class="fas fa-file-alt text-primary mr-2"></i>
         <a href="#" class="text-dark">
@@ -26,4 +37,5 @@
         <span class="badge badge-success badge-pill">66 赞</span>
         <a href="#" class="btn btn-success float-right btn-sm"><i class="fas fa-thumbs-up"></i> 点赞</a>
     </li>
+  {% endif %}
 </ul>
