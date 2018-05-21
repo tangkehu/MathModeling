@@ -2,4 +2,5 @@
 .idea/
 venv/
 migrations/
-
+app/static/know/
+app/static/train_files/
