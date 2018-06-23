@@ -32,7 +32,7 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost/mathmodeling'
 
 

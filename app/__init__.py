@@ -1,3 +1,4 @@
+import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -10,9 +11,17 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 login_manager.login_message = '请先登录帐号'
 
+# 日志配置
+logging_handler = logging.FileHandler('app/static/logs/run.log', encoding='UTF-8')
+logging_format = logging.Formatter(
+            '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')
+logging_handler.setFormatter(logging_format)
+
 
 def create_app(config_name):
     app = Flask(__name__)
+    app.logger.addHandler(logging_handler)
+    app.logger.setLevel(logging.INFO)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     db.init_app(app)
