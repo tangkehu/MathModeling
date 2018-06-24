@@ -5,7 +5,15 @@
   <div class="container">
     {% include "know/_search.html" %}
     <div class="card">
-        {% include "know/_list.html" %}
+        <ul class="list-group list-group-flush">
+            {% if search_result %}
+                {% for one in search_result %}
+                    {% include 'know/_file_list.html' %}
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">该关键词在该类别下搜索无结果...</li>
+            {% endif %}
+        </ul>
     </div>
   </div>
 {% endblock %}

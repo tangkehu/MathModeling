@@ -20,6 +20,10 @@
                 </div>
             </li>
             {% endfor %}
+
+            {% if not resources %}
+                <li class="list-group-item">当前无文件待审核...</li>
+            {% endif %}
         </ul>
     </div>
   </div>

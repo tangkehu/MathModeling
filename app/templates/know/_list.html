@@ -14,17 +14,11 @@
 
     {% if resource_list.get('resource') %}
         {% for one in resource_list['resource'] %}
-            <li class="list-group-item">
-                <i class="fas fa-file-alt text-primary mr-2"></i>
-                <a href="{{ url_for('know.show_resource', resource_id=one.id) }}" class="text-dark">{{ one.resource_name }}</a>
-                <small class="text-muted ml-2">{{ one.user.username }} &nbsp; {{ one.create_time }} &nbsp; {{ one.know_type.type_name }}</small>
-                <span class="badge badge-success badge-pill">{{ one.helpful_count }} 赞</span>
-                <span class="float-right">
-                    <a href="{{ url_for('know.helpful', resource_id=one.id) }}" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-                    <a href="{{ url_for('know.edit_resource', resource_id=one.id) }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-                    <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-                </span>
-            </li>
+            {% include 'know/_file_list.html' %}
         {% endfor %}
+    {% endif %}
+
+    {% if not resource_list.get('type') and not resource_list.get('resource') %}
+        <li class="list-group-item">当前目录下无资源...</li>
     {% endif %}
 </ul>

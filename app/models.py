@@ -230,9 +230,9 @@ class KnowType(db.Model):
 
     @staticmethod
     def get_parents(type_id):
-        """接收的type_id为null或数字"""
+        """接收的type_id为0或数字id"""
         result = []
-        if type_id == 'null':
+        if int(type_id) is 0:
             pass
         else:
             child = KnowType.query.get_or_404(int(type_id))
@@ -246,8 +246,8 @@ class KnowType(db.Model):
 
     @staticmethod
     def get_children(type_id):
-        """接收的type_id为null或数字，返回的children除了文件夹还有文件"""
-        if type_id == 'null':
+        """接收的type_id为0或数字id，返回的children除了文件夹还有文件"""
+        if int(type_id) is 0:
             child_type = KnowType.query.filter(
                 KnowType.parent_id == None, KnowType.school_id == current_user.school_id).order_by(
                 KnowType.type_name.desc()).all()
@@ -274,7 +274,7 @@ class KnowType(db.Model):
     def add_type(type_id, name, code):
         new_type = KnowType(type_name=name,
                             type_code=code,
-                            parent=None if type_id == 'null' else KnowType.query.get_or_404(int(type_id)),
+                            parent=None if int(type_id) is 0 else KnowType.query.get_or_404(int(type_id)),
                             school=current_user.school)
         db.session.add(new_type)
         db.session.commit()
@@ -315,8 +315,8 @@ class KnowResource(db.Model):
 
     @staticmethod
     def search(type_id, words):
-        """type_id为null或id"""
-        if type_id == 'null':
+        """type_id为0或id"""
+        if int(type_id) is 0:
             result = KnowResource.query.filter(
                 KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True,
                 KnowResource.resource_name.like('%'+words+'%')).all()
@@ -335,7 +335,7 @@ class KnowResource(db.Model):
                                     unhelpful_count=0,
                                     read_count=0,
                                     verify_status=False,
-                                    know_type=None if type_id == 'null' else KnowType.query.get_or_404(int(type_id)),
+                                    know_type=None if int(type_id) is 0 else KnowType.query.get_or_404(int(type_id)),
                                     user=current_user,
                                     school=current_user.school)
         db.session.add(new_resource)
@@ -343,9 +343,10 @@ class KnowResource(db.Model):
         resource_path = type_id + '-' + str(new_resource.id) + '-' + filename
         try:
             file.save(os.path.join(current_app.config['FILE_PATH'], resource_path))
-        except:
+        except Exception as e:
             db.session.delete(new_resource)
             db.session.commit()
+            current_app.logger.info(e)
             return False
         new_resource.resource_path = resource_path
         db.session.add(new_resource)
@@ -377,6 +378,13 @@ class KnowResource(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_checking_file():
+        result = KnowResource.query.filter(
+            KnowResource.verify_status == False, KnowResource.school_id == current_user.school_id).order_by(
+            KnowResource.create_time.desc()).all()
+        return result
+
+    @staticmethod
     def file_pass(resource_id):
         the_resource = KnowResource.query.get_or_404(int(resource_id))
         the_resource.verify_status = True
@@ -384,11 +392,17 @@ class KnowResource(db.Model):
         db.session.commit()
 
     @staticmethod
-    def auto_push():
-        words = session.get('hot_words', 'null')
+    def get_hottest():
         result = KnowResource.query.filter(
-            KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True,
-            KnowResource.resource_name.like('%' + words + '%')).all()
+            KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True).order_by(
+            KnowResource.helpful_count.desc()).limit(10).all()
+        return result
+
+    @staticmethod
+    def get_newest():
+        result = KnowResource.query.filter(
+            KnowResource.school_id == current_user.school_id, KnowResource.verify_status == True).order_by(
+            KnowResource.create_time.desc()).limit(10).all()
         return result
 
 

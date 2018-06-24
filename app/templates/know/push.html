@@ -6,129 +6,29 @@
     {% include 'know/_search.html' %}
     <div class="card">
         <div class="card-header">
-            最新文件TOP10
+            最新文件
         </div>
-{#        {% include 'know/_list.html' %}#}
         <ul class="list-group list-group-flush">
-
-            <li class="list-group-item">
-
-                <i class="fas fa-file-alt text-primary mr-2"></i>
-
-                <a href="#" class="text-dark">中国人口增长预测</a>
-
-                <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-
-                <span class="badge badge-success badge-pill">66 赞</span>
-
-                <span class="float-right">
-
-                    <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-
-                    <a href="#" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-
-                    <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-
-                </span>
-
-            </li>
-
+            {% for one in resource_newest %}
+                {% include 'know/_file_list.html' %}
+            {% endfor %}
+            {% if not resource_newest %}
+                <li class="list-group-item">当前无排行数据...</li>
+            {% endif %}
         </ul>
     </div>
 
     <div class="card mt-5">
         <div class="card-header">
-            最热文件TOP10
+            最热文件
         </div>
-{#        {% include 'know/_list.html' %}#}
         <ul class="list-group list-group-flush">
-
-            <li class="list-group-item">
-
-                <i class="fas fa-file-alt text-primary mr-2"></i>
-
-                <a href="#" class="text-dark">易拉罐形状和尺寸的最优设计</a>
-
-                <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-
-                <span class="badge badge-success badge-pill">45 赞</span>
-
-                <span class="float-right">
-
-                    <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-
-                    <a href="#" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-
-                    <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-
-                </span>
-
-            </li>
-
-        </ul>
-    </div>
-
-    <div class="card mt-5">
-        <div class="card-header">
-            智能推荐
-        </div>
-{#        {% include 'know/_list.html' %}#}
-        <ul class="list-group list-group-flush">
-
-            <li class="list-group-item">
-
-                <i class="fas fa-file-alt text-primary mr-2"></i>
-
-                <a href="#" class="text-dark">雨量预报方法的评价</a>
-
-                <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-
-                <span class="badge badge-success badge-pill">20 赞</span>
-
-                <span class="float-right">
-
-                    <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-
-                    <a href="#" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-
-                    <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-
-                </span>
-
-            </li>
-
-        </ul>
-    </div>
-
-    <div class="card mt-5">
-        <div class="card-header">
-            网络资源TOP10
-        </div>
-{#        {% include 'know/_list.html' %}#}
-        <ul class="list-group list-group-flush">
-
-            <li class="list-group-item">
-
-                <i class="fas fa-file-alt text-primary mr-2"></i>
-
-                <a href="#" class="text-dark">中国人口增长预测</a>
-
-                <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-
-                <span class="badge badge-success badge-pill">66 赞</span>
-
-                <span class="float-right">
-
-                    <a href="#" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-
-                    <a href="#" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-
-                    <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
-
-                </span>
-
-            </li>
-
+            {% for one in resource_hottest %}
+                {% include 'know/_file_list.html' %}
+            {% endfor %}
+            {% if not resource_hottest %}
+                <li class="list-group-item">当前无排行数据...</li>
+            {% endif %}
         </ul>
     </div>
   </div>

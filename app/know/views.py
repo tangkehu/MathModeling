@@ -1,5 +1,6 @@
-from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, session
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response
 from flask_login import login_required, current_user
+from urllib.parse import quote
 from . import know
 from ..models import KnowType, KnowResource
 
@@ -13,11 +14,11 @@ def push():
             flash('请输入要搜索的关键词')
         else:
             return redirect(url_for('.search', type_id=request.form.get('search_type'), words=words))
-    resource_list = {'type': None, 'resource': None}
     select_type = KnowType.get_type_select()
-    result = KnowResource.auto_push()
-    return render_template('know/push.html', active_flg=['know', 'push'], resource_list=resource_list,
-                           select_type=select_type, result=result)
+    resource_hottest = KnowResource.get_hottest()
+    resource_newest = KnowResource.get_newest()
+    return render_template('know/push.html', active_flg=['know', 'push'], select_type=select_type,
+                           resource_hottest=resource_hottest, resource_newest=resource_newest)
 
 
 @know.route('/resource/<type_id>', methods=['GET', 'POST'])
@@ -57,8 +58,12 @@ def upload(type_id):
 @know.route('/show_resource/<resource_id>')
 @login_required
 def show_resource(resource_id):
-    resource_path = KnowResource.query.get_or_404(int(resource_id)).resource_path
-    return send_from_directory(current_app.config['FILE_PATH'], resource_path)
+    the_resource = KnowResource.query.get_or_404(int(resource_id))
+    resource_path = the_resource.resource_path
+    response = make_response(send_from_directory(current_app.config['FILE_PATH'], resource_path))
+    response.headers["Content-Disposition"] = "attachment; filename={0}; filename*=utf-8''{0}".format(
+        quote(the_resource.resource_name))
+    return response
 
 
 @know.route('/add_type/<type_id>', methods=['GET', 'POST'])
@@ -84,7 +89,7 @@ def add_type(type_id):
 def edit_type(type_id):
     the_type = KnowType.query.get_or_404(int(type_id))
     parent_id = the_type.parent_id
-    parent_id = parent_id if parent_id else 'null'
+    parent_id = parent_id if parent_id else '0'
     if request.method == 'POST':
         name = request.form.get('name')
         code = request.form.get('code')
@@ -104,7 +109,7 @@ def edit_type(type_id):
 @login_required
 def del_type(type_id):
     parent_id = KnowType.query.get_or_404(int(type_id)).parent_id
-    parent_id = parent_id if parent_id else 'null'
+    parent_id = parent_id if parent_id else 0
     KnowType.del_type(type_id)
     flash('删除成功')
     return redirect(url_for('.resource', type_id=parent_id))
@@ -114,7 +119,7 @@ def del_type(type_id):
 @login_required
 def helpful(resource_id):
     the_resource = KnowResource.query.get_or_404(int(resource_id))
-    type_id = the_resource.know_type_id if the_resource.know_type_id else 'null'
+    type_id = the_resource.know_type_id if the_resource.know_type_id else 0
     KnowResource.helpful(resource_id)
     return redirect(url_for('.resource', type_id=type_id))
 
@@ -123,7 +128,7 @@ def helpful(resource_id):
 @login_required
 def edit_resource(resource_id):
     the_resource = KnowResource.query.get_or_404(int(resource_id))
-    type_id = the_resource.know_type_id if the_resource.know_type_id else 'null'
+    type_id = the_resource.know_type_id if the_resource.know_type_id else '0'
     if request.method == 'POST':
         name = request.form.get('name')
         if not name:
@@ -142,15 +147,13 @@ def del_resource(resource_id):
     type_id = KnowResource.query.get_or_404(resource_id).know_type_id
     KnowResource.del_resource(resource_id)
     flash('删除成功')
-    return redirect(url_for('.resource', type_id=type_id if type_id else 'null'))
+    return redirect(url_for('.resource', type_id=type_id if type_id else 0))
 
 
 @know.route('/file_check/')
 @login_required
 def file_check():
-    resources = KnowResource.query.filter(
-        KnowResource.verify_status == False, KnowResource.school_id == current_user.school_id).order_by(
-        KnowResource.create_time.desc()).all()
+    resources = KnowResource.get_checking_file()
     return render_template('know/file_check.html', active_flg=['know', 'file_check'], resources=resources)
 
 
@@ -171,8 +174,7 @@ def search(type_id, words):
             flash('请输入要搜索的关键词')
         else:
             return redirect(url_for('.search', type_id=search_type, words=search_words))
-    resource_list = {'type': None, 'resource': KnowResource.search(type_id, words)}
     select_type = KnowType.get_type_select()
-    session['hot_words'] = words
-    return render_template('know/search_result.html', active_flg=['know', 'resource'], resource_list=resource_list,
+    search_result = KnowResource.search(type_id, words)
+    return render_template('know/search_result.html', active_flg=['know', 'resource'], search_result=search_result,
                            select_type=select_type, words=words, search_type=type_id)

@@ -6,7 +6,7 @@
     <div class="card my-5">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-white">
-            <li class="breadcrumb-item"><a href="#">/ 根目录</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('.resource', type_id=0) }}">/ 根目录</a></li>
             {% for one in parents %}
                 {% if one[0] == current_type_id %}
                     <li class="breadcrumb-item active" aria-current="page">{{ one[1] }}</li>

@@ -7,7 +7,7 @@
     <div class="card">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-white">
-            <li class="breadcrumb-item"><a href="{{ url_for('.resource', type_id='null') }}">/ 根目录</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('.resource', type_id=0) }}">/ 根目录</a></li>
             {% for one in parents %}
                 {% if one[0] == current_type_id %}
                     <li class="breadcrumb-item active" aria-current="page">{{ one[1] }}</li>
@@ -15,8 +15,8 @@
                     <li class="breadcrumb-item"><a href="{{ url_for('.resource', type_id=one[0]) }}">{{ one[1] }}</a></li>
                 {% endif %}
             {% endfor %}
-            <a href="{{ url_for('know.upload', type_id=current_type_id) }}" class="ml-4 text-success"><i class="fas fa-cloud-upload-alt"></i> 上传</a>
-            <a href="{{ url_for('know.add_type', type_id=current_type_id) }}" class="ml-4 text-info"><i class="fas fa-plus"></i> 添加</a>
+            <a href="{{ url_for('know.upload', type_id=current_type_id) }}" class="ml-4 text-success"><i class="fas fa-cloud-upload-alt"></i> 上传资源</a>
+            <a href="{{ url_for('know.add_type', type_id=current_type_id) }}" class="ml-4 text-info"><i class="fas fa-plus"></i> 添加目录</a>
           </ol>
         </nav>
 
