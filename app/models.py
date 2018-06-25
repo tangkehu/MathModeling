@@ -356,17 +356,27 @@ class KnowResource(db.Model):
     @staticmethod
     def edit_resource(resource_id, resource_name):
         the_resource = KnowResource.query.get_or_404(int(resource_id))
-        the_resource.resource_name = resource_name
-        db.session.add(the_resource)
-        db.session.commit()
+        path = current_app.config['FILE_PATH']
+        resource_path = '{}-{}-{}'.format(the_resource.know_type_id, the_resource.id, resource_name)
+        try:
+            os.rename(os.path.join(path, the_resource.resource_path), os.path.join(path, resource_path))
+        except Exception as e:
+            current_app.logger.info(e)
+            return False
+        else:
+            the_resource.resource_name = resource_name
+            the_resource.resource_path = resource_path
+            db.session.add(the_resource)
+            db.session.commit()
+            return True
 
     @staticmethod
     def del_resource(resource_id):
         the_resource = KnowResource.query.get_or_404(int(resource_id))
         try:
             os.remove(os.path.join(current_app.config['FILE_PATH'], the_resource.resource_path))
-        except:
-            current_app.logger.info('文件删除失败')
+        except Exception as e:
+            current_app.logger.info(e)
         db.session.delete(the_resource)
         db.session.commit()
 

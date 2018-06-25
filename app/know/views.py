@@ -141,8 +141,11 @@ def edit_resource(resource_id):
         if not name:
             flash('请输入名称')
         else:
-            KnowResource.edit_resource(resource_id, name)
-            return redirect(url_for('.resource', type_id=type_id))
+            if not KnowResource.edit_resource(resource_id, name):
+                flash('文件名含有特殊字符')
+            else:
+                flash('重命名成功')
+                return redirect(url_for('.resource', type_id=type_id))
     parents = KnowType.get_parents(type_id)
     return render_template('know/edit_name.html', active_flg=['know', 'resource'], current_type_id=str(type_id),
                            parents=parents, the_resource=the_resource)
