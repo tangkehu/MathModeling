@@ -1,4 +1,5 @@
-from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response, abort
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response
+from flask import abort
 from flask_login import login_required, current_user
 from urllib.parse import quote
 from . import know
