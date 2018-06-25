@@ -9,19 +9,19 @@
       </li>
   {% endfor %}
 
-  {% if baidu_result %}
-    {% for one in baidu_result %}
+  {% if web_spider %}
+    {% for one in web_spider %}
         <li class="list-group-item">
             <i class="fas fa-file-alt text-primary mr-2"></i>
-            <a href="{{ one['url'] }}" class="text-dark" target="_blank">
-                {{ one['title'] }}
+            <a href="{{ one[0] }}" class="text-dark" target="_blank">
+                {{ one[1] | striptags }}
             </a>
-            <small class="text-muted ml-2">{{ one['source'] }} &nbsp; {{ one['data'] }} &nbsp; 网络资源</small>
+            <small class="text-muted ml-2">&nbsp;&nbsp;网络资源 &nbsp;&nbsp; {{ one[2] | striptags }}</small>
         </li>
     {% endfor %}
   {% endif %}
 
-  {% if not resource and not baidu_result %}
+  {% if not resource and not web_spider %}
       <li class="list-group-item">当前无学习资源...</li>
   {% endif %}
 </ul>

@@ -1,80 +1,31 @@
 import requests
 import re
-import datetime
 from flask import current_app
 
 
-def baidu_web_search(words):
-    result = []
-    url = r'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baidu&wd=' + words
-    try:
-        html = requests.get(url).text
-    except Exception as e:
-        current_app.logger.info(e)
-    else:
-        p = re.compile(r'''<h3 class="t">.*?href = "(.*?)".*?>(.*?)</a></h3>''', re.MULTILINE | re.DOTALL)
-        s_1 = p.findall(html)
-        print(s_1, words, html)
-    return result
+class WebSpider:
+    """网络爬虫"""
+    def __init__(self, words):
+        self.result = []
+        self.words = words
+        self.url = ''
+        self.html = ''
+        self.headersParameters = {    # 发送HTTP请求时的HEAD信息，用于伪装为浏览器
+            'Connection': 'Keep-Alive',
+            'Accept': 'text/html, application/xhtml+xml, */*',
+            'Accept-Language': 'en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3',
+            'Accept-Encoding': 'gzip, deflate',
+            'User-Agent': 'Mozilla/6.1 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko'
+        }
 
-
-def baidu_news_search(words):
-    result = []
-    url = r'http://news.baidu.com/ns?word=title%3A%28' + words + r'%29&pn=0&cl=2&ct=0&tn=newstitle&rn=20&bt=0&et=0'
-    try:
-        htm = requests.get(url).text
-    except Exception as e:
-        current_app.logger.info(e)
-        htm = ''
-    p_1 = re.compile(r'''<h3 class="c-title"><a href="(.*?)".*?>(.*?)<\/div><\/div><div''',
-                     re.MULTILINE | re.DOTALL)
-    s_1 = p_1.findall(htm)
-    for line in s_1:
-        p_2 = re.compile(r'^(.*?)<\/a><\/h3><div class="c-title-author">')
-        s_2 = p_2.search(line[1]).groups()
-        s_2 = s_2[0].replace('<em>', '')
-        s_2 = s_2.replace('</em>', '')
-        s_2 = s_2.replace('&quot;', '')
-
-        p_3 = re.compile(r'c-title-author">((.*?)&nbsp;&nbsp;.*?|\d+.*?)$')
-        s_3a = p_3.search(line[1]).groups()
-        s_3 = list(s_3a)
-        if s_3[1] == None:
-            s_3[1] = 'null'
-
-        date = datetime.datetime.now()
-        p_4 = re.compile(r'c-title-author">.*?(\d+?.*?)($|&nbsp;.*?</a>)')
-        s_4 = p_4.search(line[1]).groups()
-        s_4 = s_4[0].replace(' ', '')
-        s_4 = s_4.replace('</div>', '')
-        s_4 = s_4.replace(s_3[1] + '&nbsp;&nbsp;', '')
-        s_4 = s_4.replace('年', '-')
-        s_4 = s_4.replace('月', '-')
-        s_4 = s_4.replace('日', ' ')
-        pr = re.compile(r'(\d+)(\D{6})')
-        s_4a = pr.search(s_4)
-        if s_4a != None:
-            s_4a = s_4a.groups()
-            if s_4a[1] == '分钟前':
-                s_4b = int(s_4a[0])
-                s_4 = date - datetime.timedelta(minutes=s_4b)
-            else:
-                s_4b = int(s_4a[0])
-                s_4 = date - datetime.timedelta(hours=s_4b)
-
-        # p_5 = re.compile(r'''c-title-author">.*?({'fm':'sd'}">(\d+).*?>></a>|$)''')
-        # s_5a = p_5.search(line[1]).groups()
-        # s_5 = list(s_5a)
-        # if s_5[1] == None:
-        #     s_5[1] = 0
-        # s_5 = int(s_5[1])
-        # s_5 = s_5 + 1
-        # s_5 = str(s_5)
-
-        result.append({
-            'url': line[0],
-            'title': s_2,
-            'source': s_3[1],
-            'data': s_4
-        })
-    return result
+    def get_baidu(self):
+        self.url = 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=monline_dg&wd={}'.format(self.words)
+        response = requests.get(self.url, headers=self.headersParameters)
+        if response.status_code is not 200:
+            current_app.logger.info('爬虫请求链接响应的状态码不是200')
+            return self.result
+        else:
+            self.html = response.text
+            self.result = re.findall(r'''href = "(.*?)".*?>(.*?)</a>.*?style="text-decoration:none;">(.*?)&nbsp;</a>''',
+                                     self.html, re.MULTILINE | re.DOTALL)
+            return self.result
