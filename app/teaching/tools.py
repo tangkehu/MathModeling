@@ -1,6 +1,21 @@
 import requests
 import re
 import datetime
+from flask import current_app
+
+
+def baidu_web_search(words):
+    result = []
+    url = r'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baidu&wd=' + words
+    try:
+        html = requests.get(url).text
+    except Exception as e:
+        current_app.logger.info(e)
+    else:
+        p = re.compile(r'''<h3 class="t">.*?href = "(.*?)".*?>(.*?)</a></h3>''', re.MULTILINE | re.DOTALL)
+        s_1 = p.findall(html)
+        print(s_1, words, html)
+    return result
 
 
 def baidu_news_search(words):
@@ -8,7 +23,8 @@ def baidu_news_search(words):
     url = r'http://news.baidu.com/ns?word=title%3A%28' + words + r'%29&pn=0&cl=2&ct=0&tn=newstitle&rn=20&bt=0&et=0'
     try:
         htm = requests.get(url).text
-    except:
+    except Exception as e:
+        current_app.logger.info(e)
         htm = ''
     p_1 = re.compile(r'''<h3 class="c-title"><a href="(.*?)".*?>(.*?)<\/div><\/div><div''',
                      re.MULTILINE | re.DOTALL)

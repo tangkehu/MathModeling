@@ -1,4 +1,14 @@
 <ul class="list-group list-group-flush">
+  {% for one in resource %}
+      <li class="list-group-item">
+        <i class="fas fa-file-alt text-primary mr-2"></i>
+        <a href="{{ url_for('know.show_resource', resource_id=one.id) }}" class="text-dark">{{ one.resource_name }}</a>
+        <small class="text-muted ml-2">{{ one.user.username }} &nbsp; {{ moment(one.create_time).format('LL') }} &nbsp; {{ one.know_type.type_name }}</small>
+        <span class="badge badge-success badge-pill">{{ one.helpful_count }} 赞</span>
+        <a href="{{ url_for('know.helpful', resource_id=one.id) }}" class="btn btn-success float-right btn-sm"><i class="fas fa-thumbs-up"></i> 点赞</a>
+      </li>
+  {% endfor %}
+
   {% if baidu_result %}
     {% for one in baidu_result %}
         <li class="list-group-item">
@@ -9,33 +19,9 @@
             <small class="text-muted ml-2">{{ one['source'] }} &nbsp; {{ one['data'] }} &nbsp; 网络资源</small>
         </li>
     {% endfor %}
-  {% else %}
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">
-            数学建模相关模型概览
-        </a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">66 赞</span>
-        <a href="#" class="btn btn-success float-right btn-sm"><i class="fas fa-thumbs-up"></i> 点赞</a>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">
-            python编码经验
-        </a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">66 赞</span>
-        <a href="#" class="btn btn-success float-right btn-sm"><i class="fas fa-thumbs-up"></i> 点赞</a>
-    </li>
-    <li class="list-group-item">
-        <i class="fas fa-file-alt text-primary mr-2"></i>
-        <a href="#" class="text-dark">
-            ARIMA模型简介
-        </a>
-        <small class="text-muted ml-2">唐柯虎 &nbsp; 2018-05-02 &nbsp; 集训文件</small>
-        <span class="badge badge-success badge-pill">66 赞</span>
-        <a href="#" class="btn btn-success float-right btn-sm"><i class="fas fa-thumbs-up"></i> 点赞</a>
-    </li>
+  {% endif %}
+
+  {% if not resource and not baidu_result %}
+      <li class="list-group-item">当前无学习资源...</li>
   {% endif %}
 </ul>
