@@ -5,7 +5,9 @@
       <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource', type_id=0) }}">
           <i class="fas fa-folder-open"></i> 知识库
       </a>
+      {% if current_user.can('resource_check') %}
       <a class="nav-item nav-link {% if 'file_check' in active_flg %} active {% endif %}" href="{{ url_for('know.file_check') }}">
           <i class="fas fa-filter"></i> 文件审核
       </a>
+      {% endif %}
     </div>

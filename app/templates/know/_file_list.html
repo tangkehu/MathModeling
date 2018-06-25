@@ -5,7 +5,9 @@
     <span class="badge badge-success badge-pill">{{ one.helpful_count }} 赞</span>
     <span class="float-right">
         <a href="{{ url_for('know.helpful', resource_id=one.id) }}" class="text-success"><i class="fas fa-thumbs-up"></i> 点赞</a>
-        <a href="{{ url_for('know.edit_resource', resource_id=one.id) }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-        <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
+        {% if current_user.can('resource_manage') %}
+            <a href="{{ url_for('know.edit_resource', resource_id=one.id) }}" class="mx-2 text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
+            <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
+        {% endif %}
     </span>
 </li>

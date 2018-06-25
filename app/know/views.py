@@ -1,8 +1,9 @@
-from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response, abort
 from flask_login import login_required, current_user
 from urllib.parse import quote
 from . import know
 from ..models import KnowType, KnowResource
+from ..decorators import permission_required
 
 
 @know.route('/push/', methods=['GET', 'POST'])
@@ -39,6 +40,7 @@ def resource(type_id):
 
 @know.route('/upload/<type_id>', methods=['GET', 'POST'])
 @login_required
+@permission_required('resource_add')
 def upload(type_id):
     if request.method == 'POST':
         file = request.files.get('file')
@@ -68,6 +70,7 @@ def show_resource(resource_id):
 
 @know.route('/add_type/<type_id>', methods=['GET', 'POST'])
 @login_required
+@permission_required('know_type_manage')
 def add_type(type_id):
     if request.method == 'POST':
         name = request.form.get('name')
@@ -86,6 +89,7 @@ def add_type(type_id):
 
 @know.route('/edit_type/<type_id>', methods=['GET', 'POST'])
 @login_required
+@permission_required('know_type_manage')
 def edit_type(type_id):
     the_type = KnowType.query.get_or_404(int(type_id))
     parent_id = the_type.parent_id
@@ -107,6 +111,7 @@ def edit_type(type_id):
 
 @know.route('/del_type/<type_id>')
 @login_required
+@permission_required('know_type_manage')
 def del_type(type_id):
     parent_id = KnowType.query.get_or_404(int(type_id)).parent_id
     parent_id = parent_id if parent_id else 0
@@ -128,6 +133,8 @@ def helpful(resource_id):
 @login_required
 def edit_resource(resource_id):
     the_resource = KnowResource.query.get_or_404(int(resource_id))
+    if not current_user.can('resource_manage') and the_resource.user_id != current_user.id:
+        abort(403)
     type_id = the_resource.know_type_id if the_resource.know_type_id else '0'
     if request.method == 'POST':
         name = request.form.get('name')
@@ -144,7 +151,10 @@ def edit_resource(resource_id):
 @know.route('/del_resource/<resource_id>')
 @login_required
 def del_resource(resource_id):
-    type_id = KnowResource.query.get_or_404(resource_id).know_type_id
+    the_resource = KnowResource.query.get_or_404(int(resource_id))
+    if not current_user.can('resource_manage') and the_resource.user_id != current_user.id:
+        abort(403)
+    type_id = the_resource.know_type_id
     KnowResource.del_resource(resource_id)
     flash('删除成功')
     return redirect(url_for('.resource', type_id=type_id if type_id else 0))
@@ -152,6 +162,7 @@ def del_resource(resource_id):
 
 @know.route('/file_check/')
 @login_required
+@permission_required('resource_check')
 def file_check():
     resources = KnowResource.get_checking_file()
     return render_template('know/file_check.html', active_flg=['know', 'file_check'], resources=resources)
@@ -159,6 +170,7 @@ def file_check():
 
 @know.route('/file_pass/<resource_id>')
 @login_required
+@permission_required('resource_check')
 def file_pass(resource_id):
     KnowResource.file_pass(resource_id)
     return redirect(url_for('.file_check'))

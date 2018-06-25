@@ -17,6 +17,13 @@ def deploy():
     Permission.insert_basic_permission()
     Role.insert_basic_roles()
     User.insert_admin_user()
+    db.session.add(User(
+        username='测试',
+        email='test@test.cn',
+        password='123456',
+        school=School.query.filter_by(school_name=app.config['ADMIN_SCHOOL']).first()
+    ))
+    db.session.commit()
     return '配置成功'
 
 
