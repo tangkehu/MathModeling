@@ -22,8 +22,8 @@ class Config(object):
                        6: '论文',
                        7: '评分结果',
                        8: '总结'}
-    FILE_PATH = os.path.join(os.getcwd(), 'app/static/know')
-    TRAIN_FILE_PATH = os.path.join(os.getcwd(), 'app/static/train_files')
+    FILE_PATH = os.path.join(os.getcwd(), 'app'+os.sep+'static'+os.sep+'know')
+    TRAIN_FILE_PATH = os.path.join(os.getcwd(), 'app'+os.sep+'static'+os.sep+'train_files')
     PAGE_VIEW = 0
 
     @staticmethod
@@ -32,7 +32,6 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost/mathmodeling'
 
 

@@ -9,7 +9,7 @@
             <li class="list-group-item">
                 <i class="fas fa-file-alt text-primary mr-2"></i>
                 <a href="{{ url_for('know.show_resource', resource_id=one.id) }}" class="text-dark"> {{ one.resource_name }}</a>
-                <small class="text-muted ml-2">{{ one.user.username }} &nbsp; {{ one.create_time }} &nbsp; {{ one.know_type.type_name }}</small>
+                <small class="text-muted ml-2">{{ one.user.username }} &nbsp; {{ moment(one.create_time).format('LL') }} &nbsp; {{ one.know_type.type_name }}</small>
                 <div class="btn-group btn-group-sm float-right" role="group">
                     <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="btn btn-outline-danger" type="button">
                         <i class="fas fa-trash"></i> 删除

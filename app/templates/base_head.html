@@ -26,6 +26,7 @@
     <script src="{{ url_for('static', filename='bootstrap-4.1.1/js/bootstrap.bundle.min.js') }}"></script>
     <script defer src="{{ url_for('static', filename='fontawesome-free-5.0.13/fontawesome-all.min.js') }}"></script>
     {{ moment.include_moment() }}
+    {{ moment.locale('zh-cn') }}
 
     {% block script_block %}{% endblock %}
 </body>
