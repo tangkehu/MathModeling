@@ -438,7 +438,32 @@ class CommunityQuestion(db.Model):
     @staticmethod
     def get_newest():
         return CommunityQuestion.query.filter_by(school_id=current_user.school_id).order_by(
-            CommunityQuestion.create_time.desc()).limit(10).all()
+            CommunityQuestion.create_time.desc()).limit(50).all()
+    
+    @staticmethod
+    def add(kwargs):
+        db.session.add(CommunityQuestion(
+            question_title=kwargs.get('title'),
+            question_description=kwargs.get('description'),
+            create_time=int(time.time()),
+            hide_user=True if kwargs.get('hide_user') else False,
+            user=current_user,
+            school=current_user.school
+        ))
+        db.session.commit()
+
+    def edit(self, kwargs):
+        self.question_title = kwargs.get('title')
+        self.question_description = kwargs.get('description')
+        self.hide_user = True if kwargs.get('hide_user') else False
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        for one in self.community_answer.all():
+            one.delete()
+        db.session.delete(self)
+        db.session.commit()
 
 
 class CommunityAnswer(db.Model):
@@ -450,6 +475,28 @@ class CommunityAnswer(db.Model):
     community_question_id = db.Column(db.Integer, db.ForeignKey('community_question.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+
+    @staticmethod
+    def add(kwargs):
+        db.session.add(CommunityAnswer(
+            answer_content=kwargs.get('answer'),
+            create_time=int(time.time()),
+            hide_user=True if kwargs.get('hide_user') else False,
+            community_question=kwargs.get('the_question'),
+            user=current_user,
+            school=current_user.school
+        ))
+        db.session.commit()
+
+    def edit(self, kwargs):
+        self.answer_content = kwargs.get('answer')
+        self.hide_user = True if kwargs.get('hide_user') else False
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 
 class News(db.Model):

@@ -7,14 +7,14 @@
             <form method="post">
                 <div class="form-group">
                     <label for="questionID">问题标题：</label>
-                    <input type="text" class="form-control" id="questionID" name="title" {% if question %} value="{{ question }}" {% endif %}>
+                    <input type="text" class="form-control" id="questionID" name="title" {% if the_question %} value="{{ the_question.question_title }}" {% endif %}>
                 </div>
                 <div class="form-group">
                     <label for="describeID">问题描述（可选）：</label>
-                    <textarea class="form-control" id="describeID" name="description" rows="3"></textarea>
+                    <textarea class="form-control" id="describeID" name="description" rows="3">{% if the_question %}{{ the_question.question_description }}{% endif %}</textarea>
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="hideID" name="hide_user">
+                    <input type="checkbox" class="form-check-input" id="hideID" name="hide_user" {% if the_question and the_question.hide_user %} checked {% endif %}>
                     <label for="hideID" class="form-check-label">匿名提问</label>
                 </div>
                 <button type="submit" class="btn btn-primary">提交问题</button>
