@@ -1,7 +1,7 @@
 {% extends "base_navbar.html" %}
 
 {% block content_block %}
-    <div class="container">
+    <div class="container mb-5">
         {% include "_search.html" %}
         <div class="row justify-content-center my-4">
             <a href="{{ url_for('community.question_add') }}" class="btn btn-primary"><i class="fas fa-plus"></i> 我要提问</a>
@@ -9,6 +9,21 @@
         <div class="row justify-content-center my-4">
             <div class="col-xl-8 col-md-10">
                 <div class="list-group">
+                    {% if result %}
+                        {% for one in result %}
+                            <a href="{{ url_for('.question_info', question_id=one.id) }}" class="list-group-item list-group-item-action flex-column align-items-start my-2">
+                                <div class="d-flex w-100 justify-content-between">
+                                  <h5 class="mb-1">{{ one.question_title }}</h5>
+                                  <small>{{ one.community_answer.count() }}个回答</small>
+                                </div>
+                                <small class="text-muted">{{ one.user.username }} &nbsp;&nbsp; {{ moment(one.create_time).format('LL') }}</small>
+                                <p class="mb-1">{{ one.question_description }}</p>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">当前条件下没有提问数据...</li>
+                    {% endif %}
+
                   <a href="{{ url_for('.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start my-2">
                     <div class="d-flex w-100 justify-content-between">
                       <h5 class="mb-1">这里是一个问题标题</h5>

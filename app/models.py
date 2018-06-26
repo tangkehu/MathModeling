@@ -428,6 +428,18 @@ class CommunityQuestion(db.Model):
 
     community_answer = db.relationship('CommunityAnswer', backref='community_question', lazy='dynamic')
 
+    @staticmethod
+    def search(word):
+        result = CommunityQuestion.query.filter(
+            CommunityQuestion.school_id == current_user.school_id, CommunityQuestion.question_title.like('%'+word+'%')
+        ).order_by(CommunityQuestion.create_time.desc()).all()
+        return result
+
+    @staticmethod
+    def get_newest():
+        return CommunityQuestion.query.filter_by(school_id=current_user.school_id).order_by(
+            CommunityQuestion.create_time.desc()).limit(10).all()
+
 
 class CommunityAnswer(db.Model):
     __tablename__ = 'community_answer'

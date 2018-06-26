@@ -1,6 +1,7 @@
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required
 from . import community
+from ..models import CommunityQuestion, CommunityAnswer
 
 
 @community.route('/main/<words>', methods=['GET', 'POST'])
@@ -11,14 +12,15 @@ def main(words):
         if new_words:
             words = new_words
         else:
+            flash('请输入要搜索的关键词')
             words = 'null'
         return redirect(url_for('community.main', words=words))
-    if request.method == 'GET':
-        if words == 'null':
-            words = None
-        else:
-            pass
-        return render_template('community/main.html', active_flg=['community'], words=words)
+    if words == 'null':
+        words = None
+        result = CommunityQuestion.get_newest()
+    else:
+        result = CommunityQuestion.search(words)
+    return render_template('community/main.html', active_flg=['community'], words=words, result=result)
 
 
 @community.route('/question_add', methods=['GET', 'POST'])
