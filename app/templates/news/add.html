@@ -5,11 +5,11 @@
             <form method="post" class="col-8">
                 <div class="form-group">
                     <label for="titleID">标题：</label>
-                    <input type="text" id="titleID" class="form-control" name="title" {% if the_news %} value="{{ the_news }}" {% endif %}>
+                    <input type="text" id="titleID" class="form-control" name="title" {% if the_news %} value="{{ the_news.news_title }}" {% endif %}>
                 </div>
                 <div class="form-group">
                     <label for="contentID">内容：</label>
-                    <textarea id="contentID" class="form-control" name="content" rows="5">{% if the_news %}{{ the_news }}{% endif %}</textarea>
+                    <textarea id="contentID" class="form-control" name="content" rows="5">{% if the_news %}{{ the_news.news_content }}{% endif %}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> 发布</button>
                 <a href="{{ url_for('.main') }}" class="btn btn-warning"><i class="fas fa-undo"></i> 取消</a>

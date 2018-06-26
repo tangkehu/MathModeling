@@ -509,6 +509,43 @@ class News(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
+    @staticmethod
+    def search(word):
+        result = News.query.filter(News.school_id == current_user.school_id,
+                                   News.news_title.like('%' + word + '%')).order_by(News.create_time.desc()).all()
+        return result
+
+    @staticmethod
+    def get_newest():
+        return News.query.filter_by(school_id=current_user.school_id).order_by(News.create_time.desc()).limit(50).all()
+
+    @staticmethod
+    def add(kwargs):
+        db.session.add(News(
+            news_title=kwargs.get('title'),
+            news_content=kwargs.get('content'),
+            read_count=0,
+            create_time=int(time.time()),
+            user=current_user,
+            school=current_user.school
+        ))
+        db.session.commit()
+
+    def edit(self, kwargs):
+        self.news_title = kwargs.get('title')
+        self.news_content = kwargs.get('content')
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def read_count_add(self):
+        self.read_count += 1
+        db.session.add(self)
+        db.session.commit()
+
 
 class TrainStudent(db.Model):
     __tablename__ = 'train_student'
