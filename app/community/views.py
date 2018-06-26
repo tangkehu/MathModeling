@@ -1,5 +1,5 @@
-from flask import render_template, request, url_for, redirect, flash
-from flask_login import login_required
+from flask import render_template, request, url_for, redirect, flash, abort
+from flask_login import login_required, current_user
 from . import community
 from ..models import CommunityQuestion, CommunityAnswer
 
@@ -37,6 +37,8 @@ def question_add():
 @login_required
 def question_edit(question_id):
     the_question = CommunityQuestion.query.get_or_404(int(question_id))
+    if not current_user.can('community_manage') and the_question.user_id != current_user.id:
+        abort(403)
     if request.method == 'POST':
         kwargs = request.form.to_dict()
         if kwargs.get('title'):
@@ -56,8 +58,11 @@ def question_info(question_id):
 
 
 @community.route('/question_del/<question_id>')
+@login_required
 def question_del(question_id):
     the_question = CommunityQuestion.query.get_or_404(int(question_id))
+    if not current_user.can('community_manage') and the_question.user_id != current_user.id:
+        abort(403)
     the_question.delete()
     flash('删除成功')
     return redirect(url_for('community.main', words='null'))
@@ -81,6 +86,8 @@ def answer_add(question_id):
 @login_required
 def answer_edit(answer_id):
     the_answer = CommunityAnswer.query.get_or_404(int(answer_id))
+    if not current_user.can('community_manage') and the_answer.user_id != current_user.id:
+        abort(403)
     if request.method == 'POST':
         kwargs = request.form.to_dict()
         if kwargs.get('answer'):
@@ -95,6 +102,8 @@ def answer_edit(answer_id):
 @login_required
 def answer_del(answer_id):
     the_answer = CommunityAnswer.query.get_or_404(int(answer_id))
+    if not current_user.can('community_manage') and the_answer.user_id != current_user.id:
+        abort(403)
     the_question_id = the_answer.community_question_id
     the_answer.delete()
     flash('删除成功')

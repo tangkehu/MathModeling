@@ -6,8 +6,10 @@
                 <div class="card mb-5">
                     <div class="card-body">
                         <h5 class="card-title">{{ the_question.question_title }}</h5>
-                        <a href="{{ url_for('community.question_edit', question_id=the_question.id) }}" class="card-link"><i class="fas fa-edit"></i> 编辑</a>
-                        <a href="{{ url_for('.question_del', question_id=the_question.id) }}" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                        {% if current_user.can('community_manage') %}
+                            <a href="{{ url_for('community.question_edit', question_id=the_question.id) }}" class="card-link"><i class="fas fa-edit"></i> 编辑</a>
+                            <a href="{{ url_for('.question_del', question_id=the_question.id) }}" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                        {% endif %}
                         <p class="text-muted card-text mt-2">{% if the_question.hide_user %}匿名{% else %}{{ the_question.user.username  }}{% endif %} &nbsp;&nbsp; {{ moment(the_question.create_time).format('LL') }}</p>
                         <p class="card-text">{{ the_question.question_description }}</p>
                         <a href="{{ url_for('.answer_add', question_id=the_question.id) }}" class="btn btn-primary float-right"><i class="fas fa-pencil-alt"></i> 写回答</a>
@@ -20,8 +22,10 @@
                         <div class="card-body">
                             <p class="card-text">{{ one.answer_content }}</p>
                             <small>{% if one.hide_user %}匿名{% else %}{{ one.user.username }}{% endif %} &nbsp;&nbsp; {{ moment(one.create_time).format('LL') }}</small>
-                            <a href="{{ url_for('.answer_edit', answer_id=one.id) }}" class="card-link ml-4"><i class="fas fa-edit"></i> 编辑</a>
-                            <a href="{{ url_for('.answer_del', answer_id=one.id) }}" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                            {% if current_user.can('community_manage') %}
+                                <a href="{{ url_for('.answer_edit', answer_id=one.id) }}" class="card-link ml-4"><i class="fas fa-edit"></i> 编辑</a>
+                                <a href="{{ url_for('.answer_del', answer_id=one.id) }}" class="card-link"><i class="fas fa-trash"></i> 删除</a>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
