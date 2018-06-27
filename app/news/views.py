@@ -34,9 +34,6 @@ def add():
     if request.method == 'POST':
         kwargs = request.form.to_dict()
         if kwargs.get('title') and kwargs.get('content'):
-            kwargs['content'] = kwargs['content'].replace('\n', '<br/>')
-            kwargs['content'] = kwargs['content'].replace(' ', '&nbsp;')
-            print(kwargs.get('content'))
             News.add(kwargs)
             flash('新闻公告添加成功')
             return redirect(url_for('.main'))
@@ -48,6 +45,7 @@ def add():
 @login_required
 def info(news_id):
     the_news = News.query.get_or_404(int(news_id))
+    the_news.read_count_add()
     return render_template('news/info.html', active_flg=['news'], the_news=the_news)
 
 

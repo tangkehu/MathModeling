@@ -12,25 +12,16 @@
                     {% for one in news_list %}
                       <a href="{{ url_for('.info', news_id=one.id) }}" class="list-group-item list-group-item-action flex-column align-items-start my-2">
                         <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">{{ one.news_title }}</h5>
+                          <h5 class="mb-1 text-success">{{ one.news_title }}</h5>
                           <small>{{ one.read_count }}点击量</small>
                         </div>
                         <small class="text-muted">{{ moment(one.create_time).format('LL') }}</small>
-                        <p class="mb-1">{{ one.news_content | safe }}</p>
+                        <p class="mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ one.news_content | striptags }}</p>
                       </a>
                     {% endfor %}
                 {% else %}
                     <li class="list-group-item">当前条件无新闻公告...</li>
                 {% endif %}
-
-              <a href="{{ url_for('.info', news_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start my-2">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">这里是一个新闻标题</h5>
-                  <small>3点击量</small>
-                </div>
-                <small class="text-muted">2018-05-13</small>
-                <p class="mb-1">这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容这里是新闻内容</p>
-              </a>
             </div>
           </div>
         </div>
