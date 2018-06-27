@@ -13,7 +13,8 @@ class Config(object):
         ('resource_add', '知识库文件添加'),
         ('know_type_manage', '知识库类别管理，目录的添加删除'),
         ('resource_check', '知识库文件审核'),
-        ('community_manage', '问答社区管理，问题答案的编辑删除')
+        ('community_manage', '问答社区管理，问题答案的编辑删除'),
+        ('news_manage', '新闻公告管理，新闻公告的发布编辑删除')
     ]
     ROLES = [('普通用户', 'none'), ('管理员', 'all')]
     ADMIN_EMAIL = '2739182815@qq.com'

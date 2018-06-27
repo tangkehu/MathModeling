@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required
 from . import news
 from ..models import News
+from ..decorators import permission_required
 
 
 @news.route('/main/', methods=['GET', 'POST'])
@@ -30,6 +31,7 @@ def search(words):
 
 @news.route('/add/', methods=['GET', 'POST'])
 @login_required
+@permission_required('news_manage')
 def add():
     if request.method == 'POST':
         kwargs = request.form.to_dict()
@@ -51,6 +53,7 @@ def info(news_id):
 
 @news.route('/edit/<news_id>', methods=['GET', 'POST'])
 @login_required
+@permission_required('news_manage')
 def edit(news_id):
     the_news = News.query.get_or_404(int(news_id))
     if request.method == 'POST':
@@ -65,6 +68,7 @@ def edit(news_id):
 
 @news.route('/delete/<news_id>')
 @login_required
+@permission_required('news_manage')
 def delete(news_id):
     the_news = News.query.get_or_404(int(news_id))
     the_news.delete()
