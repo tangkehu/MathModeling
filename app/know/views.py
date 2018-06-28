@@ -3,7 +3,7 @@ from flask import abort
 from flask_login import login_required, current_user
 from urllib.parse import quote
 from . import know
-from ..models import KnowType, KnowResource
+from ..models import KnowType, KnowResource, FlowCount
 from ..decorators import permission_required
 
 
@@ -50,6 +50,7 @@ def upload(type_id):
         else:
             result = KnowResource.upload(type_id, file)
             if result:
+                FlowCount.add_resource_count()
                 return redirect(url_for('know.resource', type_id=type_id))
             else:
                 flash('文件上传失败，请更改文件名后重试')

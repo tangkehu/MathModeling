@@ -1,6 +1,8 @@
-import os, time
+import os
+import time
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import current_app, session
+from flask import current_app
 from flask_login import AnonymousUserMixin, current_user
 from app import db, login_manager
 
@@ -778,3 +780,47 @@ class FlowCount(db.Model):
     page_view_count = db.Column(db.Integer)
     resource_count = db.Column(db.Integer)
     count_time = db.Column(db.String(32))
+
+    @staticmethod
+    def get_echarts_data():
+        date = []
+        pv_count = []
+        rs_count = []
+        for item in range(29):
+            today = datetime.datetime.now() - datetime.timedelta(days=item)
+            str_today = today.strftime("%Y-%m-%d")
+            if item is 0:
+                date.insert(0, '今天')
+            else:
+                date.insert(0, str_today)
+
+            the_flow_count = FlowCount.query.filter_by(count_time=str_today).first()
+            if the_flow_count:
+                pv_count.insert(0, the_flow_count.page_view_count)
+                rs_count.insert(0, the_flow_count.resource_count)
+            else:
+                pv_count.insert(0, 0)
+                rs_count.insert(0, 0)
+        return {'date': date, 'pv_count': pv_count, 'rs_count': rs_count}
+
+    @staticmethod
+    def add_page_view_count():
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        the_flow = FlowCount.query.filter_by(count_time=today).first()
+        if the_flow:
+            the_flow.page_view_count += 1
+        else:
+            the_flow = FlowCount(page_view_count=1, resource_count=0, count_time=today)
+        db.session.add(the_flow)
+        db.session.commit()
+
+    @staticmethod
+    def add_resource_count():
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        the_flow = FlowCount.query.filter_by(count_time=today).first()
+        if the_flow:
+            the_flow.resource_count += 1
+        else:
+            the_flow = FlowCount(page_view_count=0, resource_count=1, count_time=today)
+        db.session.add(the_flow)
+        db.session.commit()
