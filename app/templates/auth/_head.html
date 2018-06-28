@@ -1,9 +1,11 @@
     <div class="jumbotron jumbotron-fluid" style="background-image: url({{ url_for('static', filename='img/profile_bg.jpg') }});">
       <div class="container text-center text-white">
         <img src="{{ url_for('static', filename='img/user.jpg') }}" class="rounded-circle" width="120px" height="120px">
-        <h3 class="mt-2">{{ current_user.username }}</h3>
+        <h3 class="mt-2">{% if the_user %}{{ the_user.username }}{% else %}{{ current_user.username }}{% endif %}</h3>
       </div>
     </div>
+
+    {% if not the_user %}
     <div class="nav nav-pills justify-content-center my-4">
         <a class="nav-item nav-link {% if 'profile' in active_flg %} active {% endif %}" href="{{ url_for('auth.profile', user_id=current_user.id) }}">
             <i class="fas fa-user"></i> 个人
@@ -18,3 +20,4 @@
             <i class="fas fa-user-shield"></i> 角色
         </a>
     </div>
+    {% endif %}
