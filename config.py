@@ -17,10 +17,15 @@ class Config(object):
         ('news_manage', '新闻公告管理，新闻公告的发布编辑删除'),
         ('user_manage', '用户管理，权限管理')
     ]
-    ROLES = [('普通用户', 'none'), ('管理员', 'all')]
-    ADMIN_EMAIL = '2739182815@qq.com'
-    ADMIN_PASSWORD = 'tang@1013'
-    ADMIN_SCHOOL = '成都大学'
+    ROLES = [
+        ('普通用户', 'none'),
+        ('管理员', 'all'),
+        ('知识库文件管理员', ['resource_add', 'resource_manage', 'resource_check'])
+    ]
+    ADMIN = [
+        ('唐柯虎', '2739182815@qq.com', 'tang@1013', '成都大学'),
+        ('tangkehu', '329937872@qq.com', 'zylT#1013', '成都大学')
+    ]
     TRAIN_FILE_TYPE = {1: '集训题目',
                        2: '参考资料',
                        3: '模型结构',

@@ -249,11 +249,11 @@ class User(db.Model):
 
     @staticmethod
     def insert_admin_user():
-        user = User(username='admin',
-                    email=current_app.config['ADMIN_EMAIL'],
-                    password=current_app.config['ADMIN_PASSWORD'],
-                    school=School.query.filter_by(school_name=current_app.config['ADMIN_SCHOOL']).first())
-        db.session.add(user)
+        for one in current_app.config['ADMIN']:
+            db.session.add(User(username=one[0],
+                                email=one[1],
+                                password=one[2],
+                                school=School.query.filter_by(school_name=one[3]).first()))
         db.session.commit()
 
 
