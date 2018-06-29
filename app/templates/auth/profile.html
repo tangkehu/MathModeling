@@ -4,9 +4,9 @@
     {% include 'auth/_head.html' %}
 
     <div class="container">
-        <div class="row justify-content-center my-5">
-            <div id="user_look_chart" style="width: 600%; height:400%;"></div>
-        </div>
+{#        <div class="row justify-content-center my-5">#}
+{#            <div id="user_look_chart" style="width: 600%; height:400%;"></div>#}
+{#        </div>#}
         <div class="row justify-content-center my-5">
             <div class="col-xl-8 col-md-10">
                 <div class="card">
@@ -65,41 +65,41 @@
     </div>
 {% endblock %}
 
-{% block script_block %}
-    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
-
-    <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('user_look_chart'));
-        var option = {
-            radar: {
-                // shape: 'circle',
-                name: {
-                    textStyle: {
-                        color: '#fff',
-                        backgroundColor: '#999',
-                        borderRadius: 3,
-                        padding: [3, 5]
-                   }
-                },
-                indicator: [
-                    { name: '写作能力', max: 100},
-                    { name: '建模能力', max: 100},
-                    { name: '编码能力', max: 100},
-                    { name: '团队协作', max: 100},
-                    { name: '表达能力', max: 100}
-                ]
-            },
-            series: [{
-                type: 'radar',
-                // areaStyle: {normal: {}},
-                itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                data : [
-                    {
-                        value : [40, 80, 10, 60, 50]
-                    }
-                ]
-            }]
-        };
-        myChart.setOption(option);
-    </script>
-{% endblock %}
+{#{% block script_block %}#}
+{#    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>#}
+{##}
+{#    <script type="text/javascript">#}
+{#        var myChart = echarts.init(document.getElementById('user_look_chart'));#}
+{#        var option = {#}
+{#            radar: {#}
+{#                // shape: 'circle',#}
+{#                name: {#}
+{#                    textStyle: {#}
+{#                        color: '#fff',#}
+{#                        backgroundColor: '#999',#}
+{#                        borderRadius: 3,#}
+{#                        padding: [3, 5]#}
+{#                   }#}
+{#                },#}
+{#                indicator: [#}
+{#                    { name: '写作能力', max: 100},#}
+{#                    { name: '建模能力', max: 100},#}
+{#                    { name: '编码能力', max: 100},#}
+{#                    { name: '团队协作', max: 100},#}
+{#                    { name: '表达能力', max: 100}#}
+{#                ]#}
+{#            },#}
+{#            series: [{#}
+{#                type: 'radar',#}
+{#                // areaStyle: {normal: {}},#}
+{#                itemStyle: {normal: {areaStyle: {type: 'default'}}},#}
+{#                data : [#}
+{#                    {#}
+{#                        value : [40, 80, 10, 60, 50]#}
+{#                    }#}
+{#                ]#}
+{#            }]#}
+{#        };#}
+{#        myChart.setOption(option);#}
+{#    </script>#}
+{#{% endblock %}#}

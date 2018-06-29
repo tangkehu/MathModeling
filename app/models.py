@@ -169,7 +169,7 @@ class User(db.Model):
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
         if not self.role.all():
-            if self.email == current_app.config['ADMIN_EMAIL']:
+            if self.email in [x[1] for x in current_app.config['ADMIN']]:
                 self.role = [Role.query.filter_by(role_name='管理员').first()]
             else:
                 self.role = [Role.query.filter_by(is_default=True).first()]
