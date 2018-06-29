@@ -2,8 +2,8 @@ from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from . import auth
-from .forms import LoginForm, RegisterForm, AccountEditForm
-from ..models import User, School
+from .forms import LoginForm, RegisterForm, AccountEditForm, RoleForm
+from ..models import User, School, Role
 from ..decorators import permission_required
 
 
@@ -111,15 +111,26 @@ def user_search(words):
 
 
 @auth.route('/role/')
+@login_required
+@permission_required('user_manage')
 def role():
-    return render_template('auth/role.html', active_flg=['role'])
+    roles = Role.query.all()
+    return render_template('auth/role.html', active_flg=['role'], roles=roles)
 
 
 @auth.route('/role_add/', methods=['GET', 'POST'])
+@login_required
+@permission_required('user_manage')
 def role_add():
-    if request.method == 'POST':
+    form = RoleForm()
+    if form.validate_on_submit():
+        Role.add(form.data)
+        flash('添加成功')
         return redirect(url_for('.role'))
-    return render_template('auth/role_add.html', active_flg=['role'])
+    message = list(form.errors.values())
+    if message:
+        flash(message[0][0])
+    return render_template('auth/role_add.html', active_flg=['role'], form=form)
 
 
 @auth.route('/role_edit/<role_id>', methods=['GET', 'POST'])

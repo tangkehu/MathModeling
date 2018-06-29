@@ -117,6 +117,13 @@ class Role(db.Model):
         return flg
 
     @staticmethod
+    def add(form):
+        db.session.add(Role(role_name=form.get('role_name'),
+                            permission=[Permission.query.get(one) for one in form.get('permissions')],
+                            is_default=False))
+        db.session.commit()
+
+    @staticmethod
     def insert_basic_roles():
         for one in current_app.config['ROLES']:
             if not Role.query.filter_by(role_name=one[0]).first():

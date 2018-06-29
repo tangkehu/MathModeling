@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, EqualTo, Regexp
 from wtforms import ValidationError
-from ..models import User, School, Role
+from ..models import User, School, Role, Permission
 
 
 class LoginForm(FlaskForm):
@@ -71,3 +71,27 @@ class AccountEditForm(FlaskForm):
         self.real_name.data = self.user.real_name
         self.student_number.data = self.user.student_number
         self.roles.data = [one.id for one in self.user.role.all()]
+
+
+class RoleForm(FlaskForm):
+    role_name = StringField('角色名：', validators=[DataRequired(message='请输入角色名')])
+    permissions = SelectMultipleField('权限：', coerce=int)
+
+    def __init__(self, role=None, *args, **kwargs):
+        super(RoleForm, self).__init__(*args, **kwargs)
+        self.permissions.choices = [(one.id, one.permission_description) for one in Permission.query.all()]
+        self.role = role
+
+    def validate_role_name(self, field):
+        the_role = Role.query.filter_by(role_name=field.data).first()
+        if self.role:
+            if the_role and the_role.id != self.role.id:
+                raise ValidationError('该角色已经存在')
+        else:
+            if the_role:
+                raise ValidationError('该角色已经存在')
+
+    def set_data(self):
+        if self.role:
+            self.role_name.data = self.role.role_name
+            self.permissions.data = [one.id for one in self.role.permission.all()]
