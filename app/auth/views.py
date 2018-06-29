@@ -4,6 +4,7 @@ from app import db
 from . import auth
 from .forms import LoginForm, RegisterForm, AccountEditForm
 from ..models import User, School
+from ..decorators import permission_required
 
 
 @auth.route('/login/', methods=['GET', 'POST'])
@@ -75,10 +76,13 @@ def account(user_id):
 
 
 @auth.route('/manage/', methods=['GET', 'POST'])
+@login_required
+@permission_required('user_manage')
 def manage():
     if request.method == 'POST':
         return redirect(url_for('.user_search', words=request.form.get('words', 'null')))
-    return render_template('auth/manage.html', active_flg=['manage'])
+    users = User.query.all()
+    return render_template('auth/manage.html', active_flg=['manage'], users=users)
 
 
 @auth.route('/user_search/<words>', methods=['GET', 'POST'])

@@ -10,7 +10,7 @@
         <div class="row justify-content-center my-5">
             <div class="col-xl-8 col-md-10">
                 <div class="card">
-                    <div class="card-header">我贡献的资源</div>
+                    <div class="card-header">贡献的资源</div>
                     <ul class="list-group list-group-flush">
                         {% set resource = the_user.know_resource.all() %}
                         {% if resource %}
@@ -38,7 +38,7 @@
         <div class="row justify-content-center my-5">
             <div class="col-xl-8 col-md-10">
                 <div class="card">
-                    <div class="card-header">我发布的问题</div>
+                    <div class="card-header">发布的问题</div>
                     <ul class="list-group list-group-flush">
                         {% set question=the_user.community_question.all() %}
                         {% if question %}
