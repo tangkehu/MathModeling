@@ -31,12 +31,10 @@
                 {{ form.verify_password.label }}
                 {{ form.verify_password(class="form-control", placeholder="若不修改密码则不填此项") }}
             </div>
-            {% if current_user.can('user_manage') %}
-            <div class="form-group">
+            <div class="form-group" {% if not current_user.can('user_manage') %} style="display: none" {% endif %}>
                 {{ form.roles.label }}
                 {{ form.roles(class="form-control") }}
             </div>
-            {% endif %}
 
             <button type="submit" class="btn btn-warning"><i class="fas fa-sync"></i> 提交修改</button>
             <button type="reset" class="btn btn-primary"><i class="fas fa-undo"></i> 取消修改</button>
