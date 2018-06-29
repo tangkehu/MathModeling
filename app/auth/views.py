@@ -75,21 +75,39 @@ def account(user_id):
     return render_template('auth/account.html', active_flg=['account'], the_user=the_user, form=form)
 
 
+@auth.route('/user_del/<user_id>')
+@login_required
+@permission_required('user_manage')
+def user_del(user_id):
+    the_user = User.query.get_or_404(int(user_id))
+    the_user.delete()
+    return redirect(url_for('.manage'))
+
+
 @auth.route('/manage/', methods=['GET', 'POST'])
 @login_required
 @permission_required('user_manage')
 def manage():
     if request.method == 'POST':
-        return redirect(url_for('.user_search', words=request.form.get('words', 'null')))
+        words = request.form.get('words')
+        if words:
+            return redirect(url_for('.user_search', words=words))
+        flash('请输入要查找的内容')
     users = User.query.all()
     return render_template('auth/manage.html', active_flg=['manage'], users=users)
 
 
 @auth.route('/user_search/<words>', methods=['GET', 'POST'])
+@login_required
+@permission_required('user_manage')
 def user_search(words):
     if request.method == 'POST':
-        return redirect(url_for('.user_search', words=request.form.get('words', 'null')))
-    return render_template('auth/manage.html', active_flg=['manage'], words=words)
+        words = request.form.get('words')
+        if words:
+            return redirect(url_for('.user_search', words=words))
+        flash('请输入要查找的内容')
+    users = User.search(words)
+    return render_template('auth/manage.html', active_flg=['manage'], words=words, users=users)
 
 
 @auth.route('/role/')

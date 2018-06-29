@@ -4,6 +4,7 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from flask_login import AnonymousUserMixin, current_user
+from sqlalchemy import and_, or_
 from app import db, login_manager
 
 
@@ -201,9 +202,33 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        for one in self.know_resource.all():
+            KnowResource.del_resource(one.id)
+        for one in self.community_question.all():
+            one.delete()
+        for one in self.community_answer.all():
+            one.delete()
+        for one in self.news.all():
+            one.delete()
+        db.session.delete(self)
+        db.session.commit()
+
     @property
     def is_train_student(self):
         return True if self.train_student and self.train_student.verify_status is True else False
+
+    @staticmethod
+    def search(words):
+        result = []
+        users = User.query.filter(and_(User.school_id == current_user.school_id, or_(
+            User.username.like('%'+words+'%'), User.real_name.like('%'+words+'%')
+        ))).all()
+        result += list(users)
+        for one in Role.query.filter(Role.role_name.like('%'+words+'%')).all():
+            role_users = one.user.all()
+            result += list(role_users)
+        return list(set(result))
 
     @staticmethod
     def insert_admin_user():

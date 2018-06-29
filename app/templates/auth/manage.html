@@ -3,7 +3,7 @@
     {% include "auth/_head.html" %}
     <div class="container">
         {% include '_search.html' %}
-
+        {% if users %}
         {% for one in users %}
             <div class="row my-1">
                 <div class="col-3"><a href="{{ url_for('auth.profile', user_id=one.id) }}" class="text-primary">{{ one.username }}</a></div>
@@ -11,9 +11,12 @@
                 <div class="col-5">{% for item in one.role.all() %}{{ item.role_name }} &nbsp; {% endfor %}</div>
                 <div class="col-2">
                     <a href="{{ url_for('auth.account', user_id=one.id) }}" class="mr-2 text-primary"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
+                    <a href="{{ url_for('auth.user_del', user_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
                 </div>
             </div>
         {% endfor %}
+        {% else %}
+            <div class="row">当前条件下无结果...</div>
+        {% endif %}
     </div>
 {% endblock %}
