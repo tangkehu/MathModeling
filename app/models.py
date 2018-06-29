@@ -123,6 +123,16 @@ class Role(db.Model):
                             is_default=False))
         db.session.commit()
 
+    def edit(self, form):
+        self.role_name = form.get('role_name')
+        self.permission = [Permission.query.get(one) for one in form.get('permissions')]
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     @staticmethod
     def insert_basic_roles():
         for one in current_app.config['ROLES']:

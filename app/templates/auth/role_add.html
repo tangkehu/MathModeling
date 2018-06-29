@@ -17,7 +17,7 @@
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> 确定</button>
                 <button type="reset" class="btn btn-warning"><i class="fas fa-undo"></i> 取消</button>
                 {% if the_role %}
-                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
+                <a href="{{ url_for('auth.role_del', role_id=the_role.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
                 {% endif %}
             </form>
         </div>

@@ -134,8 +134,28 @@ def role_add():
 
 
 @auth.route('/role_edit/<role_id>', methods=['GET', 'POST'])
+@login_required
+@permission_required("user_manage")
 def role_edit(role_id):
-    if request.method == 'POST':
+    the_role = Role.query.get_or_404(int(role_id))
+    form = RoleForm(the_role)
+    if request.method == 'GET':
+        form.set_data()
+    if form.validate_on_submit():
+        the_role.edit(form.data)
+        flash('编辑成功')
         return redirect(url_for('.role'))
-    the_role = role_id
-    return render_template('auth/role_add.html', active_flg=['role'], the_role=the_role)
+    message = list(form.errors.values())
+    if message:
+        flash(message[0][0])
+    return render_template('auth/role_add.html', active_flg=['role'], the_role=the_role, form=form)
+
+
+@auth.route('/role_del/<role_id>')
+@login_required
+@permission_required('user_manage')
+def role_del(role_id):
+    the_role = Role.query.get_or_404(int(role_id))
+    the_role.delete()
+    flash('删除成功')
+    return redirect(url_for('.role'))
