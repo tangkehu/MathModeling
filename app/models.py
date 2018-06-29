@@ -190,6 +190,17 @@ class User(db.Model):
                 break
         return flg
 
+    def edit(self, form):
+        self.username = form.get('username')
+        self.email = form.get('email')
+        self.real_name = form.get('real_name')
+        self.student_number = form.get('student_number')
+        self.role = [Role.query.get(one) for one in form.get('roles')]
+        if form.get('password'):
+            self.password = form['password']
+        db.session.add(self)
+        db.session.commit()
+
     @property
     def is_train_student(self):
         return True if self.train_student and self.train_student.verify_status is True else False

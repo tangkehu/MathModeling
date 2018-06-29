@@ -1,8 +1,8 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from . import auth
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, AccountEditForm
 from ..models import User, School
 
 
@@ -51,19 +51,27 @@ def register():
 @auth.route('/profile/<user_id>')
 @login_required
 def profile(user_id):
-    if int(user_id) == current_user.id:
-        the_user = None
-    else:
-        the_user = User.query.get_or_404(int(user_id))
+    the_user = User.query.get_or_404(int(user_id))
     return render_template('auth/profile.html', active_flg=['profile'], the_user=the_user)
 
 
 @auth.route('/account/<user_id>', methods=['GET', 'POST'])
+@login_required
 def account(user_id):
-    if request.method == 'POST':
+    the_user = User.query.get_or_404(int(user_id))
+    if not current_user.can('user_manage') and the_user.id != current_user.id:
+        abort(403)
+    form = AccountEditForm(the_user)
+    if request.method == 'GET':
+        form.set_data()
+    if form.validate_on_submit():
+        the_user.edit(form.data)
+        flash('修改成功')
         return redirect(url_for('.account', user_id=user_id))
-    the_user = user_id
-    return render_template('auth/account.html', active_flg=['account'], the_user=the_user)
+    message = list(form.errors.values())
+    if message:
+        flash(message[0][0])
+    return render_template('auth/account.html', active_flg=['account'], the_user=the_user, form=form)
 
 
 @auth.route('/manage/', methods=['GET', 'POST'])
