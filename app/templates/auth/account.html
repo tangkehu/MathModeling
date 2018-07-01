@@ -6,44 +6,34 @@
     <div class="container">
     <div class="row justify-content-center mb-5">
         <form method="post" class="col-6">
+            {{ form.csrf_token }}
             <div class="form-group">
-                <label for="usernameID">用户名：</label>
-                <input type="text" id="usernameID" class="form-control" name="username" value="{{ current_user.username }}">
+                {{ form.username.label }}
+                {{ form.username(class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="emailID">邮箱：</label>
-                <input type="email" id="emailID" class="form-control" name="email" value="{{ current_user.email }}">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="real_nameID">实名：</label>
-                <input type="text" id="real_nameID" class="form-control" name="real_name" value="{{ current_user.real_name }}">
+                {{ form.real_name.label }}
+                {{ form.real_name(class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="student_numberID">学号：</label>
-                <input type="text" id="student_numberID" class="form-control" name="student_number" value="{{ current_user.student_number }}">
+                {{ form.student_number.label }}
+                {{ form.student_number(class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="passwordID">新密码：</label>
-                <input type="password" id="passwordID" class="form-control" name="password">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", placeholder="若不修改密码则不填此项") }}
             </div>
             <div class="form-group">
-                <label for="check_passwordID">确认新密码：</label>
-                <input type="password" id="check_passwordID" class="form-control" name="check_password">
+                {{ form.verify_password.label }}
+                {{ form.verify_password(class="form-control", placeholder="若不修改密码则不填此项") }}
             </div>
-
-            <div class="form-group">
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" id="roleID1" class="custom-control-input" checked>
-                    <label class="custom-control-label" for="roleID1">角色1</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" id="roleID2" class="custom-control-input">
-                    <label class="custom-control-label" for="roleID2">角色2</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" id="roleID3" class="custom-control-input" disabled>
-                    <label class="custom-control-label" for="roleID3">角色3</label>
-                </div>
+            <div class="form-group" {% if not current_user.can('user_manage') %} style="display: none" {% endif %}>
+                {{ form.roles.label }}
+                {{ form.roles(class="form-control") }}
             </div>
 
             <button type="submit" class="btn btn-warning"><i class="fas fa-sync"></i> 提交修改</button>

@@ -28,29 +28,15 @@
       </div>
 
       <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-              <i class="fas fa-file-alt text-primary mr-2"></i>
-              <a href="#" class="text-dark">
-                  中国人口增长预测
-              </a>
-              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
-          </li>
-
-          <li class="list-group-item">
-              <i class="fas fa-file-alt text-primary mr-2"></i>
-              <a href="#" class="text-dark">
-                  易拉罐形状和尺寸的最优设计
-              </a>
-              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
-          </li>
-
-          <li class="list-group-item">
-              <i class="fas fa-file-alt text-primary mr-2"></i>
-              <a href="#" class="text-dark">
-                  雨量预报方法的评价
-              </a>
-              <a href="#" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
-          </li>
+          {% for one in file_list %}
+              <li class="list-group-item">
+                  <i class="fas fa-file-alt text-primary mr-2"></i>
+                  <a href="{{ url_for('train.show_file', file_id=one.id) }}" class="text-dark">
+                      {{ one.train_filename }}
+                  </a>
+                  <a href="{{ url_for('train.del_file', file_id=one.id) }}" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+              </li>
+          {% endfor %}
       </ul>
     </div>
   </div>

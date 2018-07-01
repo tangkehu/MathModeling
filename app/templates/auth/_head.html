@@ -1,9 +1,11 @@
     <div class="jumbotron jumbotron-fluid" style="background-image: url({{ url_for('static', filename='img/profile_bg.jpg') }});">
       <div class="container text-center text-white">
         <img src="{{ url_for('static', filename='img/user.jpg') }}" class="rounded-circle" width="120px" height="120px">
-        <h3 class="mt-2">{{ current_user.username }}</h3>
+        <h3 class="mt-2">{% if the_user %}{{ the_user.username }}{% else %}{{ current_user.username }}{% endif %}</h3>
       </div>
     </div>
+
+    {% if not the_user or the_user.id == current_user.id %}
     <div class="nav nav-pills justify-content-center my-4">
         <a class="nav-item nav-link {% if 'profile' in active_flg %} active {% endif %}" href="{{ url_for('auth.profile', user_id=current_user.id) }}">
             <i class="fas fa-user"></i> 个人
@@ -11,10 +13,14 @@
         <a class="nav-item nav-link {% if 'account' in active_flg %} active {% endif %}" href="{{ url_for('auth.account', user_id=current_user.id) }}">
             <i class="fas fa-user-cog"></i> 帐户
         </a>
+
+        {% if current_user.can('user_manage') %}
         <a class="nav-item nav-link {% if 'manage' in active_flg %} active {% endif %}" href="{{ url_for('auth.manage') }}">
             <i class="fas fa-cogs"></i> 管理
         </a>
         <a class="nav-item nav-link {% if 'role' in active_flg %} active {% endif %}" href="{{ url_for('auth.role') }}">
             <i class="fas fa-user-shield"></i> 角色
         </a>
+        {% endif %}
     </div>
+    {% endif %}

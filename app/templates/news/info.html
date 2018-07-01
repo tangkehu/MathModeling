@@ -3,12 +3,14 @@
     <div class="container">
         <div class="row justify-content-center my-4">
             <div class="col-xl-8 col-md-10">
-                <h4>关于某某某的通知</h4>
-                <p class="text-muted">2018-05-14 &nbsp;&nbsp; 25点击量</p>
-                <a href="{{ url_for('.edit', news_id=the_news) }}"><i class="fas fa-edit"></i> 编辑</a>
-                <a href="#" class="ml-4"><i class="fas fa-trash"></i> 删除</a>
+                <h4>{{ the_news.news_title }}</h4>
+                <p class="text-muted">{{ moment(the_news.create_time).format('LL') }} &nbsp;&nbsp; {{ the_news.read_count }}点击量</p>
+                {% if current_user.can('news_manage') %}
+                    <a href="{{ url_for('.edit', news_id=the_news.id) }}"><i class="fas fa-edit"></i> 编辑</a>
+                    <a href="{{ url_for('.delete', news_id=the_news.id) }}" class="ml-4"><i class="fas fa-trash"></i> 删除</a>
+                {% endif %}
                 <hr>
-                <p>这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时这个通知实时</p>
+                <p>{{ the_news.news_content | safe }}</p>
             </div>
         </div>
     </div>

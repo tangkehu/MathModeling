@@ -1,18 +1,15 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
     {% include "auth/_head.html" %}
-    <div class="container">
+    <div class="container mb-5">
         <div class="row justify-content-center my-5">
             <a href="{{ url_for('auth.role_add') }}" class="btn btn-info"><i class="fas fa-plus"></i> 新增角色</a>
         </div>
         <div class="row justify-content-center">
             <div class="col-xl-6 col-md-8 col-10">
-                <a href="{{ url_for('auth.role_edit', role_id=1) }}" class="btn btn-secondary mx-2 my-2">普通学生</a>
-                <a href="#" class="btn btn-secondary mx-2 my-2">老师</a>
-                <a href="#" class="btn btn-secondary mx-2 my-2">普通学生</a>
-                <a href="#" class="btn btn-secondary mx-2 my-2">普通学生</a>
-                <a href="#" class="btn btn-secondary mx-2 my-2">普通学生</a>
-                <a href="#" class="btn btn-secondary mx-2 my-2">普通学生</a>
+                {% for one in roles %}
+                    <a href="{{ url_for('auth.role_edit', role_id=one.id) }}" class="btn btn-secondary mx-2 my-2">{{ one.role_name }}</a>
+                {% endfor %}
             </div>
         </div>
     </div>

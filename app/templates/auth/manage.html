@@ -1,45 +1,22 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
     {% include "auth/_head.html" %}
-    <div class="container">
+    <div class="container mb-5">
         {% include '_search.html' %}
-        <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-around">
-                <span>admin</span>
-                <span>唐柯虎</span>
-                <span>201410412217</span>
-                <div class="btn-group btn-group-sm">
-                    <a href="{{ url_for('auth.account', user_id=1) }}" class="btn btn-primary"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
+        {% if users %}
+        {% for one in users %}
+            <div class="row my-1">
+                <div class="col-3"><a href="{{ url_for('auth.profile', user_id=one.id) }}" class="text-primary">{{ one.username }}</a></div>
+                <div class="col-2">{{ one.real_name }}</div>
+                <div class="col-5">{% for item in one.role.all() %}{{ item.role_name }} &nbsp; {% endfor %}</div>
+                <div class="col-2">
+                    <a href="{{ url_for('auth.account', user_id=one.id) }}" class="mr-2 text-primary"><i class="fas fa-edit"></i> 编辑</a>
+                    <a href="{{ url_for('auth.user_del', user_id=one.id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除</a>
                 </div>
-            </li>
-            <li class="list-group-item d-flex justify-content-around">
-                <span>admin</span>
-                <span>唐柯虎</span>
-                <span>201410412217</span>
-                <div class="btn-group btn-group-sm">
-                    <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
-                </div>
-            </li>
-            <li class="list-group-item d-flex justify-content-around">
-                <span>admin</span>
-                <span>唐柯虎</span>
-                <span>201410412217</span>
-                <div class="btn-group btn-group-sm">
-                    <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
-                </div>
-            </li>
-            <li class="list-group-item d-flex justify-content-around">
-                <span>admin</span>
-                <span>唐柯虎</span>
-                <span>201410412217</span>
-                <div class="btn-group btn-group-sm">
-                    <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i> 编辑</a>
-                    <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
-                </div>
-            </li>
-        </ul>
+            </div>
+        {% endfor %}
+        {% else %}
+            <div class="row">当前条件下无结果...</div>
+        {% endif %}
     </div>
 {% endblock %}

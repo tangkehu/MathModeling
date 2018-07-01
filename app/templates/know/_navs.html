@@ -2,10 +2,12 @@
       <a class="nav-item nav-link {% if 'push' in active_flg %} active {% endif %}" href="{{ url_for('know.push') }}">
           <i class="fas fa-chart-pie"></i> 资源推荐
       </a>
-      <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource') }}">
+      <a class="nav-item nav-link {% if 'resource' in active_flg %} active {% endif %}" href="{{ url_for('know.resource', type_id=0) }}">
           <i class="fas fa-folder-open"></i> 知识库
       </a>
+      {% if current_user.can('resource_check') %}
       <a class="nav-item nav-link {% if 'file_check' in active_flg %} active {% endif %}" href="{{ url_for('know.file_check') }}">
           <i class="fas fa-filter"></i> 文件审核
       </a>
+      {% endif %}
     </div>

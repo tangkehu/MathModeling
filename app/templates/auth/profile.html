@@ -4,41 +4,32 @@
     {% include 'auth/_head.html' %}
 
     <div class="container">
-        <div class="row justify-content-center my-5">
-            <div id="user_look_chart" style="width: 600%; height:400%;"></div>
-        </div>
+{#        <div class="row justify-content-center my-5">#}
+{#            <div id="user_look_chart" style="width: 600%; height:400%;"></div>#}
+{#        </div>#}
         <div class="row justify-content-center my-5">
             <div class="col-xl-8 col-md-10">
                 <div class="card">
-                    <div class="card-header">我贡献的资源</div>
+                    <div class="card-header">贡献的资源</div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <i class="fas fa-file-alt text-primary mr-2"></i>
-                            <a href="#" class="text-dark">这是一个文件名</a>
-                            <small class="text-muted ml-2">文件类别</small>
-                            <span class="float-right">
-                                <a href="{{ url_for('know.edit_name') }}" class="text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-                                <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i> 删除</a>
-                            </span>
-                        </li>
-                        <li class="list-group-item">
-                            <i class="fas fa-file-alt text-primary mr-2"></i>
-                            <a href="#" class="text-dark">这是一个文件名</a>
-                            <small class="text-muted ml-2">文件类别</small>
-                            <span class="float-right">
-                                <a href="{{ url_for('know.edit_name') }}" class="text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-                                <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i> 删除</a>
-                            </span>
-                        </li>
-                        <li class="list-group-item">
-                            <i class="fas fa-file-alt text-primary mr-2"></i>
-                            <a href="#" class="text-dark">这是一个文件名</a>
-                            <small class="text-muted ml-2">文件类别</small>
-                            <span class="float-right">
-                                <a href="{{ url_for('know.edit_name') }}" class="text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
-                                <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i> 删除</a>
-                            </span>
-                        </li>
+                        {% set resource = the_user.know_resource.all() %}
+                        {% if resource %}
+                        {% for one in resource %}
+                            <li class="list-group-item">
+                                <i class="fas fa-file-alt text-primary mr-2"></i>
+                                <a href="{{ url_for('know.show_resource', resource_id=one.id) }}" class="text-dark">{{ one.resource_name }}</a>
+                                <small class="text-muted ml-2">{{ the_user.username }} &nbsp; {{ moment(one.create_time).format('LL') }} &nbsp; {{ one.know_type.type_name }}</small>
+                                {% if the_user.id == current_user.id %}
+                                <span class="float-right">
+                                    <a href="{{ url_for('know.edit_resource', resource_id=one.id) }}" class="text-primary"><i class="fas fa-redo-alt"></i> 重命名</a>
+                                    <a href="{{ url_for('know.del_resource', resource_id=one.id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i> 删除</a>
+                                </span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">还没有贡献任何资源...</li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -47,74 +38,68 @@
         <div class="row justify-content-center my-5">
             <div class="col-xl-8 col-md-10">
                 <div class="card">
-                    <div class="card-header">与我相关的问题</div>
-                    <div class="list-group list-group-flush">
-                      <a href="{{ url_for('community.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">这里是一个问题标题</h5>
-                          <small>3个回答</small>
-                        </div>
-                        <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
-                        <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
-                      </a>
-                      <a href="{{ url_for('community.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">这里是一个问题标题</h5>
-                          <small>3个回答</small>
-                        </div>
-                        <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
-                        <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
-                      </a>
-                      <a href="{{ url_for('community.question_info', question_id=1) }}" class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">这里是一个问题标题</h5>
-                          <small>3个回答</small>
-                        </div>
-                        <small class="text-muted">唐柯虎 &nbsp;&nbsp; 2018-05-13</small>
-                        <p class="mb-1">这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述这里是问题描述</p>
-                      </a>
-                    </div>
+                    <div class="card-header">发布的问题</div>
+                    <ul class="list-group list-group-flush">
+                        {% set question=the_user.community_question.all() %}
+                        {% if question %}
+                        {% for one in question %}
+                            <li class="list-group-item">
+                                <i class="fas fa-file-alt text-primary mr-2"></i>
+                                <a href="{{ url_for('community.question_info', question_id=one.id) }}" class="text-dark">{{ one.question_title }}</a>
+                                <small class="text-muted ml-2">{{ the_user.username }} &nbsp; {{ moment(one.create_time).format('LL') }} &nbsp; {{ one.community_answer.count() }}个回答</small>
+                                {% if the_user.id == current_user.id %}
+                                <span class="float-right">
+                                    <a href="{{ url_for('community.question_edit', question_id=one.id) }}" class="text-primary"><i class="fas fa-edit"></i> 编辑</a>
+                                    <a href="{{ url_for('community.question_del', question_id=one.id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i> 删除</a>
+                                </span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">还没有发布任何问题...</li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
-{% block script_block %}
-    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
-
-    <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('user_look_chart'));
-        var option = {
-            radar: {
-                // shape: 'circle',
-                name: {
-                    textStyle: {
-                        color: '#fff',
-                        backgroundColor: '#999',
-                        borderRadius: 3,
-                        padding: [3, 5]
-                   }
-                },
-                indicator: [
-                    { name: '写作能力', max: 100},
-                    { name: '建模能力', max: 100},
-                    { name: '编码能力', max: 100},
-                    { name: '团队协作', max: 100},
-                    { name: '表达能力', max: 100}
-                ]
-            },
-            series: [{
-                type: 'radar',
-                // areaStyle: {normal: {}},
-                itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                data : [
-                    {
-                        value : [40, 80, 10, 60, 50]
-                    }
-                ]
-            }]
-        };
-        myChart.setOption(option);
-    </script>
-{% endblock %}
+{#{% block script_block %}#}
+{#    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>#}
+{##}
+{#    <script type="text/javascript">#}
+{#        var myChart = echarts.init(document.getElementById('user_look_chart'));#}
+{#        var option = {#}
+{#            radar: {#}
+{#                // shape: 'circle',#}
+{#                name: {#}
+{#                    textStyle: {#}
+{#                        color: '#fff',#}
+{#                        backgroundColor: '#999',#}
+{#                        borderRadius: 3,#}
+{#                        padding: [3, 5]#}
+{#                   }#}
+{#                },#}
+{#                indicator: [#}
+{#                    { name: '写作能力', max: 100},#}
+{#                    { name: '建模能力', max: 100},#}
+{#                    { name: '编码能力', max: 100},#}
+{#                    { name: '团队协作', max: 100},#}
+{#                    { name: '表达能力', max: 100}#}
+{#                ]#}
+{#            },#}
+{#            series: [{#}
+{#                type: 'radar',#}
+{#                // areaStyle: {normal: {}},#}
+{#                itemStyle: {normal: {areaStyle: {type: 'default'}}},#}
+{#                data : [#}
+{#                    {#}
+{#                        value : [40, 80, 10, 60, 50]#}
+{#                    }#}
+{#                ]#}
+{#            }]#}
+{#        };#}
+{#        myChart.setOption(option);#}
+{#    </script>#}
+{#{% endblock %}#}

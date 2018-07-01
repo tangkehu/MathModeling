@@ -1,14 +1,18 @@
     <div class="row justify-content-center my-5">
         <div class="col-xl-8 col-md-10">
-            <form action="{{ url_for('know.search') }}" method="post">
+            <form method="post">
                 <div class="input-group">
                     <select class="custom-select col-3 bg-primary text-light" id="inputGroupSelect02" name="search_type">
-                        <option value="1" selected>全部</option>
-                        <option value="4">论文文献</option>
-                        <option value="2">集训文件</option>
-                        <option value="3">网络资源</option>
+                        <option value=0 selected>全部</option>
+                        {% for one in select_type %}
+                            {% if search_type and search_type == one[0] %}
+                                <option value="{{ one[0] }}" selected>{{ one[1] }}</option>
+                            {% else %}
+                                <option value="{{ one[0] }}">{{ one[1] }}</option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
-                    <input type="text" class="form-control" name="search_words">
+                    <input type="text" class="form-control" name="words" {% if words %} value="{{ words }}" {% endif %}>
                     <div class="input-group-append">
                         <button class="btn bg-primary text-white" type="submit">
                             <i class="fas fa-search"></i> 搜索

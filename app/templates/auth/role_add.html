@@ -4,48 +4,21 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <form method="post" class="col-8">
+                {{ form.csrf_token }}
                 <div class="form-group">
-                    <label for="role_nameID">角色名：</label>
-                    <input type="text" id="role_nameID" class="form-control" name="role_name" {% if the_role %} value="{{ the_role }}" {% endif %}>
+                    {{ form.role_name.label }}
+                    {{ form.role_name(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID1" class="custom-control-input" checked>
-                        <label class="custom-control-label" for="roleID1">权限1</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID2" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID2">权限2</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID3" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID3">权限3</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID4" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID4">权限4</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID5" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID5">权限5</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID6" class="custom-control-input" checked>
-                        <label class="custom-control-label" for="roleID6">权限6</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID7" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID7">权限7</label>
-                    </div>
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" id="roleID8" class="custom-control-input">
-                        <label class="custom-control-label" for="roleID8">权限8</label>
-                    </div>
+                    {{ form.permissions.label }}
+                    {{ form.permissions(class="form-control") }}
                 </div>
 
                 <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> 确定</button>
                 <button type="reset" class="btn btn-warning"><i class="fas fa-undo"></i> 取消</button>
-                <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
+                {% if the_role %}
+                <a href="{{ url_for('auth.role_del', role_id=the_role.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> 删除</a>
+                {% endif %}
             </form>
         </div>
     </div>

@@ -6,30 +6,30 @@
     {% include 'know/_search.html' %}
     <div class="card">
         <div class="card-header">
-            最新文件TOP10
+            最新文件
         </div>
-        {% include 'know/_list.html' %}
+        <ul class="list-group list-group-flush">
+            {% for one in resource_newest %}
+                {% include 'know/_file_list.html' %}
+            {% endfor %}
+            {% if not resource_newest %}
+                <li class="list-group-item">当前无排行数据...</li>
+            {% endif %}
+        </ul>
     </div>
 
     <div class="card mt-5">
         <div class="card-header">
-            最热文件TOP10
+            最热文件
         </div>
-        {% include 'know/_list.html' %}
-    </div>
-
-    <div class="card mt-5">
-        <div class="card-header">
-            智能推荐
-        </div>
-        {% include 'know/_list.html' %}
-    </div>
-
-    <div class="card mt-5">
-        <div class="card-header">
-            网络资源TOP10
-        </div>
-        {% include 'know/_list.html' %}
+        <ul class="list-group list-group-flush">
+            {% for one in resource_hottest %}
+                {% include 'know/_file_list.html' %}
+            {% endfor %}
+            {% if not resource_hottest %}
+                <li class="list-group-item">当前无排行数据...</li>
+            {% endif %}
+        </ul>
     </div>
   </div>
 {% endblock %}

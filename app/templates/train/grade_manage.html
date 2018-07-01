@@ -9,30 +9,27 @@
   {% include 'train/_navs.html' %}
   <div class="container">
     <div class="card my-5">
-        <div class="card-header text-center text-info"><h4>{{ team_number }}组评分任务</h4></div>
+        <div class="card-header text-center text-info"><h4>{{ the_team.team_number }}组评分任务</h4></div>
         <div class="row justify-content-center my-4">
             <div class="col-xl-4 col-md-6 col-8">
                 <form method="post">
                     <select class="form-control show-tick selectpicker my-2" name="grade1" data-live-search="true">
                       <option selected value="0">选择任务...</option>
-                      <option value="1">1组</option>
-                      <option value="2">2组</option>
-                      <option value="3">3组</option>
-                      <option value="4">4组</option>
+                      {% for one in select_team %}
+                          <option value="{{ one[0] }}">{{ one[1] }}组</option>
+                      {% endfor %}
                     </select>
                     <select class="form-control show-tick selectpicker my-2" name="grade2" data-live-search="true">
                       <option selected value="0">选择任务...</option>
-                      <option value="1">1组</option>
-                      <option value="2">2组</option>
-                      <option value="3">3组</option>
-                      <option value="4">4组</option>
+                      {% for one in select_team %}
+                          <option value="{{ one[0] }}">{{ one[1] }}组</option>
+                      {% endfor %}
                     </select>
                     <select class="form-control show-tick selectpicker my-2" name="grade3" data-live-search="true">
                       <option selected value="0">选择任务...</option>
-                      <option value="1">1组</option>
-                      <option value="2">2组</option>
-                      <option value="3">3组</option>
-                      <option value="4">4组</option>
+                      {% for one in select_team %}
+                          <option value="{{ one[0] }}">{{ one[1] }}组</option>
+                      {% endfor %}
                     </select>
                     <button class="btn btn-info my-2" type="submit"><i class="fas fa-check"></i> 确定</button>
                     <a href="{{ url_for('train.team') }}" class="btn btn-warning my-2"><i class="fas fa-undo-alt"></i> 取消</a>
