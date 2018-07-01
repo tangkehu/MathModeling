@@ -1,6 +1,7 @@
 # private
 app/static/know
 app/static/train_files
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
