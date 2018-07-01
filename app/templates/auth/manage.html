@@ -1,7 +1,7 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
     {% include "auth/_head.html" %}
-    <div class="container">
+    <div class="container mb-5">
         {% include '_search.html' %}
         {% if users %}
         {% for one in users %}
