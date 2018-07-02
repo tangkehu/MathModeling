@@ -2,7 +2,8 @@ from flask_script import Manager, Shell
 from flask_migrate import MigrateCommand, Migrate
 from app import create_app, db
 
-app = create_app('default')
+# app = create_app('default')
+app = create_app('production')
 manager = Manager(app)
 migrate = Migrate(app, db)    # 用于数据库迁移
 
