@@ -11,7 +11,7 @@
 部署日志记录在实施部署的过程中所遇到的问题。
 
 ### flask-moment扩展的使用问题
-本项目在使用flask-moment的过程中介于数据库设计的原因，只能传递给moment的参数类型为int型的timestamp时间戳，然后flask-moment没有默认处理int类型的时间戳。需要对源码进行如下更改。
+本项目在使用flask-moment的过程中介于数据库设计的原因，只能传递给moment的参数类型为int型的timestamp时间戳，然而flask-moment没有默认处理int类型的时间戳。需要对源码进行如下更改。
 
 源代码为：
 ```
