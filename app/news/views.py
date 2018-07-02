@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required
+from urllib.parse import quote, unquote
 from . import news
 from ..models import News
 from ..decorators import permission_required
@@ -11,7 +12,7 @@ def main():
     if request.method == 'POST':
         words = request.form.get('words')
         if words:
-            return redirect(url_for('.search', words=words))
+            return redirect(url_for('.search', words=quote(words)))
         flash('请输入关键词')
     news_list = News.get_newest()
     return render_template('news/main.html', active_flg=['news'], news_list=news_list)
@@ -20,10 +21,11 @@ def main():
 @news.route('/search/<words>', methods=['GET', 'POST'])
 @login_required
 def search(words):
+    words = unquote(words)
     if request.method == 'POST':
         words = request.form.get('words')
         if words:
-            return redirect(url_for('.search', words=words))
+            return redirect(url_for('.search', words=quote(words)))
         flash('请输入关键词')
     news_list = News.search(words)
     return render_template('news/main.html', active_flg=['news'], words=words, news_list=news_list)

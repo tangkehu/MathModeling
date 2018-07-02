@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, send_from_directory, current_app, make_response
 from flask import abort
 from flask_login import login_required, current_user
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 from . import know
 from ..models import KnowType, KnowResource, FlowCount
 from ..decorators import permission_required
@@ -15,7 +15,7 @@ def push():
         if not words:
             flash('请输入要搜索的关键词')
         else:
-            return redirect(url_for('.search', type_id=request.form.get('search_type'), words=words))
+            return redirect(url_for('.search', type_id=request.form.get('search_type'), words=quote(words)))
     select_type = KnowType.get_type_select()
     resource_hottest = KnowResource.get_hottest()
     resource_newest = KnowResource.get_newest()
@@ -31,7 +31,7 @@ def resource(type_id):
         if not words:
             flash('请输入要搜索的关键词')
         else:
-            return redirect(url_for('.search', type_id=request.form.get('search_type'), words=words))
+            return redirect(url_for('.search', type_id=request.form.get('search_type'), words=quote(words)))
     parents = KnowType.get_parents(type_id)
     children = KnowType.get_children(type_id)
     select_type = KnowType.get_type_select()
@@ -184,13 +184,14 @@ def file_pass(resource_id):
 @know.route('/search/<type_id>/<words>', methods=['GET', 'POST'])
 @login_required
 def search(type_id, words):
+    words = unquote(words)
     if request.method == 'POST':
         search_type = request.form.get("search_type")
         search_words = request.form.get("words")
         if not search_words:
             flash('请输入要搜索的关键词')
         else:
-            return redirect(url_for('.search', type_id=search_type, words=search_words))
+            return redirect(url_for('.search', type_id=search_type, words=quote(search_words)))
     select_type = KnowType.get_type_select()
     search_result = KnowResource.search(type_id, words)
     return render_template('know/search_result.html', active_flg=['know', 'resource'], search_result=search_result,

@@ -1,5 +1,6 @@
 from flask import render_template, request, url_for, redirect, flash, abort
 from flask_login import login_required, current_user
+from urllib.parse import quote, unquote
 from . import community
 from ..models import CommunityQuestion, CommunityAnswer
 
@@ -11,12 +12,13 @@ def main(words):
         new_words = request.form.get('words')
         if new_words:
             words = new_words
-            return redirect(url_for('community.main', words=words))
+            return redirect(url_for('community.main', words=quote(words)))
         flash('请输入要搜索的关键词')
     if words == 'null':
         words = None
         result = CommunityQuestion.get_newest()
     else:
+        words = unquote(words)
         result = CommunityQuestion.search(words)
     return render_template('community/main.html', active_flg=['community'], words=words, result=result)
 
