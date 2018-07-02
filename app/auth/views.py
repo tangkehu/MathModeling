@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
+from urllib.parse import quote, unquote
 from app import db
 from . import auth
 from .forms import LoginForm, RegisterForm, AccountEditForm, RoleForm
@@ -91,7 +92,7 @@ def manage():
     if request.method == 'POST':
         words = request.form.get('words')
         if words:
-            return redirect(url_for('.user_search', words=words))
+            return redirect(url_for('.user_search', words=quote(words)))
         flash('请输入要查找的内容')
     users = User.query.all()
     return render_template('auth/manage.html', active_flg=['manage'], users=users)
@@ -101,10 +102,11 @@ def manage():
 @login_required
 @permission_required('user_manage')
 def user_search(words):
+    words = unquote(words)
     if request.method == 'POST':
         words = request.form.get('words')
         if words:
-            return redirect(url_for('.user_search', words=words))
+            return redirect(url_for('.user_search', words=quote(words)))
         flash('请输入要查找的内容')
     users = User.search(words)
     return render_template('auth/manage.html', active_flg=['manage'], words=words, users=users)

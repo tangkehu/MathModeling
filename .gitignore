@@ -2,6 +2,7 @@
 app/static/know
 app/static/train_files
 migrations/
+wfastcgi.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

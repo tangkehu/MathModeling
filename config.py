@@ -20,11 +20,10 @@ class Config(object):
     ROLES = [
         ('普通用户', 'none'),
         ('管理员', 'all'),
-        ('知识库文件管理员', ['resource_add', 'resource_manage', 'resource_check'])
+        ('知识库文件管理员', ['resource_add', 'resource_manage', 'resource_check', 'know_type_manage'])
     ]
     ADMIN = [
-        ('唐柯虎', '2739182815@qq.com', 'tang@1013', '成都大学'),
-        ('tangkehu', '329937872@qq.com', 'zylT#1013', '成都大学')
+        ('唐柯虎', '329937872@qq.com', 'tang@1013', '成都大学'),
     ]
     TRAIN_FILE_TYPE = {1: '集训题目',
                        2: '参考资料',
@@ -47,7 +46,7 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = ''
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:a1!@localhost/mathmodeling'
 
 
 config = {
