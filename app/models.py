@@ -12,7 +12,9 @@ class School(db.Model):
     __tablename__ = 'school'
     id = db.Column(db.Integer, primary_key=True)
     school_name = db.Column(db.String(128), nullable=False, unique=True)
-    train_status = db.Column(db.Integer, default=0)
+    train_status = db.Column(db.Boolean, default=False)
+    apply_status = db.Column(db.Boolean, default=False)
+    public_status = db.Column(db.Boolean, default=False)
 
     user = db.relationship('User', backref='school', lazy='dynamic')
     know_type = db.relationship('KnowType', backref='school', lazy='dynamic')
@@ -25,28 +27,19 @@ class School(db.Model):
     train_file = db.relationship('TrainFile', backref='school', lazy='dynamic')
     train_grade = db.relationship('TrainGrade', backref='school', lazy='dynamic')
 
-    @staticmethod
-    def start_apply():
-        current_user.school.train_status = 1
-        db.session.add(current_user.school)
+    def alt_train(self):
+        self.train_status = False if self.train_status is True else True
+        db.session.add(self)
         db.session.commit()
 
-    @staticmethod
-    def end_apply():
-        current_user.school.train_status = 2
-        db.session.add(current_user.school)
+    def alt_apply(self):
+        self.apply_status = False if self.apply_status is True else True
+        db.session.add(self)
         db.session.commit()
 
-    @staticmethod
-    def public_file():
-        current_user.school.train_status = 3
-        db.session.add(current_user.school)
-        db.session.commit()
-
-    @staticmethod
-    def over_train():
-        current_user.school.train_status = 0
-        db.session.add(current_user.school)
+    def alt_public(self):
+        self.public_status = False if self.public_status is True else False
+        db.session.add(self)
         db.session.commit()
 
     @staticmethod
@@ -822,8 +815,8 @@ class TrainFile(db.Model):
         for one in TrainFile.query.filter_by(school_id=current_user.school_id).all():
             try:
                 os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
-            except:
-                current_app.logger.info('文件删除失败')
+            except Exception as e:
+                current_app.logger.info(str(e)+'文件删除失败')
             db.session.delete(one)
         db.session.commit()
 

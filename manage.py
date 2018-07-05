@@ -32,9 +32,9 @@ def test_set():
         for i in range(15):
             i = str(i)
             user = User(username='用户' + i,
-                        email=i+'@test.cn',
+                        email=i+'@qq.com',
                         password='123456',
-                        school=School.query.filter_by(school_name=app.config['ADMIN_SCHOOL']).first(),
+                        school=School.query.filter_by(school_name='成都大学').first(),
                         real_name='实名'+i,
                         student_number='20141041221'+i)
             db.session.add(user)
@@ -42,7 +42,7 @@ def test_set():
 
     def test_train_student():
         for one in User.query.all():
-            if one.username == 'admin':
+            if one.username == '唐柯虎':
                 continue
             student = TrainStudent(resume='我热爱数学建模，并为之努力学习，从模型结构到代码实现，我是'+one.username,
                                    user=one,

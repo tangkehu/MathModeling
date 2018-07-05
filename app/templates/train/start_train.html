@@ -1,0 +1,18 @@
+{% extends "base_navbar.html" %}
+{% block content_block %}
+    <div class="container text-center my-5">
+        <h4>数学建模集训尚未开启...</h4>
+        {% if current_user.can('train_manage') %}
+            <form method="post" class="my-5">
+                {% if is_train_data %}
+                <div class="form-group">
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="apply1" name="keep_old_data" class="custom-control-input">
+                      <label class="custom-control-label text-success" for="apply1">沿用已有的集训学员及小组信息</label>
+                    </div>
+                </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary"><i class="fas fa-unlock-alt"></i> 开启集训</button>
+            </form>
+    </div>
+{% endblock %}

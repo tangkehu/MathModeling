@@ -2,23 +2,35 @@ from flask import render_template, request, redirect, url_for, current_app, flas
 from flask_login import login_required, current_user
 from . import train
 from ..models import TrainStudent, TrainFile, School, TrainTeam, TrainGrade
+from ..decorators import train_required
 
 
-@train.route('/no_train/', methods=['GET', 'POST'])
+@train.route('/start_train/', methods=['GET', 'POST'])
 @login_required
-def no_train():
-    if request.method == 'POST':
-        if request.form.get('apply') == '0':
-            School.end_apply()
-        else:
-            School.start_apply()
+def start_train():
+    if current_user.school.train_status is True:
         return redirect(url_for('.file', type_id=1))
-    return render_template('train/no_train.html', active_flg=['train'])
+
+    if request.method == 'POST':
+        if not request.form.get('keep_old_data'):
+            TrainStudent.reset()
+            TrainFile.reset()
+            TrainGrade.reset()
+            TrainTeam.reset()
+        current_user.school.alt_train()
+        return redirect(url_for('.file', type_id=1))
+    is_train_data = True if TrainStudent.query.filter_by(school_id=current_user.school_id).first() else False
+    return render_template('train/start_train.html', active_flg=['train'], is_train_data=is_train_data)
 
 
 @train.route('/apply/', methods=['GET', 'POST'])
 @login_required
 def apply():
+    if current_user.school.train_status is False:
+        return redirect(url_for('.start_train'))
+    if current_user.can('train_look') or current_user.is_train_student:
+        return redirect(url_for('.file', type_id=1))
+
     if request.method == 'POST':
         resume = request.form.get('resume')
         if resume:
