@@ -2,12 +2,13 @@ from flask import render_template, request, redirect, url_for, current_app, flas
 from flask_login import login_required, current_user
 from . import train
 from ..models import TrainStudent, TrainFile, School, TrainTeam, TrainGrade
-from ..decorators import train_required
+from ..decorators import train_required, permission_required
 
 
 @train.route('/start_train/', methods=['GET', 'POST'])
 @login_required
 def start_train():
+    """开启集训"""
     if current_user.school.train_status is True:
         return redirect(url_for('.file', type_id=1))
 
@@ -26,6 +27,7 @@ def start_train():
 @train.route('/apply/', methods=['GET', 'POST'])
 @login_required
 def apply():
+    """学员报名"""
     if current_user.school.train_status is False:
         return redirect(url_for('.start_train'))
     if current_user.can('train_look') or current_user.is_train_student:
@@ -35,56 +37,42 @@ def apply():
         resume = request.form.get('resume')
         if resume:
             TrainStudent.add_student(resume)
-            return redirect(url_for('train.file', type_id=1))
-        else:
-            flash('请输入个人简介')
+            return redirect(url_for('.apply'))
+        flash('请输入个人简介')
     return render_template('train/apply.html', active_flg=['train'])
 
 
-@train.route("/end_apply/")
+@train.route('/alt_apply/')
 @login_required
-def end_apply():
-    School.end_apply()
-    apply_count = TrainStudent.query.filter_by(verify_status=True).count()
-    team_count = apply_count // 3 if apply_count % 3 == 0 else apply_count // 3 + 1
-    TrainTeam.set_basic_team(team_count)
-    return redirect(url_for('.team'))
-
-
-@train.route("/public_file/")
-@login_required
-def public_file():
-    School.public_file()
-    return redirect(url_for('.team'))
+@permission_required('train_manage')
+def alt_apply():
+    """报名功能开关"""
+    current_user.school.alt_apply()
+    return redirect(url_for('.student'))
 
 
 @train.route('/file/<type_id>')
 @login_required
+@train_required
 def file(type_id):
-    if current_user.school.train_status is 0:
-        return redirect(url_for('.no_train'))
-    elif current_user.school.train_status is 1 and not current_user.can('train_manage') \
-            and not current_user.is_train_student:
-        return redirect(url_for('.apply'))
-    else:
-        file_list = TrainFile.get_file_list(type_id)
-        return render_template('train/file.html', active_flg=['train', 'file', int(type_id)], file_list=file_list)
+    file_list = TrainFile.get_file_list(type_id)
+    return render_template('train/file.html', active_flg=['train', 'file', int(type_id)], file_list=file_list)
 
 
 @train.route('/upload/<type_id>', methods=['GET', 'POST'])
 @login_required
+@train_required
 def upload(type_id):
     type_id = int(type_id)
     if request.method == "POST":
         new_file = request.files.get('file')
-        if not new_file:
-            flash('请选择文件')
-        else:
+        if new_file:
             TrainFile.upload(type_id, new_file)
             if type_id in [1, 2, 3, 4, 5]:
                 return redirect(url_for('train.file', type_id=type_id))
             else:
                 return redirect(url_for('train.team'))
+        flash('请选择文件')
     return render_template('train/upload.html', active_flg=['train'],
                            type_name=current_app.config['TRAIN_FILE_TYPE'][type_id])
 

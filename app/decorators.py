@@ -16,7 +16,7 @@ def permission_required(permission):
 
 
 def train_required(fun):
-    """具有进入集训权限验证功能的装饰器"""
+    """具有进入集训系统权限验证功能的装饰器"""
     @wraps(fun)
     def decorated_fun(*args, **kwargs):
         if current_user.school.train_status is False:

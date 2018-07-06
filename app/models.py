@@ -798,7 +798,9 @@ class TrainFile(db.Model):
                              school=current_user.school)
         db.session.add(new_file)
         db.session.commit()
-        file_path = str(type_id) + '-' + str(new_file.id) + '-' + filename
+        train_team = new_file.train_team
+        team_name = train_team.team_number if train_team else ''
+        file_path = team_name+'-'+current_app.config['TRAIN_FILE_TYPE'][type_id]+'-'+str(new_file.id)+'-'+filename
         try:
             file.save(os.path.join(current_app.config['TRAIN_FILE_PATH'], file_path))
         except:

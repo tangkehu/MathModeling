@@ -34,7 +34,9 @@
                   <a href="{{ url_for('train.show_file', file_id=one.id) }}" class="text-dark">
                       {{ one.train_filename }}
                   </a>
-                  <a href="{{ url_for('train.del_file', file_id=one.id) }}" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+                  {% if current_user.can('train_manage') %}
+                    <a href="{{ url_for('train.del_file', file_id=one.id) }}" class="btn btn-danger btn-sm float-right"><i class="fas fa-trash"></i> 删除</a>
+                  {% endif %}
               </li>
           {% endfor %}
       </ul>

@@ -1,6 +1,7 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
     <div class="container text-center">
+      {% if current_user.school.apply_status %}
         {% if current_user.train_student %}
             <h3 class="my-5">已提交报名表，待审核...</h3>
         {% else %}
@@ -14,5 +15,8 @@
                 </div>
             </div>
         {% endif %}
+      {% else %}
+        <h3 class="my-5">集训进行中...</h3>
+      {% endif %}
     </div>
 {% endblock %}
