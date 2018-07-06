@@ -170,7 +170,8 @@ def team_member_edit(team_id):
 def student():
     all_count = TrainStudent.query.count()
     apply_count = TrainStudent.query.filter_by(verify_status=True).count()
-    student_list = TrainStudent.query.all()
+    student_list = TrainStudent.query.filter_by(
+        school_id=current_user.school_id).order_by(TrainStudent.train_team_id.desc()).all()
     return render_template('train/student.html', active_flg=['train', 'student'], all_count=all_count,
                            apply_count=apply_count, student_list=student_list)
 
