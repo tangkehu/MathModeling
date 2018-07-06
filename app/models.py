@@ -615,12 +615,6 @@ class TrainStudent(db.Model):
         db.session.commit()
 
     @staticmethod
-    def get_select():
-        result = [(x.id, x.user.real_name) for x in TrainStudent.query.filter(
-            TrainStudent.school_id == current_user.school_id).all()]
-        return result
-
-    @staticmethod
     def del_student(student_id):
         the_student = TrainStudent.query.get(int(student_id))
         db.session.delete(the_student)
@@ -662,6 +656,18 @@ class TrainGrade(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @staticmethod
+    def is_all_grade_ok():
+        all_grade = TrainGrade.query.filter_by(school_id=current_user.school_id).all()
+        for one in all_grade:
+            if not one.score:
+                return False
+        return True
+
     @staticmethod
     def reset():
         for one in TrainGrade.query.filter_by(school_id=current_user.school_id).all():
@@ -693,58 +699,97 @@ class TrainTeam(db.Model):
     @staticmethod
     def get_teams_info():
         result = []
-        if current_user.can('train_manage'):
-            teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
-            for one in teams:
-                result.append({
-                    'team': one,
-                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
-                    'paper': one.train_file.filter_by(train_filetype=6).first(),
-                    'task': [x for x in one.children.all()],
-                    'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
-                    'final_report': one.train_file.filter_by(train_filetype=8).first()
-                })
-        elif current_user.school.train_status == 3:
-            teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
-            for one in teams:
-                result.append({
-                    'team': one,
-                    'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
-                    'paper': one.train_file.filter_by(train_filetype=6).first(),
-                    'task': [],
-                    'grade_paper': None,
-                    'final_report': one.train_file.filter_by(train_filetype=8).first()
-                })
-        else:
-            one = current_user.train_student.train_team
+        teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+        for one in teams:
             result.append({
                 'team': one,
-                'members': [x.user for x in one.train_student.all()] if one.train_student.first() else [],
+                'members': [x.user for x in one.train_student.all()],
                 'paper': one.train_file.filter_by(train_filetype=6).first(),
-                'task': [x for x in one.children.all()],
+                'task': [x for x in one.children.order_by(TrainGrade.child_team_id.desc()).all()],
                 'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
                 'final_report': one.train_file.filter_by(train_filetype=8).first()
             })
         return result
 
     @staticmethod
-    def get_select():
-        result = [(x.id, x.team_number)for x in TrainTeam.query.all()]
-        return result
+    def add():
+        the_last = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.id.desc()).first()
+        db.session.add(TrainTeam(
+            team_number=int(the_last.team_number)+1 if the_last else 1,
+            school=current_user.school
+        ))
+        db.session.commit()
 
-    @staticmethod
-    def set_basic_team(count):
-        for one in range(count):
-            new_team = TrainTeam(team_number=one+1,
-                                 school=current_user.school)
-            db.session.add(new_team)
-            db.session.commit()
+    def delete(self):
+        student = self.train_student.all()
+        if student:
+            for one in student:
+                one.train_team = None
+                db.session.add(one)
+                db.session.commit()
+        file = self.train_file.all()
+        if file:
+            for one in file:
+                one.del_file()
+        children = self.children.all()
+        if children:
+            for one in children:
+                one.delete()
+        parents = self.parents.all()
+        if parents:
+            for one in parents:
+                one.delete()
+        db.session.delete(self)
+        db.session.commit()
+
+    def set_children(self, children_list):
+        old_children = self.children.all()
+        if old_children:
+            for one in old_children:
+                one.delete()
+        TrainGrade.set_grade([(self.id, int(one)) for one in children_list])
 
     def add_members(self, student_list):
+        for one in self.train_student.all():
+            one.train_team = None
+            db.session.add(one)
+        db.session.commit()
         for one in student_list:
             the_student = TrainStudent.query.get_or_404(int(one))
             the_student.train_team = self
             db.session.add(the_student)
+        db.session.commit()
+
+    @staticmethod
+    def is_all_paper_ok():
+        all_team = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+        for one in all_team:
+            if not one.train_file.filter_by(train_filetype=6).first():
+                return False
+        return True
+
+    @staticmethod
+    def is_all_grade_paper_ok():
+        all_team = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+        for one in all_team:
+            if not one.train_file.filter_by(train_filetype=7).first():
+                return False
+        return True
+
+    @staticmethod
+    def count_score():
+        all_team = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+        for one in all_team:
+            score = 0.0
+            index = 0
+            for x in one.parents.all():
+                score += x.score
+                index += 1
+            try:
+                one.score = round(score/index, 2)
+            except Exception as e:
+                current_app.logger.info(str(e)+'统分出错')
+            db.session.add(one)
         db.session.commit()
 
     @staticmethod
@@ -776,21 +821,18 @@ class TrainFile(db.Model):
         return TrainFile.query.filter(
             TrainFile.train_filetype == int(type_id), TrainFile.school_id == current_user.school_id).all()
 
-    @staticmethod
-    def del_file(file_id):
-        the_file = TrainFile.query.get_or_404(int(file_id))
-        current_file_type = the_file.train_filetype
+    def del_file(self):
         try:
-            os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], the_file.train_filepath))
-        except:
-            current_app.logger.info('文件删除失败')
-        db.session.delete(the_file)
+            os.remove(os.path.join(current_app.config['TRAIN_FILE_PATH'], self.train_filepath))
+        except Exception as e:
+            current_app.logger.info(str(e)+'集训文件删除失败')
+        db.session.delete(self)
         db.session.commit()
-        return current_file_type
 
     @staticmethod
     def upload(type_id, file):
-        filename = file.filename
+        filename = current_app.config['TRAIN_FILE_TYPE'][type_id]+os.extsep+file.filename.split('.')[-1] if \
+            type_id in [6, 7, 8] else file.filename
         new_file = TrainFile(train_filename=filename,
                              train_filetype=type_id,
                              train_team=current_user.train_student.train_team if current_user.train_student else None,
@@ -798,14 +840,16 @@ class TrainFile(db.Model):
                              school=current_user.school)
         db.session.add(new_file)
         db.session.commit()
+
         train_team = new_file.train_team
-        team_name = train_team.team_number if train_team else ''
-        file_path = team_name+'-'+current_app.config['TRAIN_FILE_TYPE'][type_id]+'-'+str(new_file.id)+'-'+filename
+        team_num = train_team.team_number+'组' if train_team else ''
+        file_path = team_num+current_app.config['TRAIN_FILE_TYPE'][type_id]+'-'+str(new_file.id)+'-'+filename
         try:
             file.save(os.path.join(current_app.config['TRAIN_FILE_PATH'], file_path))
-        except:
+        except Exception as e:
             db.session.delete(new_file)
             db.session.commit()
+            current_app.logger.info(str(e)+'集训文件上传失败')
             return False
         new_file.train_filepath = file_path
         db.session.add(new_file)

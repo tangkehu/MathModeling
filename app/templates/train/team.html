@@ -1,144 +1,86 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
   {% include "train/_navs.html" %}
-  <div class="container">
-    <div class="row justify-content-center mt-4">
-        <a href="{{ url_for('.public_file') }}" class="btn btn-primary my-2"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
-        <a href="{{ url_for('.end_apply') }}" class="btn btn-primary my-2 mx-2"><i class="fas fa-stop-circle"></i> 停止报名</a>
+  <div class="container my-5">
+    {% if current_user.can('train_manage') %}
+    <div class="row justify-content-center">
+        <a href="{{ url_for('.public') }}" class="btn btn-primary my-2 {% if current_user.school.public_status %}disabled{% endif %}"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
+        <a href="{{ url_for('.team_add') }}" class="btn btn-info my-2"><i class="fas fa-plus-alt"></i> 添加小组</a>
     </div>
+    {% endif %}
 
     <ul class="list-unstyled">
-        {% for one in teams_info %}
+      {% for one in teams_info %}
+        {% if not current_user.school.public_status %}
+          {% if current_user.is_train_student %}
+            {% if current_user.train_student.train_team_id == one['team'].id %}
+              {% include "train/team_li.html" %}
+            {% endif %}
+          {% else %}
+            {% include "train/team_li.html" %}
+          {% endif %}
+        {% else %}
           <li class="media my-4">
             <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> {{ one['team'].team_number }}组</span>
             <div class="media-body">
               <p>
                   {% for x in one['members'] %}
-                      <a href="{{ url_for('auth.profile', user_id=x.id) }}" class="text-dark">{{ x.username }}</a>
+                      <a href="{{ url_for('auth.profile', user_id=x.id) }}" class="mr-1 text-dark">{{ x.real_name }}</a>
                   {% endfor %}
-                  <a href="{{ url_for('train.team_member_edit', team_id=one['team'].id) }}" class="ml-4 text-info"><i class="fas fa-edit"></i></a>
+
+                  小组成绩:{{ one['team'].team_score }} &nbsp;&nbsp;
+
+                  论文:
+                  {% if one['paper'] %}
+                      <a href="{{ url_for('train.show_file', file_id=one['paper'].id) }}" class="text-primary mr-2">查看</a>
+                  {% else %}
+                      {% if current_user.is_train_student and current_user.train_student.train_team_id == one['team'].id %}
+                      <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info mr-2"><i class="fas fa-cloud-upload-alt"></i>提交</a>
+                      {% else %}
+                      未提交 &nbsp;&nbsp;
+                      {% endif %}
+                  {% endif %}
+
+                  总结:
+                  {% if one['final_report'] %}
+                      <a href="{{ url_for('train.show_file', file_id=one['final_report'].id) }}" class="text-primary">查看</a>
+                  {% else %}
+                      {% if current_user.is_train_student and current_user.train_student.train_team_id == one['team'].id %}
+                      <a href="{{ url_for('train.upload', type_id=8) }}" class="text-info"><i class="fas fa-cloud-upload-alt"></i>提交</a>
+                      {% else %}
+                      未提交
+                      {% endif %}
+                  {% endif %}
+                  &nbsp;&nbsp;
+
+                  {% if current_user.can('train_manage') %}
+                  <a href="{{ url_for('.team_del', team_id=one['team'].id) }}" class="text-danger"><i class="fas fa-trash"></i> 删除该小组</a>
+                  {% endif %}
               </p>
-              <div class="row">
-                  <div class="col-xl-2 col-md-4 col-8">
-                      <p>论文：
-                          {% if one['paper'] %}
-                          <a href="{{ url_for('train.show_file', file_id=one['paper'].id) }}" class="text-primary"><i class="fas fa-eye"></i></a>
-                          <a href="{{ url_for('train.del_file', file_id=one['paper'].id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>
-                          {% else %}
-                          <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>
-                          {% endif %}
-                      </p>
-                  </div>
-                  <div class="col-xl-4 col-md-8 col-12">
-                      <p>评分任务：
-                          {% if one['task'] %}
-                              {% set task = one['task'] %}
-                              <a href="{{ url_for('train.show_file', file_id=task[0].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务一</a>
-                              <a href="{{ url_for('train.show_file', file_id=task[1].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务二</a>
-                              <a href="{{ url_for('train.show_file', file_id=task[2].child_team.train_file.filter_by(train_filetype=6).first().id) }}" class="mr-2">任务三</a>
-                          {% else %}
-                              <a href="{{ url_for('train.grade_manage', team_id=one['team'].id) }}" class="text-info"><i class="fas fa-paper-plane"></i> 发布</a>
-                          {% endif %}
-                      </p>
-                  </div>
-                  <div class="col-xl-4 col-md-8 col-12">
-                      <p>评分结果：
-                          {% if one['task'] %}
-                              {% set task = one['task'] %}
-                              一：{{ task[0].score }}
-                              <a href="{{ url_for('train.grade', grade_id=task[0].id) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                              二：{{ task[1].score }}
-                              <a href="{{ url_for('train.grade', grade_id=task[1].id) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>
-                              三：{{ task[2].score }}
-                              <a href="{{ url_for('train.grade', grade_id=task[2].id) }}" class="text-warning"><i class="fas fa-pencil-alt"></i></a>
-                          {% endif %}
-                      </p>
-                  </div>
-                  <div class="col-xl-2 col-md-4 col-8">
-                      <p>评分表：
-                          {% if one['grade_paper'] %}
-                          <a href="{{ url_for('train.show_file', file_id=one['grade_paper'].id) }}" class="text-primary"><i class="fas fa-eye"></i></a>
-                          <a href="{{ url_for('train.del_file', file_id=one['grade_paper'].id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>
-                          {% else %}
-                          <a href="{{ url_for('train.upload', type_id=7) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>
-                          {% endif %}
-                      </p>
-                  </div>
-                  <div class="col-xl-2 col-md-4 col-6">
-                      <p>小组成绩：{{ one['team'].team_score }}</p>
-                  </div>
-                  <div class="col-xl-2 col-md-4 col-8">
-                      <p>总结：
-                          {% if one['final_report'] %}
-                          <a href="{{ url_for('train.show_file', file_id=one['final_report'].id) }}" class="text-primary"><i class="fas fa-eye"></i></a>
-                          <a href="{{ url_for('train.del_file', file_id=one['final_report'].id) }}" class="text-danger ml-2"><i class="fas fa-trash"></i></a>
-                          {% else %}
-                          <a href="{{ url_for('train.upload', type_id=8) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>
-                          {% endif %}
-                      </p>
-                  </div>
-              </div>
-              <hr>
+              <p>
+                  评分任务:
+                  {% for x in one['task'] %}
+                      <a href="{{ url_for('train.grade_download', file_id=x.child_team.train_file.filter_by(train_filetype=6).first().id, index_id=loop.index) }}">
+                          {{ x.child_team.team_number }}组
+                      </a>: &nbsp;
+                      {{ x.score }} &nbsp;
+                  {% endfor %}
+
+                  评分表:
+                  {% if one['grade_paper'] %}
+                      <a href="{{ url_for('train.show_file', file_id=one['grade_paper'].id) }}" class="text-primary">查看</a>
+                  {% else %}
+                      {% if current_user.is_train_student and current_user.train_student.train_team_id == one['team'].id %}
+                      <a href="{{ url_for('train.upload', type_id=8) }}" class="text-info"><i class="fas fa-cloud-upload-alt"></i>提交</a>
+                      {% else %}
+                      未提交
+                      {% endif %}
+                  {% endif %}
+              </p>
             </div>
           </li>
-        {% endfor %}
-
-{#      <li class="media my-4">#}
-{#        <span class="mr-3 text-info"><i class="fas fa-user-friends"></i> 1组</span>#}
-{#        <div class="media-body">#}
-{#          <p>#}
-{#              <a href="#" class="text-dark">唐柯虎</a>#}
-{#              <a href="#" class="text-dark">王跣铭</a>#}
-{#              <a href="#" class="text-dark">张维雄</a>#}
-{#              <a href="{{ url_for('train.team_member_edit', team_id=1) }}" class="ml-4 text-info"><i class="fas fa-edit"></i></a>#}
-{#          </p>#}
-{#          <div class="row">#}
-{#              <div class="col-xl-2 col-md-4 col-8">#}
-{#                  <p>论文：#}
-{#                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>#}
-{#                      <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info ml-2"><i class="fas fa-cloud-upload-alt"></i></a>#}
-{#                      <a href="#" class="text-danger ml-2"><i class="fas fa-trash"></i></a>#}
-{#                  </p>#}
-{#              </div>#}
-{#              <div class="col-xl-4 col-md-8 col-12">#}
-{#                  <p>评分任务：#}
-{#                      <a href="#" class="mr-2">任务一</a>#}
-{#                      <a href="#" class="mr-2">任务二</a>#}
-{#                      <a href="#" class="mr-2">任务三</a>#}
-{#                      <a href="{{ url_for('train.grade_manage', team_id=1) }}" class="text-info"><i class="fas fa-paper-plane"></i> 发布</a>#}
-{#                  </p>#}
-{#              </div>#}
-{#              <div class="col-xl-4 col-md-8 col-12">#}
-{#                  <p>评分结果：#}
-{#                      一：75#}
-{#                      <a href="{{ url_for('train.grade', grade_id=1) }}" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>#}
-{#                      二：85#}
-{#                      <a href="#" class="text-warning mr-1"><i class="fas fa-pencil-alt"></i></a>#}
-{#                      三：90#}
-{#                      <a href="#" class="text-warning"><i class="fas fa-pencil-alt"></i></a>#}
-{#                  </p>#}
-{#              </div>#}
-{#              <div class="col-xl-2 col-md-4 col-8">#}
-{#                  <p>评分表：#}
-{#                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>#}
-{#                      <a href="{{ url_for('train.upload', type_id=7) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>#}
-{#                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>#}
-{#                  </p>#}
-{#              </div>#}
-{#              <div class="col-xl-2 col-md-4 col-6">#}
-{#                  <p>小组成绩：80</p>#}
-{#              </div>#}
-{#              <div class="col-xl-2 col-md-4 col-8">#}
-{#                  <p>总结：#}
-{#                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>#}
-{#                      <a href="{{ url_for('train.upload', type_id=6) }}" class="ml-2 text-info"><i class="fas fa-cloud-upload-alt"></i></a>#}
-{#                      <a href="#" class="ml-2 text-danger"><i class="fas fa-trash"></i></a>#}
-{#                  </p>#}
-{#              </div>#}
-{#          </div>#}
-{#          <hr>#}
-{#        </div>#}
-{#      </li>#}
+        {% endif %}
+      {% endfor %}
     </ul>
   </div>
 {% endblock %}
