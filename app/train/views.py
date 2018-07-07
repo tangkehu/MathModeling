@@ -4,7 +4,7 @@ from urllib.parse import quote
 from flask_login import login_required, current_user
 from . import train
 from .forms import TrainMembersForm, GradeManageForm
-from ..models import TrainStudent, TrainFile, School, TrainTeam, TrainGrade
+from ..models import TrainStudent, TrainFile, TrainTeam, TrainGrade
 from ..decorators import train_required, permission_required
 
 
