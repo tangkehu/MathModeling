@@ -263,18 +263,20 @@ def public():
 
 @train.route('/over/', methods=['GET', 'POST'])
 @login_required
+@permission_required('train_manage')
 def over():
     if request.method == 'POST':
-        if request.form.get('del_student') == '0':
+        if request.form.get('keep_student'):
             TrainGrade.reset()
             TrainFile.reset()
             TrainTeam.reset_score()
-            School.over_train()
+            current_user.school.alt_train()
         else:
             TrainStudent.reset()
             TrainGrade.reset()
             TrainFile.reset()
             TrainTeam.reset()
-            School.over_train()
-        return redirect(url_for('.no_train'))
+            current_user.school.alt_train()
+        flash('集训关闭成功')
+        return redirect(url_for('.start_train'))
     return render_template('train/over.html', active_flg=['train', 'over'])
