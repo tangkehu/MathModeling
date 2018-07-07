@@ -9,23 +9,38 @@
     {% endif %}
     <h4 class="text-info text-center my-2">报名学员：{{ all_count }} &nbsp;&nbsp;已审核学员：{{ apply_count }}</h4>
 
-    {% for one in student_list %}
-        <div class="row my-2">
-            <div class="col-2">{{ one.user.real_name }}</div>
-            <div class="col-2">{{ one.user.student_number }}</div>
-            <div class="col-1">{% if one.train_team %}{{ one.train_team.team_number }}组{% endif %}</div>
-            <div class="col-5">{{ one.resume }}</div>
-            <div class="col-2">
-              {% if current_user.can('train_manage') %}
-                <a href="{{ url_for('train.del_student', student_id=one.id) }}" class="text-danger mr-2"><i class="fas fa-trash"></i> 删除</a>
-                {% if one.verify_status == True %}
-                    <span class="text-success">已通过</span>
-                {% else %}
-                    <a href="{{ url_for('train.apply_student', student_id=one.id) }}" class="text-info"><i class="fas fa-check"></i> 通过</a>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">姓名</th>
+                <th scope="col">学号</th>
+                <th scope="col">小组</th>
+                <th scope="col">自我介绍</th>
+                {% if current_user.can('train_manage') %}
+                <th scope="col">操作</th>
                 {% endif %}
-              {% endif %}
-            </div>
-        </div>
-    {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for one in student_list %}
+            <tr>
+                <td>{{ one.user.real_name }}</td>
+                <td>{{ one.user.student_number }}</td>
+                <td>{% if one.train_team %}{{ one.train_team.team_number }}组{% endif %}</td>
+                <td>{{ one.resume }}</td>
+                {% if current_user.can('train_manage') %}
+                <td>
+                    <a href="{{ url_for('train.del_student', student_id=one.id) }}" class="text-danger mr-2"><i class="fas fa-trash"></i> 删除</a>
+                    {% if one.verify_status == True %}
+                        <span class="text-success">已通过</span>
+                    {% else %}
+                        <a href="{{ url_for('train.apply_student', student_id=one.id) }}" class="text-info"><i class="fas fa-check"></i> 通过</a>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
   </div>
 {% endblock %}

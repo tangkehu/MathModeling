@@ -614,17 +614,13 @@ class TrainStudent(db.Model):
         db.session.add(new_student)
         db.session.commit()
 
-    @staticmethod
-    def del_student(student_id):
-        the_student = TrainStudent.query.get(int(student_id))
-        db.session.delete(the_student)
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
 
-    @staticmethod
-    def apply_student(student_id):
-        the_student = TrainStudent.query.get(int(student_id))
-        the_student.verify_status = True
-        db.session.add(the_student)
+    def pass_apply(self):
+        self.verify_status = True
+        db.session.add(self)
         db.session.commit()
 
     @staticmethod
