@@ -1,5 +1,8 @@
+import os
+import zipfile
+from io import BytesIO
 from flask import render_template, request, redirect, url_for, current_app, flash, send_from_directory, make_response, \
-    abort
+    abort, send_file
 from urllib.parse import quote
 from flask_login import login_required, current_user
 from . import train
@@ -259,6 +262,17 @@ def public():
     TrainTeam.count_score()
     current_user.school.alt_public()
     return redirect(url_for('.team'))
+
+
+@train.route('/get_train_files/')
+@login_required
+@permission_required('train_manage')
+def get_train_files():
+    zf = zipfile.ZipFile('MathModelingTrainFile.zip', 'w', zipfile.ZIP_DEFLATED)
+    files_path = TrainFile.query.filter_by(school_id=current_user.school_id).all()
+    for one in files_path:
+        zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
+    return send_file(BytesIO(zf), attachment_filename='MathModelingTrainFile.zip', as_attachment=True)
 
 
 @train.route('/over/', methods=['GET', 'POST'])
