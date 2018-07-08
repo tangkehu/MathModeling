@@ -7,6 +7,7 @@ from urllib.parse import quote
 from flask_login import login_required, current_user
 from . import train
 from .forms import TrainMembersForm, GradeManageForm
+from .. import excel
 from ..models import TrainStudent, TrainFile, TrainTeam, TrainGrade
 from ..decorators import train_required, permission_required
 
@@ -228,9 +229,14 @@ def grade(grade_id):
     if request.method == 'POST':
         score = request.form.get('score')
         if score:
-            the_grade.set_score(score)
-            return redirect(url_for('train.team'))
-        flash('请输入分数')
+            try:
+                float(score)
+            except Exception as e:
+                current_app.logger.info(str(e) + '分数输入不正确')
+            else:
+                the_grade.set_score(round(float(score), 2))
+                return redirect(url_for('train.team'))
+        flash('请输入整数或小数')
     return render_template('train/grade.html', active_flg=['train', 'team'])
 
 
@@ -273,6 +279,13 @@ def get_train_files():
     for one in files_path:
         zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
     return send_file(BytesIO(zf), attachment_filename='MathModelingTrainFile.zip', as_attachment=True)
+
+
+@train.route('/export_team_info')
+@login_required
+@permission_required('train_manage')
+def export_team_info():
+    return excel.make_response_from_dict(TrainTeam.export_team_info(), 'xlsx')
 
 
 @train.route('/over/', methods=['GET', 'POST'])

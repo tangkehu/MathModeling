@@ -695,7 +695,7 @@ class TrainTeam(db.Model):
     @staticmethod
     def get_teams_info():
         result = []
-        teams = TrainTeam.query.filter_by(school_id=current_user.school_id).all()
+        teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number).all()
         for one in teams:
             result.append({
                 'team': one,
@@ -704,6 +704,19 @@ class TrainTeam(db.Model):
                 'task': [x for x in one.children.order_by(TrainGrade.child_team_id.desc()).all()],
                 'grade_paper': one.train_file.filter_by(train_filetype=7).first(),
                 'final_report': one.train_file.filter_by(train_filetype=8).first()
+            })
+        return result
+
+    @staticmethod
+    def export_team_info():
+        result = []
+        all_teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number).all()
+        for one in all_teams:
+            result.append({
+                '组号': one.team_number,
+                '成员': ' '.join([x.user.real_name for x in one.train_student.all()]),
+                '得分情况': ' '.join([str(x.parent_team_id)+'-'+str(x.score) for x in one.parents.all()]),
+                '平均分': one.team_score
             })
         return result
 
