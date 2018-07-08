@@ -3,8 +3,8 @@
     {% include "train/_navs.html" %}
     <div class="container text-center my-5">
         <div class="row justify-content-center">
-            <a href="{{ url_for('train.get_train_files') }}" class="btn btn-info">导出集训文件</a>
-            <a href="{{ url_for('train.export_team_info') }}" class="btn btn-info">导出小组成绩</a>
+            <a href="{{ url_for('train.get_train_files') }}" class="btn btn-secondary btn-sm">导出集训文件</a>
+            <a href="{{ url_for('train.export_team_info') }}" class="btn btn-secondary btn-sm">导出小组成绩</a>
         </div>
         <form method="post" class="my-2">
             <div class="form-group">
