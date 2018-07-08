@@ -203,8 +203,10 @@ def apply_student(student_id):
 @permission_required('train_manage')
 def import_student():
     if request.method == 'POST':
+        records = request.get_records(field_name='file')
+        print(records)
         return redirect(url_for('train.student'))
-    return render_template()
+    return render_template('train/import_student.html', active_flg=['train', 'student'])
 
 
 @train.route('/grade_manage/<team_id>', methods=['GET', 'POST'])
