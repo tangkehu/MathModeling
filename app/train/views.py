@@ -198,6 +198,15 @@ def apply_student(student_id):
     return redirect(url_for('.student'))
 
 
+@train.route('/import_student', methods=['GET', 'POST'])
+@login_required
+@permission_required('train_manage')
+def import_student():
+    if request.method == 'POST':
+        return redirect(url_for('train.student'))
+    return render_template()
+
+
 @train.route('/grade_manage/<team_id>', methods=['GET', 'POST'])
 @login_required
 @permission_required('train_manage')
