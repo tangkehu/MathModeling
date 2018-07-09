@@ -718,6 +718,7 @@ class TrainTeam(db.Model):
                 '得分情况': ' '.join([str(x.parent_team_id)+'-'+str(x.score) for x in one.parents.all()]),
                 '平均分': one.team_score
             })
+        print(result)
         return result
 
     @staticmethod

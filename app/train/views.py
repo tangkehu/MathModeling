@@ -285,11 +285,13 @@ def public():
 @login_required
 @permission_required('train_manage')
 def get_train_files():
-    zf = zipfile.ZipFile('MathModelingTrainFile.zip', 'w', zipfile.ZIP_DEFLATED)
-    files_path = TrainFile.query.filter_by(school_id=current_user.school_id).all()
-    for one in files_path:
-        zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
-    return send_file(BytesIO(zf), attachment_filename='MathModelingTrainFile.zip', as_attachment=True)
+    memory_file = BytesIO()
+    with zipfile.ZipFile('MathModelingTrainFile.zip', 'w', zipfile.ZIP_DEFLATED) as zf:
+        files_path = TrainFile.query.filter_by(school_id=current_user.school_id).all()
+        for one in files_path:
+            zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
+    memory_file.seek(0)
+    return send_file(memory_file, attachment_filename='MathModelingTrainFile.zip', as_attachment=True)
 
 
 @train.route('/export_team_info')
