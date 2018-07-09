@@ -26,6 +26,7 @@ def start_train():
             TrainGrade.reset()
             TrainTeam.reset()
         current_user.school.alt_train()
+        current_user.school.start_train()
         return redirect(url_for('.file', type_id=1))
     is_train_data = True if TrainStudent.query.filter_by(school_id=current_user.school_id).first() else False
     return render_template('train/start_train.html', active_flg=['train'], is_train_data=is_train_data)
