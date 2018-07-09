@@ -1,11 +1,11 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
   {% include "train/_navs.html" %}
-  <div class="container my-5">
+  <div class="container my-2">
     {% if current_user.can('train_manage') %}
     <div class="row justify-content-center">
-        <a href="{{ url_for('.public') }}" class="btn btn-secondary btn-sm my-2 {% if current_user.school.public_status %}disabled{% endif %}"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
-        <a href="{{ url_for('.team_add') }}" class="btn btn-secondary btn-sm my-2"><i class="fas fa-plus-alt"></i> 添加小组</a>
+        <a href="{{ url_for('.public') }}" class="btn btn-secondary btn-sm {% if current_user.school.public_status %}disabled{% endif %}"><i class="fas fa-paper-plane"></i> 公布成绩及论文</a>
+        <a href="{{ url_for('.team_add') }}" class="btn btn-secondary btn-sm ml-2"><i class="fas fa-plus-circle"></i> 添加小组</a>
     </div>
     {% endif %}
 

@@ -1,11 +1,11 @@
 {% extends "base_navbar.html" %}
 {% block content_block %}
   {% include "train/_navs.html" %}
-  <div class="container my-5">
+  <div class="container my-2">
     {% if current_user.can('train_manage') %}
     <div class="row justify-content-center">
-        <a href="{{ url_for('train.alt_apply') }}" class="btn btn-secondary btn-sm"><i class="fas fa-keys"></i> {% if current_user.school.apply_status %}关闭报名入口{% else %}开启报名入口{% endif %}</a>
-        <a href="{{ url_for('train.import_student') }}" class="btn btn-secondary btn-sm"><i class="fas fa-upload"></i> 导入学员</a>
+        <a href="{{ url_for('train.alt_apply') }}" class="btn btn-secondary btn-sm"><i class="fas fa-lock-open"></i> {% if current_user.school.apply_status %}关闭报名入口{% else %}开启报名入口{% endif %}</a>
+        <a href="{{ url_for('train.import_student') }}" class="btn btn-secondary btn-sm ml-2"><i class="fas fa-upload"></i> 导入学员</a>
     </div>
     {% endif %}
     <h4 class="text-info text-center my-2">报名学员：{{ all_count }} &nbsp;&nbsp;已审核学员：{{ apply_count }}</h4>
