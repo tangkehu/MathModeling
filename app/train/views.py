@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from . import train
 from .forms import TrainMembersForm, GradeManageForm
 from .. import excel
-from ..models import TrainStudent, TrainFile, TrainTeam, TrainGrade
+from ..models import TrainStudent, TrainFile, TrainTeam, TrainGrade, User
 from ..decorators import train_required, permission_required
 
 
@@ -203,9 +203,18 @@ def apply_student(student_id):
 @permission_required('train_manage')
 def import_student():
     if request.method == 'POST':
-        records = request.get_records(field_name='file')
-        print(records[0].get('姓名'))
-        return redirect(url_for('train.student'))
+        if request.files.get('file'):
+            records = request.get_records(field_name='file')
+            if User.import_user(records):
+                if TrainStudent.import_student_team(records):
+                    flash('导入成功')
+                    return redirect(url_for('train.student'))
+                else:
+                    flash('导入失败，请确保导入前系统学员信息为空且导入的文件组号格式正确')
+            else:
+                flash('导入失败导入数据格式不正确，注意学号的填写格式')
+        else:
+            flash('请选择要导入的文件')
     return render_template('train/import_student.html', active_flg=['train', 'student'])
 
 

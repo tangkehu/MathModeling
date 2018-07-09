@@ -241,6 +241,35 @@ class User(db.Model):
         return list(set(result))
 
     @staticmethod
+    def import_user(data):
+        for one in data:
+            real_name = one.get('姓名')
+            student_number = one.get('学号')
+            if not student_number.isdigit():
+                return False
+            email = one.get('邮箱')
+            exit_user = User.query.filter(
+                or_(User.email == email, User.student_number == student_number)).first()
+            if exit_user:
+                exit_user.email = email
+                exit_user.real_name = real_name,
+                exit_user.student_number = student_number
+                db.session.add(exit_user)
+                db.session.commit()
+            else:
+                new_user = User(
+                    username=real_name,
+                    email=email,
+                    real_name=real_name,
+                    student_number=student_number,
+                    password=student_number,
+                    school=current_user.school
+                )
+                db.session.add(new_user)
+                db.session.commit()
+        return True
+
+    @staticmethod
     def insert_admin_user():
         for one in current_app.config['ADMIN']:
             if not User.query.filter_by(email=one[1]).first():
@@ -622,6 +651,26 @@ class TrainStudent(db.Model):
         self.verify_status = True
         db.session.add(self)
         db.session.commit()
+
+    @staticmethod
+    def import_student_team(data):
+        if TrainStudent.query.filter_by(school_id=current_user.school_id).first():
+            return False
+        for one in data:
+            team_number = one.get('组号')
+            if not isinstance(team_number, int):
+                return False
+            team = TrainTeam.query.filter_by(team_number=team_number).first()
+            if not team:
+                team = TrainTeam(team_number=team_number, school=current_user.school)
+                db.session.add(team)
+                db.session.commit()
+            user = User.query.filter_by(email=one.get('邮箱')).first()
+            student = TrainStudent(resume='导入生成', verify_status=True, train_team=team, user=user,
+                                   school=current_user.school)
+            db.session.add(student)
+            db.session.commit()
+        return True
 
     @staticmethod
     def reset():
