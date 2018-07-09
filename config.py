@@ -8,14 +8,15 @@ class Config(object):
     # 自定义配置
     SCHOOLS = ['成都大学']
     PERMISSIONS = [
-        ('train_manage', '集训系统管理,具备该权限可直接进入集训不用报名'),
         ('resource_manage', '知识库文件管理，文件重命名及删除'),
         ('resource_add', '知识库文件添加'),
         ('know_type_manage', '知识库类别管理，目录的添加删除'),
         ('resource_check', '知识库文件审核'),
         ('community_manage', '问答社区管理，问题答案的编辑删除'),
         ('news_manage', '新闻公告管理，新闻公告的发布编辑删除'),
-        ('user_manage', '用户管理，权限管理')
+        ('user_manage', '用户管理，权限管理'),
+        ('train_manage', '集训系统管理，开关集训、导入小组信息、开关报名、删除等权限'),
+        ('train_look', '集训系统查看，进入集训查看各类数据')
     ]
     ROLES = [
         ('普通用户', 'none'),

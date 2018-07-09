@@ -2,7 +2,8 @@ from flask_script import Manager, Shell
 from flask_migrate import MigrateCommand, Migrate
 from app import create_app, db
 
-app = create_app('default')
+# app = create_app('default')
+app = create_app('production')
 manager = Manager(app)
 migrate = Migrate(app, db)    # 用于数据库迁移
 
@@ -25,34 +26,21 @@ def deploy():
 @manager.command
 def test_set():
     """应用程序测试环境数据配置"""
-    from app.models import User, School, TrainStudent
+    from app.models import User, School
 
     def test_user():
         for i in range(15):
             i = str(i)
-            user = User(username='用户' + i,
-                        email=i+'@test.cn',
+            user = User(username='测试用户' + i,
+                        email=i+'@qq.com',
                         password='123456',
-                        school=School.query.filter_by(school_name=app.config['ADMIN_SCHOOL']).first(),
+                        school=School.query.filter_by(school_name='成都大学').first(),
                         real_name='实名'+i,
-                        student_number='20141041221'+i)
+                        student_number='201410412'+i)
             db.session.add(user)
         db.session.commit()
 
-    def test_train_student():
-        for one in User.query.all():
-            if one.username == 'admin':
-                continue
-            student = TrainStudent(resume='我热爱数学建模，并为之努力学习，从模型结构到代码实现，我是'+one.username,
-                                   user=one,
-                                   verify_status=False,
-                                   school=one.school)
-            db.session.add(student)
-        db.session.commit()
-
     test_user()
-    test_train_student()
-
     return '测试数据配置成功'
 
 

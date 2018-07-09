@@ -8,7 +8,9 @@
       <a class="nav-item nav-link {% if 'student' in active_flg %} active {% endif %}" href="{{ url_for('train.student') }}">
           <i class="fas fa-users-cog"></i> 学员
       </a>
+      {% if current_user.can('train_manage') %}
       <a class="nav-item nav-link text-danger {% if 'over' in active_flg %} active {% endif %}" href="{{ url_for('train.over') }}">
           <i class="fas fa-power-off"></i> 结束
       </a>
+      {% endif %}
     </div>

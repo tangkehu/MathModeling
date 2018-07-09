@@ -82,6 +82,7 @@ def account(user_id):
 def user_del(user_id):
     the_user = User.query.get_or_404(int(user_id))
     the_user.delete()
+    flash('删除成功')
     return redirect(url_for('.manage'))
 
 
