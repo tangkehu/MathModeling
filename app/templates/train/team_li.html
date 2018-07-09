@@ -61,7 +61,7 @@
           {% endfor %}
 
           {% if current_user.can('train_manage') %}
-              <a href="{{ url_for('train.grade_manage', team_id=one['team'].id) }}" class="text-info">分配任务</a>
+              <a href="{{ url_for('train.grade_manage', team_id=one['team'].id) }}" class="text-success">分配任务</a>
           {% elif not one['task'] %}
               未分配
           {% endif %}

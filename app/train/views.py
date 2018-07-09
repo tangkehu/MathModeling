@@ -243,7 +243,7 @@ def grade_manage(team_id):
         form.set_data()
     if form.validate_on_submit():
         the_team.set_children(form.children.data)
-        flash(str(the_team.id)+'组任务分配成功')
+        flash(str(the_team.team_number)+'组任务分配成功')
         return redirect(url_for('.team'))
     message = list(form.errors.values())
     if message:
