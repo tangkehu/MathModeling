@@ -687,6 +687,7 @@ class TrainStudent(db.Model):
 # 典型的自引用多对多关系关联表
 class TrainGrade(db.Model):
     __tablename__ = 'train_grade'
+    id = db.Column(db.Integer)
     parent_team_id = db.Column(db.Integer, db.ForeignKey('train_team.id'), primary_key=True)
     child_team_id = db.Column(db.Integer, db.ForeignKey('train_team.id'), primary_key=True)
     score = db.Column(db.Float)
@@ -697,8 +698,10 @@ class TrainGrade(db.Model):
         for one in task_type:
             new_grade = TrainGrade(parent_team=TrainTeam.query.get(int(one[0])),
                                    child_team=TrainTeam.query.get(int(one[1])),
-                                   school=current_user.school)
+                                   school=current_user.school,
+                                   id=int(time.time()))
             db.session.add(new_grade)
+            time.sleep(1)
         db.session.commit()
 
     def set_score(self, score):
