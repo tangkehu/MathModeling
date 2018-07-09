@@ -43,10 +43,10 @@ def apply():
     if request.method == 'POST':
         resume = request.form.get('resume')
         if current_user.real_name and current_user.student_number:
-            if resume:
+            if resume and len(resume) < 31:
                 TrainStudent.add_student(resume)
                 return redirect(url_for('.apply'))
-            flash('请输入个人简介')
+            flash('请输入个人简介，且不超过30个字符')
         else:
             flash('请先完善个人帐户信息，主要包括实名和学号')
     return render_template('train/apply.html', active_flg=['train'])
@@ -58,6 +58,7 @@ def apply():
 def alt_apply():
     """报名功能开关"""
     current_user.school.alt_apply()
+    flash('报名入口状态更改成功')
     return redirect(url_for('.student'))
 
 
@@ -101,8 +102,8 @@ def upload(type_id):
 @train_required
 def show_file(file_id):
     the_file = TrainFile.query.get_or_404(int(file_id))
-    filename = str(the_file.train_team_id)+'组'+the_file.train_filename if the_file.train_filetype in [6, 7, 8] \
-        else the_file.train_filename
+    filename = str(the_file.train_team.team_number)+'组'+the_file.train_filename if \
+        the_file.train_filetype in [6, 7, 8] else the_file.train_filename
     response = make_response(send_from_directory(current_app.config['TRAIN_FILE_PATH'], the_file.train_filepath))
     response.headers["Content-Disposition"] = "attachment; filename={0}; filename*=utf-8''{0}".format(
         quote(filename))
@@ -158,6 +159,8 @@ def team_del(team_id):
 def team_member_edit(team_id):
     the_team = TrainTeam.query.get_or_404(int(team_id))
     form = TrainMembersForm(the_team)
+    if request.method == 'GET':
+        form.set_data()
     if form.validate_on_submit():
         the_team.add_members(form.members.data)
         flash('分配成功')
@@ -236,6 +239,8 @@ def grade_manage(team_id):
 
     the_team = TrainTeam.query.get_or_404(int(team_id))
     form = GradeManageForm(the_team)
+    if request.method == 'GET':
+        form.set_data()
     if form.validate_on_submit():
         the_team.set_children(form.children.data)
         flash(str(the_team.id)+'组任务分配成功')

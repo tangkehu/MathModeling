@@ -21,7 +21,7 @@
               {% if current_user.is_train_student and current_user.train_student.train_team_id == one['team'].id %}
               <a href="{{ url_for('train.upload', type_id=6) }}" class="text-info mr-2"><i class="fas fa-cloud-upload-alt"></i>提交</a>
               {% else %}
-              未提交 &nbsp;&nbsp;
+                  <span class="text-danger">未提交</span> &nbsp;&nbsp;
               {% endif %}
           {% endif %}
 

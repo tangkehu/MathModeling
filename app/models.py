@@ -221,6 +221,11 @@ class User(db.Model):
             one.delete()
         for one in self.news.all():
             one.delete()
+        the_train_student = self.train_student
+        if the_train_student:
+            the_train_student.delete()
+        for one in self.train_file.all():
+            one.del_file()
         db.session.delete(self)
         db.session.commit()
 
@@ -244,7 +249,7 @@ class User(db.Model):
     def import_user(data):
         for one in data:
             real_name = one.get('姓名')
-            student_number = one.get('学号')
+            student_number = str(one.get('学号'))
             if not student_number.isdigit():
                 return False
             email = one.get('邮箱')
