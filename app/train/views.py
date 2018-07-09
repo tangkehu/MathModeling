@@ -255,7 +255,7 @@ def grade_manage(team_id):
 @login_required
 @train_required
 def grade(grade_id):
-    the_grade = TrainGrade.query.get(int(grade_id))
+    the_grade = TrainGrade.query.filter_by(id=int(grade_id)).first()
     if not current_user.can('train_manage') and (
             not current_user.is_train_student or the_grade.parent_team_id != current_user.train_student.train_team_id):
         abort(403)
