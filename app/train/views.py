@@ -204,9 +204,17 @@ def apply_student(student_id):
 def import_student():
     if request.method == 'POST':
         records = request.get_records(field_name='file')
-        print(records)
+        print(records[0].get('姓名'))
         return redirect(url_for('train.student'))
     return render_template('train/import_student.html', active_flg=['train', 'student'])
+
+
+@train.route('/import_student_demo')
+@login_required
+@permission_required('train_manage')
+def import_student_demo():
+    demo = {'姓名': '张三', '组号': 1, '学号': '201410412211', '邮箱': '123456@qq.com'}
+    return excel.make_response_from_dict(demo, 'xlsx', file_name='小组信息统计表')
 
 
 @train.route('/grade_manage/<team_id>', methods=['GET', 'POST'])
@@ -298,7 +306,7 @@ def get_train_files():
 @login_required
 @permission_required('train_manage')
 def export_team_info():
-    return excel.make_response_from_dict(TrainTeam.export_team_info(), 'xlsx')
+    return excel.make_response_from_records(TrainTeam.export_team_info(), 'xlsx', file_name='小组成绩统计表')
 
 
 @train.route('/over/', methods=['GET', 'POST'])

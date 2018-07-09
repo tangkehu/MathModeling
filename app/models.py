@@ -711,14 +711,14 @@ class TrainTeam(db.Model):
     def export_team_info():
         result = []
         all_teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number).all()
-        for one in all_teams:
+        for index, one in enumerate(all_teams):
             result.append({
+                'No.': index+1,
                 '组号': one.team_number,
                 '成员': ' '.join([x.user.real_name for x in one.train_student.all()]),
                 '得分情况': ' '.join([str(x.parent_team_id)+'-'+str(x.score) for x in one.parents.all()]),
                 '平均分': one.team_score
             })
-        print(result)
         return result
 
     @staticmethod
