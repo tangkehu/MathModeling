@@ -8,11 +8,10 @@
         <a href="{{ url_for('train.import_student') }}" class="btn btn-secondary btn-sm ml-2"><i class="fas fa-upload"></i> 导入学员</a>
     </div>
     {% endif %}
-    <h5 class="text-info text-center my-4">报名学员：{{ all_count }} &nbsp;&nbsp;已审核学员：{{ apply_count }}</h5>
-
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped my-4">
         <thead>
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">姓名</th>
                 <th scope="col">学号</th>
                 <th scope="col">小组</th>
@@ -25,6 +24,7 @@
         <tbody>
             {% for one in student_list %}
             <tr>
+                <td>{{ loop.index }}</td>
                 <td>{{ one.user.real_name }}</td>
                 <td>{{ one.user.student_number }}</td>
                 <td>{% if one.train_team %}{{ one.train_team.team_number }}组{% endif %}</td>
