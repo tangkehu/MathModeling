@@ -773,7 +773,7 @@ class TrainTeam(db.Model):
                 'No.': index+1,
                 '组号': one.team_number,
                 '成员': ' '.join([x.user.real_name for x in one.train_student.all()]),
-                '得分情况': ' '.join([str(x.parent_team_id)+'-'+str(x.score) for x in one.parents.all()]),
+                '得分情况': ' '.join([str(x.parent_team.team_number)+'-'+str(x.score) for x in one.parents.all()]),
                 '平均分': one.team_score
             })
         return result
