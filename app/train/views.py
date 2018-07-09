@@ -286,10 +286,10 @@ def public():
 @permission_required('train_manage')
 def get_train_files():
     memory_file = BytesIO()
-    with zipfile.ZipFile('MathModelingTrainFile.zip', 'w', zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
         files_path = TrainFile.query.filter_by(school_id=current_user.school_id).all()
         for one in files_path:
-            zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath))
+            zf.write(os.path.join(current_app.config['TRAIN_FILE_PATH'], one.train_filepath), one.train_filepath)
     memory_file.seek(0)
     return send_file(memory_file, attachment_filename='MathModelingTrainFile.zip', as_attachment=True)
 
