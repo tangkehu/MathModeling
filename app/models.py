@@ -42,6 +42,12 @@ class School(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def start_train(self):
+        self.apply_status = False
+        self.public_status = False
+        db.session.add(self)
+        db.session.commit()
+
     @staticmethod
     def insert_basic_schools():
         for one in current_app.config['SCHOOLS']:
