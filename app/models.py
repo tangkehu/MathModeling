@@ -252,7 +252,7 @@ class User(db.Model):
                 or_(User.email == email, User.student_number == student_number)).first()
             if exit_user:
                 exit_user.email = email
-                exit_user.real_name = real_name,
+                exit_user.real_name = real_name
                 exit_user.student_number = student_number
                 db.session.add(exit_user)
                 db.session.commit()
