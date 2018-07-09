@@ -71,7 +71,7 @@
                       <a href="{{ url_for('train.show_file', file_id=one['grade_paper'].id) }}" class="text-primary">查看</a>
                   {% else %}
                       {% if current_user.is_train_student and current_user.train_student.train_team_id == one['team'].id %}
-                      <a href="{{ url_for('train.upload', type_id=8) }}" class="text-info"><i class="fas fa-cloud-upload-alt"></i>提交</a>
+                      <a href="{{ url_for('train.upload', type_id=7) }}" class="text-info"><i class="fas fa-cloud-upload-alt"></i>提交</a>
                       {% else %}
                       未提交
                       {% endif %}
