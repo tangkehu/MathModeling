@@ -28,7 +28,7 @@
                       <a href="{{ url_for('auth.profile', user_id=x.id) }}" class="mr-1 text-dark">{{ x.real_name }}</a>
                   {% endfor %}
 
-                  小组成绩:{{ one['team'].team_score }} &nbsp;&nbsp;
+                  小组成绩: &nbsp; <span class="text-danger">{{ one['team'].team_score }}</span> &nbsp;&nbsp;
 
                   论文:
                   {% if one['paper'] %}

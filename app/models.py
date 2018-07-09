@@ -38,7 +38,7 @@ class School(db.Model):
         db.session.commit()
 
     def alt_public(self):
-        self.public_status = False if self.public_status is True else False
+        self.public_status = False if self.public_status is True else True
         db.session.add(self)
         db.session.commit()
 
@@ -853,7 +853,7 @@ class TrainTeam(db.Model):
                 score += x.score
                 index += 1
             try:
-                one.score = round(score/index, 2)
+                one.team_score = round(score/index, 2)
             except Exception as e:
                 current_app.logger.info(str(e)+'统分出错')
             db.session.add(one)
