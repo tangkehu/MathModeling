@@ -674,6 +674,7 @@ class TrainStudent(db.Model):
             team_number = one.get('组号')
             if not isinstance(team_number, int):
                 return False
+            team_number = '{0:0>2}'.format(team_number)
             team = TrainTeam.query.filter_by(team_number=team_number).first()
             if not team:
                 team = TrainTeam(team_number=team_number, school=current_user.school)
@@ -791,7 +792,7 @@ class TrainTeam(db.Model):
     def add():
         the_last = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number.desc()).first()
         db.session.add(TrainTeam(
-            team_number=int(the_last.team_number)+1 if the_last else 1,
+            team_number='{0:0>2}'.format(int(the_last.team_number)+1 if the_last else 1),
             school=current_user.school
         ))
         db.session.commit()
