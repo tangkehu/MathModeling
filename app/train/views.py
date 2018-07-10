@@ -176,12 +176,9 @@ def team_member_edit(team_id):
 @login_required
 @train_required
 def student():
-    all_count = TrainStudent.query.count()
-    apply_count = TrainStudent.query.filter_by(verify_status=True).count()
     student_list = TrainStudent.query.filter_by(
-        school_id=current_user.school_id).order_by(TrainStudent.train_team_id.desc(), TrainStudent.resume.desc()).all()
-    return render_template('train/student.html', active_flg=['train', 'student'], all_count=all_count,
-                           apply_count=apply_count, student_list=student_list)
+        school_id=current_user.school_id).order_by(TrainStudent.train_team_id.asc(), TrainStudent.resume.asc()).all()
+    return render_template('train/student.html', active_flg=['train', 'student'], student_list=student_list)
 
 
 @train.route('/del_student/<student_id>')

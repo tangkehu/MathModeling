@@ -259,17 +259,20 @@ class User(db.Model):
             if not student_number.isdigit():
                 return False
             email = one.get('邮箱')
-            exit_user = User.query.filter(
-                or_(User.email == email, User.student_number == student_number)).first()
+            exit_user = User.query.filter_by(email=email).first()
+            exit_student_number = User.query.filter_by(student_number=student_number).first()
+            if exit_student_number and (not exit_user or exit_user.id != exit_student_number.id):
+                # 邮箱和学号都同时对应一个用户，删除多余的帐户，保留邮箱正确的帐户
+                db.session.delete(exit_student_number)
+                db.session.commit()
             if exit_user:
-                exit_user.email = email
                 exit_user.real_name = real_name
                 exit_user.student_number = student_number
                 db.session.add(exit_user)
                 db.session.commit()
             else:
                 new_user = User(
-                    username=real_name,
+                    username=email,
                     email=email,
                     real_name=real_name,
                     student_number=student_number,
@@ -758,7 +761,7 @@ class TrainTeam(db.Model):
     @staticmethod
     def get_teams_info():
         result = []
-        teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number).all()
+        teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number.asc()).all()
         for one in teams:
             result.append({
                 'team': one,
@@ -773,7 +776,7 @@ class TrainTeam(db.Model):
     @staticmethod
     def export_team_info():
         result = []
-        all_teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number).all()
+        all_teams = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number.asc()).all()
         for index, one in enumerate(all_teams):
             result.append({
                 'No.': index+1,
@@ -786,7 +789,7 @@ class TrainTeam(db.Model):
 
     @staticmethod
     def add():
-        the_last = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.id.desc()).first()
+        the_last = TrainTeam.query.filter_by(school_id=current_user.school_id).order_by(TrainTeam.team_number.desc()).first()
         db.session.add(TrainTeam(
             team_number=int(the_last.team_number)+1 if the_last else 1,
             school=current_user.school
