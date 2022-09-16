@@ -16,7 +16,7 @@ itsdangerous==0.24
 jdcal==1.4
 Jinja2==2.10
 lml==0.0.1
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.0
 mysql-connector==2.1.6
 openpyxl==2.5.4
